@@ -45,7 +45,7 @@
   nil)
 
 (defn valid-cols? [board]
-  nil)
+  (every? #(== 9 (count %)) (cols board)))
 
 (defn blocks [board]
   nil)
