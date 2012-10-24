@@ -73,7 +73,7 @@
   (assoc board row (assoc (get board row) col new-value)))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter #(not (has-value? board %)) (for [x (range 9) y (range 9)] [x y]))))
 
 (defn solve [board]
   nil)
