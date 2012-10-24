@@ -20,8 +20,14 @@
         y coords]
     [x y]))
 
-(defn block-values [board coord]
-  nil)
+(defn block-values [board [row col]]
+  (let [corners (for [x [0 3 6]
+                      y [0 3 6]]
+                  [x y])
+        [[a b]] (filter #(and (<= (first %) row(+ (first %) 2)) (<= (last %) col (+ (last %) 2))) corners)]
+    (set (for [x (range a (+ a 3))
+               y (range b (+ b 3))]
+           (value-at board [x y])))))
 
 (defn valid-values-for [board coord]
   nil)
