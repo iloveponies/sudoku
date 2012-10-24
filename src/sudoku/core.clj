@@ -39,7 +39,7 @@
   (map set board))
 
 (defn valid-rows? [board]
-  nil)
+  (every? #(== 9 (count %)) (rows board)))
 
 (defn cols [board]
   nil)
