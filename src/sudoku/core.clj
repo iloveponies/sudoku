@@ -38,20 +38,23 @@
 (defn rows [board]
   (map set board))
 
+(defn- valid-? [board f]
+  (every? #(== 9 (count %)) (f board)))
+
 (defn valid-rows? [board]
-  (every? #(== 9 (count %)) (rows board)))
+  (valid-? board rows))
 
 (defn cols [board]
   nil)
 
 (defn valid-cols? [board]
-  (every? #(== 9 (count %)) (cols board)))
+  (valid-? board cols))
 
 (defn blocks [board]
   nil)
 
 (defn valid-blocks? [board]
-  (every? #(== 9 (count %)) (blocks board)))
+  (valid-? board blocks))
 
 (defn valid-solution? [board]
   nil)
