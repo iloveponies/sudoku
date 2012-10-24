@@ -7,7 +7,7 @@
   (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (== 0 (value-at board coord))))
 
 (defn row-values [board coord]
   nil)
