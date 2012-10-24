@@ -9,8 +9,8 @@
 (defn has-value? [board coord]
   (not (== 0 (value-at board coord))))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [x]]
+  (set (get board x)))
 
 (defn col-values [board coord]
   nil)
