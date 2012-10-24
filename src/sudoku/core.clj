@@ -17,15 +17,11 @@
   (set (map #(get % y) board)))
 
 (defn coord-pairs [coords]
-  (for [x coords
-        y coords]
-    [x y]))
+  (for [x coords y coords] [x y]))
 
 (defn block-values [board [row col]]
   (let [[[a b]] (filter #(and (<= (first %) row(+ (first %) 2)) (<= (last %) col (+ (last %) 2))) corners)]
-    (set (for [x (range a (+ a 3))
-               y (range b (+ b 3))]
-           (value-at board [x y])))))
+    (set (#(for [x (% a) y (% b)] (value-at board [x y])) #(range % (+ % 3))))))
 
 (defn valid-values-for [board coord]
   (if (has-value? board coord)
@@ -36,7 +32,7 @@
       (set/difference possible-values taken-values))))
 
 (defn filled? [board]
-  (every? #(has-value? board %) (for [x (range 9) y (range 9)] [x y])))
+  (every? #(has-value? board %) (#(for [x % y %] [x y]) (range 9))))
 
 (defn rows [board]
   (map set board))
@@ -48,19 +44,15 @@
   (valid-? board rows))
 
 (defn cols [board]
-  (if (some empty? board)
-    []
-    (concat (vector (set(map first board)))
-            (cols (map rest board)))))
+  (#(if (some empty? board) [] (concat (vector (set(% first))) (cols (% rest)))) #(map % board)))
 
 (defn valid-cols? [board]
   (valid-? board cols))
 
 (defn blocks [board]
   (map (fn [[a b]]
-         (set (for [x (range a (+ a 3))
-                    y (range b (+ b 3))]
-                (value-at board [x y]))))
+         (set (#(for [x (% a) y (% b)] (value-at board [x y]))
+                  #(range % (+ % 3)))))
        corners))
 
 (defn valid-blocks? [board]
