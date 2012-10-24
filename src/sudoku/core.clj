@@ -54,7 +54,11 @@
   (valid-? board cols))
 
 (defn blocks [board]
-  nil)
+  (map (fn [[a b]]
+         (set (for [x (range a (+ a 3))
+                    y (range b (+ b 3))]
+                (value-at board [x y]))))
+       corners))
 
 (defn valid-blocks? [board]
   (valid-? board blocks))
