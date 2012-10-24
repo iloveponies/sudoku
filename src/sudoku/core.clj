@@ -12,8 +12,8 @@
 (defn row-values [board [x]]
   (set (get board x)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [_ y]]
+  (set (map #(get % y) board)))
 
 (defn coord-pairs [coords]
   nil)
