@@ -51,7 +51,7 @@
   nil)
 
 (defn valid-blocks? [board]
-  nil)
+  (every? #(== 9 (count %)) (blocks board)))
 
 (defn valid-solution? [board]
   nil)
