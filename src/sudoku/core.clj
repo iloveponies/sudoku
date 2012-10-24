@@ -60,7 +60,7 @@
   (valid-? board blocks))
 
 (defn valid-solution? [board]
-  nil)
+  (every? #(% board) [valid-rows? valid-cols? valid-blocks?]))
 
 (defn set-value-at [board coord new-value]
   nil)
