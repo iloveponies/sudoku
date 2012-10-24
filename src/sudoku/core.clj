@@ -48,7 +48,10 @@
   (valid-? board rows))
 
 (defn cols [board]
-  nil)
+  (if (some empty? board)
+    []
+    (concat (vector (set(map first board)))
+            (cols (map rest board)))))
 
 (defn valid-cols? [board]
   (valid-? board cols))
