@@ -69,8 +69,8 @@
 (defn valid-solution? [board]
   (every? #(% board) [valid-rows? valid-cols? valid-blocks?]))
 
-(defn set-value-at [board coord new-value]
-  nil)
+(defn set-value-at [board [row col] new-value]
+  (assoc board row (assoc (get board row) col new-value)))
 
 (defn find-empty-point [board]
   nil)
