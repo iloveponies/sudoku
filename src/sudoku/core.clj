@@ -4,6 +4,9 @@
 (def board identity)
 (def corners (#(for [row % col %] [row col]) [0 3 6]))
 
+(defn- block-area [x]
+  (range x (+ x 3)))
+
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -21,7 +24,7 @@
 
 (defn block-values [board [row col]]
   (let [[[a b]] (filter #(and (<= (first %) row(+ (first %) 2)) (<= (last %) col (+ (last %) 2))) corners)]
-    (set (#(for [x (% a) y (% b)] (value-at board [x y])) #(range % (+ % 3))))))
+    (set (#(for [x (% a) y (% b)] (value-at board [x y])) block-area))))
 
 (defn valid-values-for [board coord]
   (if (has-value? board coord)
@@ -44,15 +47,14 @@
   (valid-? board rows))
 
 (defn cols [board]
-  (#(if (some empty? board) [] (concat (vector (set(% first))) (cols (% rest)))) #(map % board)))
+  (#(if (some empty? board) [] (concat (vector (set (% first))) (cols (% rest)))) #(map % board)))
 
 (defn valid-cols? [board]
   (valid-? board cols))
 
 (defn blocks [board]
   (map (fn [[a b]]
-         (set (#(for [x (% a) y (% b)] (value-at board [x y]))
-                  #(range % (+ % 3)))))
+         (set (#(for [x (% a) y (% b)] (value-at board [x y])) block-area)))
        corners))
 
 (defn valid-blocks? [board]
@@ -65,7 +67,7 @@
   (assoc board row (assoc (get board row) col new-value)))
 
 (defn find-empty-point [board]
-  (first (filter #(not (has-value? board %)) (for [x (range 9) y (range 9)] [x y]))))
+  (first (filter #(not (has-value? board %)) (#(for [x % y %] [x y]) (range 9)))))
 
 (defn solve [board]
   nil)
