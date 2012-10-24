@@ -36,7 +36,7 @@
   nil)
 
 (defn rows [board]
-  nil)
+  (map set board))
 
 (defn valid-rows? [board]
   nil)
