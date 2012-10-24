@@ -28,7 +28,12 @@
            (value-at board [x y])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (let [possible-values (set (range 1 10))
+          value-funcs [row-values col-values block-values]
+          taken-values (apply set/union (map #(% board coord) value-funcs))]
+      (set/difference possible-values taken-values))))
 
 (defn filled? [board]
   (every? #(has-value? board %) (for [x (range 9) y (range 9)] [x y])))
