@@ -33,7 +33,7 @@
   nil)
 
 (defn filled? [board]
-  nil)
+  (every? #(has-value? board %) (for [x (range 9) y (range 9)] [x y])))
 
 (defn rows [board]
   (map set board))
