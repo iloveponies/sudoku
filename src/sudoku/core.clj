@@ -31,7 +31,9 @@
               (map (partial vec-sum (top-left-coord x y)) (coord-pairs [0 1 2]))))))
 
 (defn valid-values-for [board coord]
-  (set/difference all-values (set/union (block-values board coord) (row-values board coord) (col-values board coord))))
+  (if (has-value? board coord)
+    #{}
+    (set/difference all-values (set/union (block-values board coord) (row-values board coord) (col-values board coord)))))
 
 (defn filled? [board]
   (not (some zero? (flatten board))))
