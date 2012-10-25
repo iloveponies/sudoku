@@ -164,9 +164,9 @@
   (set-value-at sudoku-board [2 1] 4) =>
     (board (assoc-in underlying-board [2 1] 4)))
 
-(facts "find-empty-point"
-  (find-empty-point sudoku-board) => (fn [coord]
-                                       (= 0 (value-at sudoku-board coord))))
+; (facts "find-empty-point"
+;  (find-empty-point sudoku-board) => (fn [coord]
+;    (= 0 (value-at sudoku-board coord))))
 
 (facts "solve"
   (solve sudoku-board) => solved-board)
