@@ -61,7 +61,13 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter #(zero? (value-at board %)) (coord-pairs (range 0 9)))))
 
+(defn solve-brute-force [board]
+  (if (filled? board)
+    board
+    (let [point (find-empty-point board)]
+      (flatten (map #(solve-brute-force (set-value-at board point %)) (valid-values-for board point))))))
+    
 (defn solve [board]
-  nil)
+  (partition 9 (solve-brute-force board)))
