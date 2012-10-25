@@ -1,11 +1,13 @@
 (ns sudoku.core
   (:require [clojure.set :as set]))
 
+(def board identity)
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
   nil)
@@ -37,10 +39,10 @@
 (defn valid-cols? [board]
   nil)
 
-(defn blocks [board]
+(defn valid-blocks? [board]
   nil)
 
-(defn valid-blocks [board]
+(defn valid-solution? [board]
   nil)
 
 (defn valid-solution [board]

@@ -74,8 +74,8 @@
   (block-values sudoku-board [4 5]) => #{0 6 8 3 2})
 
 (facts "valid-values"
-  (valid-values-for sudoku-board [0 0]) => #{}
-  (valid-values-for sudoku-board [0 2]) => #{1 2 4})
+  (valid-values sudoku-board [0 0]) => #{}
+  (valid-values sudoku-board [0 2]) => #{1 2 4})
 
 (facts "filled?"
   (filled? sudoku-board) => falsey
@@ -102,47 +102,9 @@
                           #{1 2 3 4 5 6 7 8 9}
                           #{1 2 3 4 5 6 7 8 9}])
 
-(facts "cols"
-  (cols sudoku-board) => [#{5 6 0 8 4 7}
-                          #{3 0 9 6}
-                          #{0 8}
-                          #{0 1 8 4}
-                          #{7 9 0 6 2 1 8}
-                          #{0 5 3 9}
-                          #{0 2}
-                          #{0 6 8 7}
-                          #{0 3 1 6 5 9}]
 
-  (cols solved-board) => [#{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}])
 
-(facts "blocks"
-  (blocks sudoku-board) => [#{5 3 0 6 9 8}
-                            #{0 7 1 9 5}
-                            #{0 6}
-                            #{8 0 4 7}
-                            #{0 6 8 3 2}
-                            #{0 3 1 6}
-                            #{0 6}
-                            #{0 4 1 9 8}
-                            #{2 8 0 5 7 9}]
 
-  (blocks solved-board) => [#{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}
-                            #{1 2 3 4 5 6 7 8 9}])
 
 (facts "valid-rows?"
   (valid-rows? solved-board) => truthy
