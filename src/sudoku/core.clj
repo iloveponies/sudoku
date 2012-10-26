@@ -70,4 +70,15 @@
   (first (filter #(not (has-value? board %)) (#(for [x % y %] [x y]) (range 9)))))
 
 (defn solve [board]
-  nil)
+  (let [first-empty (find-empty-point board)]
+    (if (nil? first-empty)
+      (if (valid-solution? board)
+        board
+        '())
+      (loop [trys (valid-values-for board first-empty)]
+        (if (empty? trys)
+          '()
+          (let [solution (solve (set-value-at board first-empty (first trys)))]
+            (if (empty? solution)
+              (recur (rest trys))
+              solution)))))))
