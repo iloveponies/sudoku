@@ -23,8 +23,9 @@
       (recur (conj acc (get-in board [n y])) (dec n)))))
 
 (defn coord-pairs [coords]
-  (for []
-    ))
+  (for [x coords
+        y coords]
+    [x y]))
 
 (defn block-values [board coord]
   nil)
