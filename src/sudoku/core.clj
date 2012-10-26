@@ -48,7 +48,7 @@
         (row-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (apply concat board)) 0)))
 
 (defn rows [board]
   nil)
