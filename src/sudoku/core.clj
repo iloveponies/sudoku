@@ -8,9 +8,6 @@
 (defn value-at [board coord]
   (get-in board [(first coord) (second coord)]))
 
-(defn value-at [board coord]
-  (get-in board [(first coord) (second coord)]))
-
 (defn has-value? [board coord]
   (not= (value-at board coord) 0))
 
