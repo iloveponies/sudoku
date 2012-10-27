@@ -31,13 +31,12 @@
       (value-at board c)))))
 
 (defn valid-values-for [board coord]
-  (if (has-value? board coord) #{}
-   (clojure.set/difference 
-    (set (range 1 10))
-    (clojure.set/union 
-     (block-values board coord)
-     (row-values board coord)
-     (col-values board coord)))))
+  (let [fs [row-values col-values block-values]]
+    (if (has-value? board coord) #{}
+      (clojure.set/difference 
+       (set (range 1 10))
+       (apply clojure.set/union 
+              (map #(% board coord) fs))))))
 
 (defn filled? [board]
   (empty? (filter #(= % 0) (apply concat board))))
