@@ -75,14 +75,16 @@
          ci 0
          row (first board)
          b (rest board)]
-    (cond (= 0 (first row)) [ri ci]
-          (empty? (rest row)) (recur 0 (inc ci) (first b) (rest b))
-          (empty? (rest b)) nil
+    (cond (= 0 (first row)) [ci ri]
+          (empty? (rest row)) (if (empty? b) 
+                                nil
+                                (recur 0 (inc ci) (first b) (rest b)))
           :else (recur (inc ri) ci (rest row) b))))
 
 (defn solve [board]
   (if (filled? board)
     (if (valid-solution? board) board [])
-    ((let [point (find-empty-point board)]
-       (for [value (valid-values-for board point)]
-         (solve (set-value-at board point value)))))))
+    (let [point (find-empty-point board)]
+       (for [value (valid-values-for board point)
+             solution (solve (set-value-at board point value))]
+          solution))))
