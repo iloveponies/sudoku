@@ -3,26 +3,46 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not= (value-at board coord) 0))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [row _]]
+  (let [row-vect (get board row)]
+    (set row-vect)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [_ column]]
+  (let [get-column (fn [x] (get x column))
+        column-vect (map get-column board)]
+    (set column-vect)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords
+        y coords]
+    (vector x y)))
 
 (defn block-values [board coord]
-  nil)
+  (let [get-val (fn [x] (value-at board x))
+        get-topleft-coord (fn [[y x]] 
+                            (vector (- y (mod y 3))
+                                    (- x (mod x 3))))
+        block-coord-pairs (fn [[y-offset x-offset]]
+                            (for [y [0 1 2]
+                                  x [0 1 2]]
+                              (vector (+ y y-offset) (+ x x-offset))))]
+    (set (map get-val (block-coord-pairs (get-topleft-coord coord))))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference all-values 
+                    (block-values board coord)
+                    (row-values board coord)
+                    (col-values board coord))))
 
 (defn filled? [board]
   nil)
