@@ -28,7 +28,11 @@
     [x y]))
 
 (defn block-values [board coord]
-  nil)
+ (let [x (* 3 (int (/ (first coord) 3)))
+       y (* 3 (int (/ (last coord) 3)))]
+    (set (for [row (range x (+ x 3))
+               col (range y (+ y 3))]
+           (value-at board [row col])))))
 
 (defn valid-values-for [board coord]
   nil)
