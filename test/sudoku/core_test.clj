@@ -45,23 +45,23 @@
           [2 8 7 4 1 9 6 3 5]
           [3 4 5 2 8 6 1 7 9]]))
 
-(facts "value-at"
+(facts "ex 1 value-at"
   (value-at sudoku-board [0 1]) => 3
   (value-at sudoku-board [0 0]) => 5)
 
-(facts "has-value?"
+(facts "ex 2 has-value?"
   (has-value? sudoku-board [0 0]) => truthy
   (has-value? sudoku-board [0 2]) => falsey)
 
-(facts "row-values"
+(facts "ex 3 row-values"
   (row-values sudoku-board [0 2]) => #{0 5 3 7}
   (row-values sudoku-board [3 2]) => #{0 8 6 3})
 
-(facts "col-values"
+(facts "ex 4 col-values"
   (col-values sudoku-board [0 2]) => #{0 8}
   (col-values sudoku-board [4 8]) => #{3 1 6 0 5 9})
 
-(facts "coord-pairs"
+(facts "ex 5 coord-pairs"
   (coord-pairs [0 1]) => [[0 0] [0 1]
                           [1 0] [1 1]]
 
@@ -69,19 +69,19 @@
                             [1 0] [1 1] [1 2]
                             [2 0] [2 1] [2 2]])
 
-(facts "block-values"
+(facts "ex 6 block-values"
   (block-values sudoku-board [0 2]) => #{0 5 3 6 8 9}
   (block-values sudoku-board [4 5]) => #{0 6 8 3 2})
 
-(facts "valid-values"
+(facts "ex 7 valid-values"
   (valid-values-for sudoku-board [0 0]) => #{}
   (valid-values-for sudoku-board [0 2]) => #{1 2 4})
 
-(facts "filled?"
+(facts "ex 8 filled?"
   (filled? sudoku-board) => falsey
   (filled? solved-board) => truthy)
 
-(facts "rows"
+(facts "ex 9 rows"
   (rows sudoku-board) => [#{5 3 0 7}
                           #{6 0 1 9 5}
                           #{0 9 8 6}
@@ -102,7 +102,7 @@
                           #{1 2 3 4 5 6 7 8 9}
                           #{1 2 3 4 5 6 7 8 9}])
 
-(facts "cols"
+(facts "ex 9 cols"
   (cols sudoku-board) => [#{5 6 0 8 4 7}
                           #{3 0 9 6}
                           #{0 8}
@@ -123,7 +123,7 @@
                           #{1 2 3 4 5 6 7 8 9}
                           #{1 2 3 4 5 6 7 8 9}])
 
-(facts "blocks"
+(facts "ex 10 blocks"
   (blocks sudoku-board) => [#{5 3 0 6 9 8}
                             #{0 7 1 9 5}
                             #{0 6}
@@ -144,29 +144,29 @@
                             #{1 2 3 4 5 6 7 8 9}
                             #{1 2 3 4 5 6 7 8 9}])
 
-(facts "valid-rows?"
+(facts "ex 11 valid-rows?"
   (valid-rows? solved-board) => truthy
   (valid-rows? invalid-board) => falsey)
 
-(facts "valid-cols?"
+(facts "ex 11 valid-cols?"
   (valid-cols? solved-board) => truthy
   (valid-cols? invalid-board) => falsey)
 
-(facts "valid-blocks?"
+(facts "ex 11 valid-blocks?"
   (valid-blocks? solved-board) => truthy
   (valid-blocks? invalid-board) => falsey)
 
-(facts "valid-solution?"
+(facts "ex 12 valid-solution?"
   (valid-solution? solved-board) => truthy
   (valid-solution? invalid-board) => falsey)
 
-(facts "set-value-at"
+(facts "ex 13 set-value-at"
   (set-value-at sudoku-board [2 1] 4) =>
     (board (assoc-in underlying-board [2 1] 4)))
 
-(facts "find-empty-point"
+(facts "ex 14 find-empty-point"
   (find-empty-point sudoku-board) => (fn [coord]
                                        (= 0 (value-at sudoku-board coord))))
 
-(facts "solve"
+(facts "ex 15 solve"
   (solve sudoku-board) => solved-board)
