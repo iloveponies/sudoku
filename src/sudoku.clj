@@ -1,4 +1,4 @@
-(ns sudoku.core
+(ns sudoku
   (:require [clojure.set :as set]))
 
 (def board identity)

@@ -1,6 +1,6 @@
-(ns sudoku.core-test
+(ns sudoku-test
   (:use midje.sweet
-        sudoku.core))
+        sudoku))
 
 (def underlying-board [[5 3 0 0 7 0 0 0 0]
                        [6 0 0 1 9 5 0 0 0]
@@ -54,10 +54,12 @@
   (has-value? sudoku-board [0 2]) => falsey)
 
 (facts "ex 3 row-values"
+  (row-values sudoku-board [0 0]) => #{0 5 3 7}
   (row-values sudoku-board [0 2]) => #{0 5 3 7}
   (row-values sudoku-board [3 2]) => #{0 8 6 3})
 
 (facts "ex 4 col-values"
+  (col-values sudoku-board [0 0]) => #{0 4 5 6 7 8}
   (col-values sudoku-board [0 2]) => #{0 8}
   (col-values sudoku-board [4 8]) => #{3 1 6 0 5 9})
 
@@ -70,6 +72,7 @@
                             [2 0] [2 1] [2 2]])
 
 (facts "ex 6 block-values"
+  (block-values sudoku-board [0 0]) => #{0 3 5 6 8 9}
   (block-values sudoku-board [0 2]) => #{0 5 3 6 8 9}
   (block-values sudoku-board [4 5]) => #{0 6 8 3 2})
 
