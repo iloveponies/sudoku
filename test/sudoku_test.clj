@@ -45,25 +45,30 @@
           [2 8 7 4 1 9 6 3 5]
           [3 4 5 2 8 6 1 7 9]]))
 
-(facts "1 value-at"
+(facts "value-at" {:exercise 1
+                   :points 1}
   (value-at sudoku-board [0 1]) => 3
   (value-at sudoku-board [0 0]) => 5)
 
-(facts "2 has-value?"
+(facts "has-value?" {:exercise 2
+                     :points 1}
   (has-value? sudoku-board [0 0]) => truthy
   (has-value? sudoku-board [0 2]) => falsey)
 
-(facts "3 row-values"
+(facts "row-values" {:exercise 3
+                     :points 1}
   (row-values sudoku-board [0 0]) => #{0 5 3 7}
   (row-values sudoku-board [0 2]) => #{0 5 3 7}
   (row-values sudoku-board [3 2]) => #{0 8 6 3})
 
-(facts "4 col-values"
+(facts "col-values" {:exercise 4
+                     :points 1}
   (col-values sudoku-board [0 0]) => #{0 4 5 6 7 8}
   (col-values sudoku-board [0 2]) => #{0 8}
   (col-values sudoku-board [4 8]) => #{3 1 6 0 5 9})
 
-(facts "5 coord-pairs"
+(facts "coord-pairs" {:exercise 5
+                      :points 1}
   (coord-pairs [0 1]) => [[0 0] [0 1]
                           [1 0] [1 1]]
 
@@ -71,62 +76,68 @@
                             [1 0] [1 1] [1 2]
                             [2 0] [2 1] [2 2]])
 
-(facts "6 block-values"
+(facts "block-values" {:exercise 6
+                       :points 1}
   (block-values sudoku-board [0 0]) => #{0 3 5 6 8 9}
   (block-values sudoku-board [0 2]) => #{0 5 3 6 8 9}
   (block-values sudoku-board [4 5]) => #{0 6 8 3 2})
 
-(facts "7 valid-values"
+(facts "valid-values" {:exercise 7
+                       :points 1}
   (valid-values-for sudoku-board [0 0]) => #{}
   (valid-values-for sudoku-board [0 2]) => #{1 2 4})
 
-(facts "8 filled?"
+(facts "filled?" {:exercise 8
+                  :points 1}
   (filled? sudoku-board) => falsey
   (filled? solved-board) => truthy)
 
-(facts "9 rows"
-  (rows sudoku-board) => [#{5 3 0 7}
-                          #{6 0 1 9 5}
-                          #{0 9 8 6}
-                          #{8 0 6 3}
-                          #{4 0 8 3 1}
-                          #{7 0 2 6}
-                          #{0 6 2 8}
-                          #{0 4 1 9 5}
-                          #{0 8 7 9}]
+(facts {:exercise 9
+        :points 1}
+  (facts "rows"
+    (rows sudoku-board) => [#{5 3 0 7}
+                            #{6 0 1 9 5}
+                            #{0 9 8 6}
+                            #{8 0 6 3}
+                            #{4 0 8 3 1}
+                            #{7 0 2 6}
+                            #{0 6 2 8}
+                            #{0 4 1 9 5}
+                            #{0 8 7 9}]
+    
+    (rows solved-board) => [#{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}])
+  
+  (facts "cols"
+    (cols sudoku-board) => [#{5 6 0 8 4 7}
+                            #{3 0 9 6}
+                            #{0 8}
+                            #{0 1 8 4}
+                            #{7 9 0 6 2 1 8}
+                            #{0 5 3 9}
+                            #{0 2}
+                            #{0 6 8 7}
+                            #{0 3 1 6 5 9}]
 
-  (rows solved-board) => [#{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}])
+    (cols solved-board) => [#{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}
+                            #{1 2 3 4 5 6 7 8 9}]))
 
-(facts "9 cols"
-  (cols sudoku-board) => [#{5 6 0 8 4 7}
-                          #{3 0 9 6}
-                          #{0 8}
-                          #{0 1 8 4}
-                          #{7 9 0 6 2 1 8}
-                          #{0 5 3 9}
-                          #{0 2}
-                          #{0 6 8 7}
-                          #{0 3 1 6 5 9}]
-
-  (cols solved-board) => [#{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}
-                          #{1 2 3 4 5 6 7 8 9}])
-
-(facts "10 blocks"
+(facts "blocks" {:exercise 10
+                 :points 1}
   (blocks sudoku-board) => [#{5 3 0 6 9 8}
                             #{0 7 1 9 5}
                             #{0 6}
@@ -147,29 +158,35 @@
                             #{1 2 3 4 5 6 7 8 9}
                             #{1 2 3 4 5 6 7 8 9}])
 
-(facts "11 valid-rows?"
-  (valid-rows? solved-board) => truthy
-  (valid-rows? invalid-board) => falsey)
+(facts {:exercise 11
+        :points 1}
+  (facts "valid-rows?" 
+    (valid-rows? solved-board) => truthy
+    (valid-rows? invalid-board) => falsey)
 
-(facts "11 valid-cols?"
-  (valid-cols? solved-board) => truthy
-  (valid-cols? invalid-board) => falsey)
+  (facts "valid-cols?"
+    (valid-cols? solved-board) => truthy
+    (valid-cols? invalid-board) => falsey)
 
-(facts "11 valid-blocks?"
-  (valid-blocks? solved-board) => truthy
-  (valid-blocks? invalid-board) => falsey)
+  (facts "valid-blocks?"
+    (valid-blocks? solved-board) => truthy
+    (valid-blocks? invalid-board) => falsey))
 
-(facts "12 valid-solution?"
+(facts "valid-solution?" {:exercise 12
+                          :points 1}
   (valid-solution? solved-board) => truthy
   (valid-solution? invalid-board) => falsey)
 
-(facts "13 set-value-at"
+(facts "set-value-at" {:exercise 13
+                       :points 1}
   (set-value-at sudoku-board [2 1] 4) =>
     (board (assoc-in underlying-board [2 1] 4)))
 
-(facts "14 find-empty-point"
+(facts "find-empty-point" {:exercise 14
+                           :points 1}
   (find-empty-point sudoku-board) => (fn [coord]
                                        (= 0 (value-at sudoku-board coord))))
 
-(facts "15 solve"
+(facts "solve" {:exercise 15
+                :points 1}
   (solve sudoku-board) => solved-board)
