@@ -77,14 +77,12 @@
 (defn find-empty-point [board]
   (first (filter #(zero? (value-at board %1)) (coord-pairs (range 9)))))
 
-(defn new-solve [board coord]
-  (for [new-value (valid-values-for board coord)]
-    (solve (set-value-at board coord new-value))))
-
 (defn solve [board]
   (if (and (filled? board) (valid-solution? board)) ; maybe filled? makes it a bit faster
     board
     (let [coord (find-empty-point board)]
       (if (nil? coord)
         nil
-        (first (filter boolean (new-solve board coord)))))))
+        (first (filter boolean
+          (for [new-value (valid-values-for board coord)]
+            (solve (set-value-at board coord new-value)))))))))
