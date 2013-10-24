@@ -108,7 +108,7 @@
    (filled? current-b) []
    :else
      (let [p (find-empty-point current-b)
-              p-v-seq (valid-values-for current-b p)]
+           p-v-seq (valid-values-for current-b p)]
        (for [p-v p-v-seq
              solution (solve-helper start-b (set-value-at current-b p p-v))]
          solution))))
