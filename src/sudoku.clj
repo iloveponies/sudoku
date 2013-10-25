@@ -76,14 +76,15 @@
       :else (recur (inc i) (rest values))))]
     [(int (/ pos 9)) (mod pos 9)]))
 
-(defn solve-helper [a-board]
-  (if (valid-solution? a-board) [a-board]
-    ))
+(defn solve-helper [board]
+  (if (filled? board) (if (valid-solution? board) [board] '())
+    (let [point (find-empty-point board)]
+      (for [number (valid-values-for board point)
+            solution (solve-helper (set-value-at board point number))]
+        solution))))
 
 (defn solve [board]
-  (if (valid-solution? board) board
-    ))
-
+  (first (solve-helper board)))
 
 
 
