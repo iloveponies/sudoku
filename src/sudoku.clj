@@ -3,6 +3,8 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coords]
   (get-in board coords))
 
@@ -16,45 +18,72 @@
   (set (reduce #(conj %1 (get %2 coord)) [] board)))
 
 (defn coord-pairs [a-seq]
-    (for [_ a-seq]
-      (for [asd a-seq])
-      asd))
+  (for [a a-seq
+        b a-seq]
+    [a b]))
+
+(defn corner [coord]
+  (let [[x y] coord
+        f (fn [a] (* (int (/ a 3)) 3))]
+  [(f x) (f y)]))
+
+
+(defn block-values2 [board coord]
+  (let [[cx cy] (corner coord)]
+    (reduce #(conj %1 (value-at board %2))
+       #{}
+       (map
+         (fn [[a b]] [(+ cx a) (+ cy b)])
+         (coord-pairs [0 1 2])))))
 
 (defn block-values [board coord]
-  nil)
+  (let [[cx cy] (let [[x y] coord f (fn [a] (* (int (/ a 3)) 3))] [(f x) (f y)])]
+    (reduce #(conj %1 (value-at board %2)) #{} (map (fn [[a b]] [(+ cx a) (+ cy b)])(coord-pairs [0 1 2])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord) #{}
+  (set/difference all-values (block-values board coord) (row-values board coord) (col-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (apply set/union board)) 0)))
 
 (defn rows [board]
-  nil)
+  (map set board))
+
+(defn valid-sets [sets]
+  (every? identity (map (fn [x] (empty? (set/difference all-values x))) sets)))
 
 (defn valid-rows? [board]
-  nil)
+  (valid-sets (rows board)))
 
 (defn cols [board]
-  nil)
+  (map set (for [a [0 1 2 3 4 5 6 7 8]]
+             (col-values board [0 a]))))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-sets (cols board)))
 
 (defn blocks [board]
-  nil)
+  (map set (for [coord (coord-pairs [0 3 6])]
+             (block-values board coord))))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-sets (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [x 0
+         y 0]
+    (if (and (> x 8) (> y 8)) [x y]
+      (if (> x 8) (recur 0 (+ y 1))
+        (if (has-value? board [x y])
+          (recur (+ x 1) y)
+          [x y])))))
 
 (defn solve [board]
   nil)
