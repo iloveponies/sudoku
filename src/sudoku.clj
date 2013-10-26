@@ -85,5 +85,15 @@
           (recur (+ x 1) y)
           [x y])))))
 
+(defn solve-helper [current]
+  (if (filled? current)
+    (if (valid-solution? current)
+      [current]
+      [])
+    (let [point (find-empty-point current)]
+      (for [elem (valid-values-for current point)
+            hoho (solve-helper (set-value-at current point elem))]
+        hoho))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
