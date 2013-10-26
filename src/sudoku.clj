@@ -95,7 +95,7 @@
      (and (has-value? board [x y])
           (== y 8)
           (< x 8)) (recur (inc x) 0)
-     (not (has-value? board (vector x y))) [x y]
+     (not (has-value? board [x y])) [x y]
      :else nil)))
 
 (defn solve-helper [board]
@@ -114,6 +114,8 @@
 
 (defn solve [board]
   (first (solve-helper board)))
+
+
 
 
 
