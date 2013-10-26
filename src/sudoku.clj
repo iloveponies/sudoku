@@ -37,8 +37,7 @@
           y (range tl-y (+ tl-y 3))]
         (value-at board [x y])))))
 
-
-        
+      
 (defn valid-values-for [board coord]
   (if (has-value? board coord) #{}
       (set/difference
@@ -93,4 +92,9 @@
                 (coord-pairs (range 9))))))
 
 (defn solve [board]
-  nil)
+  (cond 
+   (filled? board) (if (valid-solution? board) board '())
+   :else (let [empty-pt (find-empty-point board)]
+           (for [val (valid-values-for board empty-pt)
+                 solved (solve (set-value-at board empty-pt val))]
+             solved))))
