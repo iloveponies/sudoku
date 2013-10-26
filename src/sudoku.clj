@@ -2,18 +2,20 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
+(def board-values (set (range 1 10)))
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not= 0 (value-at board coord)))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [row col]]
+  (set (get-in board [row])))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [row col]]
+  (let [col-helper(fn [column-set board-row] (conj column-set (get board-row col))) ]
+  (reduce col-helper #{} board)))
 
 (defn coord-pairs [coords]
   nil)
