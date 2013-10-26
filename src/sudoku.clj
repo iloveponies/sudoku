@@ -110,11 +110,9 @@
   (filter (fn [coord] (= 0 (value-at board coord)))
           (coord-pairs (range 0 9))))
 
-;(defn find-empty-point [board]
-;  "Finds one empty point on the board."
-;  (first (filter
-;          (fn [coord] (= 0 (value-at board coord)))
-;          (coord-pairs (range 0 9)))))
+(defn find-empty-point [board]
+  "Finds one empty point on the board."
+  (first (find-all-empty-points board)))
 
 (defn only-one-possible? [board coord]
   "Checks if only one possible number exists for a given coordinate."
