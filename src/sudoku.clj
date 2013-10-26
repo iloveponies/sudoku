@@ -36,30 +36,45 @@
     (set (for [x (range tl-x (+ tl-x 3))
           y (range tl-y (+ tl-y 3))]
         (value-at board [x y])))))
+
+
         
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord) #{}
+      (set/difference
+       all-values
+       (set/union (block-values board coord)
+                  (row-values board coord)
+                  (col-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (not-any? true? (map zero? (flatten board))))
 
 (defn rows [board]
-  nil)
+  (for [row board] (set row)))
+
+(defn all-values-present? [s]
+  (empty? (set/difference
+           all-values
+           s)))
 
 (defn valid-rows? [board]
-  nil)
+  (not-any? false? (map all-values-present? (rows board))))
 
 (defn cols [board]
-  nil)
+  (map (fn [colno](col-values board [0 colno])) 
+       (range (count board))))
 
 (defn valid-cols? [board]
-  nil)
+    (not-any? false? (map all-values-present? (cols board))))
 
 (defn blocks [board]
-  nil)
+  (for [x (range 0 (count board) 3)
+         y (range 0 (count board) 3)]
+    (block-values board [x y])))
 
 (defn valid-blocks? [board]
-  nil)
+  (not-any? false? (map all-values-present? (blocks board))))
 
 (defn valid-solution? [board]
   nil)
