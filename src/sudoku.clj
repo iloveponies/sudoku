@@ -18,10 +18,20 @@
   (reduce col-helper #{} board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (into [] (for [x coords
+                 y coords]
+             (vector x y))))
+
+(defn block-corner [[row col]]
+  (let [corner(fn[x] (-  x (rem x 3)))]
+  [(corner row) (corner col)]))
 
 (defn block-values [board coord]
-  nil)
+  (let [coord-range(fn[z] (range z (+ 3 z)))]
+    (def corner (block-corner coord))
+    (into #{} (for [row (coord-range (first corner))
+                    col (coord-range (second corner))]
+                (value-at board [row col])))))
 
 (defn valid-values-for [board coord]
   nil)
