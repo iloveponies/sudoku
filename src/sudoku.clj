@@ -2,7 +2,7 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
-(def board-values (set (range 1 10)))
+(def valid-values (set (range 1 10)))
 
 (defn value-at [board coord]
   (get-in board coord))
@@ -34,10 +34,17 @@
                 (value-at board [row col])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (def coord-val (value-at board coord))
+  (if (not= 0 coord-val)
+    #{}
+    (set/difference valid-values (set/union (block-values board coord) (row-values board coord) (col-values board coord)))))
+
+(defn board-values [board]
+  (let [helper(fn [board-values row] (apply conj board-values row))]
+    (reduce helper #{} board)))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (board-values board) 0)))
 
 (defn rows [board]
   nil)
