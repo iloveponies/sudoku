@@ -4,16 +4,20 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (if (= (get-in board coord) 0)
+  false
+  true))
 
 (defn row-values [board coord]
-  nil)
+  (let [row (first coord)]
+    (set (for [col (range 9)] (value-at board [row col])))))
 
 (defn col-values [board coord]
-  nil)
+  (let [column (second coord)]
+    (set (for [row (range 9)] (value-at board [row column])))))
 
 (defn coord-pairs [coords]
   nil)
