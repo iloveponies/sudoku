@@ -4,4 +4,4 @@ I'm part of the [120 hour epic sax marathon](http://iloveponies.github.com/120-h
 
 ## Comments
 
-I will be a sudoku solver.
+I am a sudoku program with a solver.
