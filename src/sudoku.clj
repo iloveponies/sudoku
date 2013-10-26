@@ -77,13 +77,20 @@
   (not-any? false? (map all-values-present? (blocks board))))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
-(defn set-value-at [board coord new-value]
-  nil)
+(defn set-value-at [board-param coord new-value]
+    (board (assoc-in board-param coord new-value)))
 
 (defn find-empty-point [board]
-  nil)
+  (first 
+   (filter (fn [item] (not (nil? item))) 
+           (map (fn [coord] (if (zero? (value-at board coord)) 
+                              coord 
+                              nil)) 
+                (coord-pairs (range 9))))))
 
 (defn solve [board]
   nil)
