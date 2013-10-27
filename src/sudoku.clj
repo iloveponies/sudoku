@@ -4,22 +4,29 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (= (value-at board coord) 0)))
 
 (defn row-values [board coord]
-  nil)
+  (let [[row _] coord]
+    (reduce (fn [values col] (conj values (value-at board [row col]))) #{} (range 9))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[_ col] coord]
+    (reduce (fn [values row] (conj values (value-at board [row col]))) #{} (range 9))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    [row col]))
 
 (defn block-values [board coord]
-  nil)
+  (let [[row col] coord
+        tl-row (int (/ row 3))
+        tl-col (int (/ col 3))]
+    (reduce (fn [values [r c]] (conj values (value-at board [(+ tl-row r) (+ tl-col c)]))) #{} (coord-pairs [0 1 2]))))
 
 (defn valid-values-for [board coord]
   nil)
