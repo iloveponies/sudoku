@@ -47,7 +47,8 @@
   (not (contains? (board-values board) 0)))
 
 (defn rows [board]
-  nil)
+  (let [helper(fn [result row] (conj result (set row)))]
+  (reduce helper [] board)))
 
 (defn valid-rows? [board]
   nil)
