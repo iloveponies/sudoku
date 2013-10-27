@@ -101,6 +101,30 @@
 
 
 
-(defn solve [board]
-  nil)
+
+
+(defn solve-helper [board]
+  (cond
+   (filled? board) (if (valid-solution? board) board [])
+   :else (let [muutettava (find-empty-point board)]
+           (for [arvot (valid-values-for board muutettava)]
+             (solve-helper (set-value-at board muutettava arvot))))))
+
+(defn ratkaisu [board]
+  (if (number? (first (first board)))
+    board
+    (ratkaisu (apply concat board))))
+
+(defn solve[board]
+  (ratkaisu (solve-helper board)))
+
+
+
+
+
+
+
+
+
+
 
