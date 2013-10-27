@@ -3,6 +3,7 @@
 
 (def board identity)
 (def valid-values (set (range 1 10)))
+(def coord-range (set (range 0 9)))
 
 (defn value-at [board coord]
   (get-in board coord))
@@ -50,26 +51,36 @@
   (let [helper(fn [result row] (conj result (set row)))]
   (reduce helper [] board)))
 
+(defn valid-content? [board-contents]
+  (loop [board-contents board-contents]
+    (cond
+      (empty? board-contents) true
+      (not= valid-values (first board-contents)) false
+      :else (recur (rest board-contents)))))
+
 (defn valid-rows? [board]
-  nil)
+  (valid-content? (rows board)))
 
 (defn cols [board]
-  nil)
+  (into [] (for [col coord-range]
+              (col-values board [0 col]))))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-content? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (into [] (for [row (range 0 7 3)
+                 col (range 0 7 3)]
+             (block-values board [row col]))))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-content? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
   nil)
