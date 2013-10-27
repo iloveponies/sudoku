@@ -53,14 +53,14 @@
                                  (block-values board coord)))))
 
 (defn filled? [board]
-  (let [allcoord (coord-pairs (range 0 9))
+  (let [allcoord (vec (coord-pairs (range 0 9)))
         taken? (fn [crds] (if (empty? (valid-values-for board crds))
                      true
                      false))]
     (loop [cur (first allcoord)
            bord (drop 1 allcoord)]
       (cond
-       (empty? bord) true
+       (nil? cur) true
        (not (taken? cur)) false
        :else (recur (first bord) (drop 1 bord))))))
 
@@ -118,5 +118,24 @@
        (not (taken? (get allcoord n))) (get allcoord n)
        :else (recur (inc n))))))
 
+(def solve-helper (fn [bord]
+                    (if (filled? bord)
+                      (if (valid-solution? bord)
+                        bord
+                        nil)
+                      (let [spot (find-empty-point bord)
+                            valids (valid-values-for bord spot)]
+                        (for [trial valids
+                              :let [solution (solve-helper (set-value-at bord
+                                                                         spot
+                                                                         trial))]
+                              :when (and (not (empty? solution))
+                                         (not (nil? solution)))]
+                          solution)))))
+
 (defn solve [board]
-  nil)
+  (let [solution (solve-helper board)]
+    (loop [seqs solution]
+      (if (vector? seqs)
+        seqs
+        (recur (first seqs))))))
