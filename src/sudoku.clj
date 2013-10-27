@@ -20,7 +20,8 @@
     (set (for [row (range 9)] (value-at board [row column])))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords col coords]
+    [row col]))
 
 (defn block-values [board coord]
   nil)
