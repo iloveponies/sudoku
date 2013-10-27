@@ -83,7 +83,8 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (def coordinates  (vec (for [x coord-range y coord-range] [x y])))
+  (first (filter #(= (value-at board %) 0) coordinates)))
 
 (defn solve [board]
   nil)
