@@ -97,12 +97,15 @@
                           fillable-points)]
     (cond (valid-solution? board)
             board
-          (some empty? (map (partial valid-values-for board) empty-points))
+          (or (empty? empty-points)
+              (some empty? (map (partial valid-values-for board) empty-points)))
             nil
           (not (= board new-board))
             (solve new-board)
           (= board new-board)
-            (first (filter (fn [board] (valid-solution? board))
+            (first
+              (filter valid-solution?
+                      (map (fn [board] (solve board))
                            (map (partial set-value-at board first-empty-point)
-                                (valid-values-for board first-empty-point)))))))
+                                (valid-values-for board first-empty-point))))))))
 
