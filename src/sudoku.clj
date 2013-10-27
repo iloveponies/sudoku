@@ -3,6 +3,8 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -24,33 +26,51 @@
 
 (defn block-values [board coord]
   (let [[row col] coord
-        tl-row (int (/ row 3))
-        tl-col (int (/ col 3))]
+        tl-row (- row (mod row 3))
+        tl-col (- col (mod col 3))]
     (reduce (fn [values [r c]] (conj values (value-at board [(+ tl-row r) (+ tl-col c)]))) #{} (coord-pairs [0 1 2]))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+  (set/difference
+   all-values
+   (set/union
+    (row-values board coord)
+    (col-values board coord)
+    (block-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (loop [rows board]
+    (cond
+     (empty? rows) true
+     (contains? (set (first rows)) 0) false
+     :else (recur (rest rows)))))
+
+(defn valid-sets? [sets]
+  (loop [unread sets]
+    (cond
+     (empty? unread) true
+     (contains? (first unread) 0) false
+     :else (recur (rest unread)))))
 
 (defn rows [board]
-  nil)
+  (reduce (fn [rows row] (conj rows (row-values board [row 0]))) [] (range 9)))
 
 (defn valid-rows? [board]
-  nil)
+  (valid-sets? (rows board)))
 
 (defn cols [board]
-  nil)
+  (reduce (fn [cols col] (conj cols (col-values board [0 col]))) [] (range 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-sets? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (reduce (fn [blocks [row col]] (conj blocks (block-values board [(* row 3) (* col 3)]))) [] (coord-pairs [0 1 2])))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-sets? (blocks board)))
 
 (defn valid-solution? [board]
   nil)
