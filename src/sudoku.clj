@@ -76,7 +76,9 @@
   (apply = [(valid-rows? board) (valid-cols? board) (valid-blocks? board) true]))
 
 (defn set-value-at [board coord new-value]
-  (assoc-in board coord new-value))
+  (if (not (nil? new-value))
+    (assoc-in board coord new-value)
+    board))
 
 (defn find-empty-points [board]
   (filter (fn [p] (zero? (value-at board p)))
@@ -97,8 +99,7 @@
                           fillable-points)]
     (cond (valid-solution? board)
             board
-          (or (empty? empty-points)
-              (some empty? (map (partial valid-values-for board) empty-points)))
+          (some empty? (map (partial valid-values-for board) empty-points))
             nil
           (not (= board new-board))
             (solve new-board)
