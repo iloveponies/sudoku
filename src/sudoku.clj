@@ -4,22 +4,46 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (= 0 (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (let [[y] coord]
+    (set (get-in board [y]))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[y x] coord]
+    (set (map (fn [a] (get-in board [a x]) ) (range 0 9)))))
 
 (defn coord-pairs [coords]
-  nil)
+  (let [pairs (for [n coords
+                    m coords]
+                [n m])]
+    (reduce conj [] pairs)))
+
+(defn atcorner [board coord]
+  (let [[y x] coord
+        assigner (fn [a]
+                   (cond
+                     (>= a 6) 6
+                     (>= a 3) 3
+                     :else 0))]
+    [(assigner y) (assigner x)]))
+
+(defn block-coord-pairs [ycoords xcoords]
+  (let [pairs (for [n xcoords m ycoords]
+                [m n])]
+    (reduce conj [] pairs)))
 
 (defn block-values [board coord]
-  nil)
+  (let [cornercoords (atcorner board coord)
+        [y x] cornercoords
+        block-coords (block-coord-pairs
+                       (range y (+ 3 y))
+                       (range x (+ 3 x)))]
+    (set (map (fn [a] (value-at board a)) block-coords))))
 
 (defn valid-values-for [board coord]
   nil)
