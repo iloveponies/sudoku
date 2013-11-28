@@ -3,56 +3,90 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (let [[y _] coord]
+    (set (map (fn [x] (value-at board [y x])) (range 9)))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[_ x] coord]
+    (set (map (fn [y] (value-at board [y x])) (range 9)))))
 
 (defn coord-pairs [coords]
-  nil)
+  (apply concat (map (fn [y] (map (fn [x] [y x]) coords)) coords)))
 
 (defn block-values [board coord]
-  nil)
+  (let [block-top-left (fn [[y x]] [(- y (mod y 3)) (- x (mod x 3))])
+        [y x] (block-top-left coord)
+        y-coords (apply concat (map (fn [y] (vector y y y)) (range y (+ y 3))))
+        x-coords (apply concat (repeat 3 (range x (+ x 3))))]
+    (set (map (fn [coord] (value-at board coord))
+              (map vector y-coords x-coords)))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (pos? (value-at board coord))
+    #{}
+    (clojure.set/difference
+      all-values
+      (row-values board coord)
+      (col-values board coord)
+      (block-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (every? true? (for [row board] (every? pos? row))))
 
 (defn rows [board]
-  nil)
+  (map set board))
+
+(defn valid-sets? [sets]
+  (every? true? (map (fn [st] (= all-values st)) sets)))
 
 (defn valid-rows? [board]
-  nil)
+  (valid-sets? (rows board)))
 
 (defn cols [board]
-  nil)
+  (map (fn [col] (col-values board [0 col])) (range 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-sets? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (map (fn [coord] (block-values board coord)) (coord-pairs [0 3 6])))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-sets? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (some identity (for [y (range 9)
+                       x (range 9)]
+                   (if (has-value? board [y x])
+                     false
+                     [y x]))))
 
 (defn solve [board]
-  nil)
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      nil)
+    (let [coord  (find-empty-point board)
+          values (valid-values-for board coord)]
+      (if (empty? values)
+        nil
+        (some identity (for [v values]
+                            (solve (set-value-at board coord v))))))))
+
