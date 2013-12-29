@@ -51,7 +51,7 @@
 
 (defn block-coords [board coord]
  (let [ tlc (top-left-corner coord)]
-    (map (fn [c] (map + c tlc)) (coord-pairs [0 1 2]))))
+    (map (fn [x] (map + x tlc)) (coord-pairs [0 1 2]))))
 
 (defn block-values [board coord]
   (set (map (fn [x] (value-at board x)) (block-coords board coord))))
@@ -70,26 +70,32 @@
 (defn rows [board]
   (map set board))
 
+(defn valid-set? [a-set]
+  (every? (fn [x] (= x all-values)) a-set))
+
 (defn valid-rows? [board]
-  nil)
+  (valid-set? (rows board)))
 
 (defn cols [board]
-  nil)
+  (for [y (range 0 9)]
+    (set (map (fn [x] (get x y)) board))))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-set? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (for [x [0 4 8]
+        y [0 4 8]]
+    (block-values board [x y])))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-set? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-cols? board) (valid-rows? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
   nil)
