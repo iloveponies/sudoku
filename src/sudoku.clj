@@ -9,12 +9,12 @@
   (get-in board coord))
 
 (defn has-value? [board coord]
-  (not= 0 (value-at board coord)))
+  (not (zero? (value-at board coord))))
 
-(defn row-values [board [row col]]
+(defn row-values [board [row _]]
   (set (get board row)))
 
-(defn col-values [board [row col]]
+(defn col-values [board [_ col]]
   (set (map #(get % col) board)))
 
 (defn coord-pairs [coords]
@@ -23,9 +23,9 @@
     [x y]))
 
 (defn block-values [board coord]
-  (let [[row col] (map #(- % (mod % 3)) coord)]
-    (set (for [x (range row (+ row 3))
-               y (range col (+ col 3))]
+  (let [[r c] (map #(- % (mod % 3)) coord)]
+    (set (for [x (range r (+ r 3))
+               y (range c (+ c 3))]
            (value-at board [x y])))))
 
 (defn valid-values-for [board coord]
@@ -36,27 +36,25 @@
                     (block-values board coord))))
 
 (defn filled? [board]
-  (not (some zero? (apply concat board))))
+  (not (some zero? (flatten board))))
 
 (defn rows [board]
-  (map set board))
+  (map #(row-values board [% 0]) (range 9)))
 
 (defn valid-rows? [board]
-  (every? #(= (sort %) (range 1 10)) (rows board)))
+  (every? #(= all-values %) (rows board)))
 
 (defn cols [board]
-  (rows (apply map vector board)))
+  (map #(col-values board [0 %]) (range 9)))
 
 (defn valid-cols? [board]
-  (valid-rows? (apply map vector board)))
+  (every? #(= all-values %) (cols board)))
 
 (defn blocks [board]
-  (for [x [0 3 6]
-        y [0 3 6]]
-    (block-values board [x y])))
+  (map #(block-values board %) (coord-pairs [0 3 6])))
 
 (defn valid-blocks? [board]
-  (every? #(= (sort %) (range 1 10)) (blocks board)))
+  (every? #(= all-values %) (blocks board)))
 
 (defn valid-solution? [board]
   (and (valid-rows?   board)
@@ -67,17 +65,11 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  (first (filter #(not (has-value? board %))
-                 (for [x (range 0 9)
-                       y (range 0 9)] [x y]))))
-
-(defn solve-helper [board]
-  (if (filled? board)
-    (if (valid-solution? board) [board] '())
-    (let [coord (find-empty-point board)]
-      (for [new-value (valid-values-for board coord)
-            solution  (solve-helper (set-value-at board coord new-value))]
-        solution))))
+  (first (remove #(has-value? board %) (coord-pairs (range 9)))))
 
 (defn solve [board]
-  (first (solve-helper board)))
+  (if (valid-solution? board) board
+    (let [coord (find-empty-point board)]
+      (for [new-value (valid-values-for board coord)
+            solution (solve (set-value-at board coord new-value))]
+        solution))))
