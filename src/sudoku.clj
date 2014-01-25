@@ -93,7 +93,9 @@
      :else (recur (+ y 1)))))
 
 
-(defn solve [board]
+(defn solve [board] nil)
+
+(defn solve2 [board]
   (if (filled? board)
     (if (valid-solution? board) board nil)
     (let [coord (find-empty-point board)]
