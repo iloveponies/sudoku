@@ -28,8 +28,6 @@
   [(round-multiple-of-three row)
    (round-multiple-of-three col)])
 
-;todo defn block-coordinates
-
 (defn block-coordinates
   "Get the block coordinates for a given coordinate."
   [coord]
@@ -39,8 +37,9 @@
       [row col])))
 
 (defn block-values [board coord]
-  (let [coordinates (block-coordinates coord)]
-    (map (fn [coordinate] (value-at board coordinate)) coordinates)))
+  (let [coordinates (block-coordinates coord)
+        values (map (fn [coordinate] (value-at board coordinate)) coordinates)]
+    (set values)))
 
 (defn valid-values-for [board coord]
   nil)
