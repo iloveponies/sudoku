@@ -1,6 +1,8 @@
 (ns sudoku
   (:require [clojure.set :as set]))
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (def board identity)
 
 (defn value-at [board coord]
@@ -42,31 +44,54 @@
     (set values)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (let [taken-row-values (row-values board coord)
+          taken-col-values (col-values board coord)
+          taken-block-values (block-values board coord)]
+      (set/difference all-values taken-row-values taken-col-values taken-block-values))))
+
+(defn board-values [board]
+  (for [row (range 9)
+        col (range 9)]
+    (value-at board [row col])))
 
 (defn filled? [board]
-  nil)
+  (every? (fn [value] (contains? all-values value)) (board-values board)))
 
 (defn rows [board]
-  nil)
+  (for [row (range 9)]
+    (row-values board [row nil])))
+
+(defn valid-sets?
+  "Returns true if all sets are are valid.
+   A valid set is a set of all values."
+  [value-sets]
+  (every? (fn [value-set] (= all-values value-set)) value-sets))
 
 (defn valid-rows? [board]
-  nil)
+  (valid-sets? (rows board)))
 
 (defn cols [board]
-  nil)
+  (for [col (range 9)]
+    (col-values board [nil col])))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-sets? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (let [steps (range 0 9 3)]
+    (for [row steps
+          col steps]
+      (block-values board [row col]))))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-sets? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
