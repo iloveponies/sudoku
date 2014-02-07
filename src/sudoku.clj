@@ -94,10 +94,14 @@
        (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [empty-point? (fn [coord] (not (has-value? board coord)))
+        all-coordinates (for [x (range 9)
+                              y (range 9)]
+                          [x y])]
+    (first (filter empty-point? all-coordinates))))
 
 (defn solve [board]
   nil)
