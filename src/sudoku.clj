@@ -43,7 +43,9 @@
         values (map (fn [coordinate] (value-at board coordinate)) coordinates)]
     (set values)))
 
-(defn valid-values-for [board coord]
+(defn valid-values-for
+  "Returns the possible valid values for this board coordinate."
+  [board coord]
   (if (has-value? board coord)
     #{}
     (let [taken-row-values (row-values board coord)
@@ -103,5 +105,16 @@
                           [x y])]
     (first (filter empty-point? all-coordinates))))
 
+(defn solve-helper [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      [])
+    (let [empty-point (find-empty-point board)
+          remaining-values (valid-values-for board empty-point)]
+      (for [possible-value remaining-values
+            solution (solve-helper (set-value-at board empty-point possible-value))]
+        solution))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
