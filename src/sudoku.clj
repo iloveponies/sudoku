@@ -91,13 +91,46 @@
   (all-valid? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [x 0
+         y 0]
+    (cond 
+      (>= x 9)
+      nil
+      (zero? (value-at board [x y]))
+      [x y]
+      :else
+      (let [next-x (if (= y 8) (inc x) x)
+            next-y (if (= y 8) 0 (inc y))]
+      (recur next-x next-y)))))
 
 (defn solve [board]
-  nil)
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      nil)
+    (let [ep (find-empty-point board)
+          valid-values-here (valid-values-for board ep)]
+      (loop [values-left-to-try valid-values-here]
+        (if (empty? values-left-to-try)
+          nil
+          (let [potential-solution (solve (set-value-at board ep (first values-left-to-try)))]
+            (if (not (nil? potential-solution))
+              potential-solution
+              (recur (rest values-left-to-try)))))))))
+
+(def sudoku-board
+  (board [[2 0 5 4 0 3 0 0 8]
+          [0 0 0 0 5 9 0 0 0]
+          [0 1 0 7 0 0 0 3 0]
+          [1 0 0 0 0 4 0 9 6]
+          [9 0 4 3 8 6 1 0 7]
+          [6 3 0 9 0 0 0 0 4]
+          [0 7 0 0 0 1 0 4 0]
+          [0 0 0 6 9 0 0 0 0]
+          [3 0 0 2 0 7 8 0 1]]))
