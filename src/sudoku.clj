@@ -123,14 +123,3 @@
             (if (not (nil? potential-solution))
               potential-solution
               (recur (rest values-left-to-try)))))))))
-
-(def sudoku-board
-  (board [[2 0 5 4 0 3 0 0 8]
-          [0 0 0 0 5 9 0 0 0]
-          [0 1 0 7 0 0 0 3 0]
-          [1 0 0 0 0 4 0 9 6]
-          [9 0 4 3 8 6 1 0 7]
-          [6 3 0 9 0 0 0 0 4]
-          [0 7 0 0 0 1 0 4 0]
-          [0 0 0 6 9 0 0 0 0]
-          [3 0 0 2 0 7 8 0 1]]))
