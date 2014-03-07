@@ -4,10 +4,10 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (if (zero? (value-at board coord)) false true))
 
 (defn row-values [board coord]
   nil)
