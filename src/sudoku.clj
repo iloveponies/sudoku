@@ -52,8 +52,12 @@
                                  (block-values board coord))]
       (set/difference all-values unified-set))))
 
+(defn set-board-all-values [board]
+  (apply set/union (map (fn [x-coord]
+                    (row-values board [x-coord 0])) (range 8))))
+
 (defn filled? [board]
-  nil)
+  (not (contains? (set-board-all-values board) 0)))
 
 (defn rows [board]
   nil)
