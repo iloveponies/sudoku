@@ -22,8 +22,26 @@
         same-coords coords]
     (vector given-coords same-coords)))
 
+(defn top-left [board coord]
+  (let [[given-x given-y] coord
+        [top-left-x top-left-y] [(- given-x (rem given-x 3)) (- given-y (rem given-y 3))]]
+    [top-left-x top-left-y]))
+
+;(defn manual-block-coordinates [coord]
+;  (let [[x y] coord]
+;    [[x y]       [x (+ 1 y)]        [x (+ 2 y)]
+;     [(+ 1 x) y] [(+ 1 x) (+ 1 y)]  [(+ 1 x) (+ 2 y)]
+;     [(+ 2 x) y] [(+ 2 x) (+ 1 y)]  [(+ 2 x) (+ 2 y)]]))
+
+(defn block-coordinates [coord]
+  (let [[x y] coord]
+    (for [x-range (range 3)
+          y-range (range 3)]
+      [(+ x x-range) (+ y y-range)])))
+
 (defn block-values [board coord]
-  nil)
+  (let [calculated-coord (top-left board coord)]
+    (set (map (fn [coord] (value-at board coord)) (block-coordinates calculated-coord)))))
 
 (defn valid-values-for [board coord]
   nil)
