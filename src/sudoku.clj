@@ -34,8 +34,8 @@
 ;     [(+ 1 x) y] [(+ 1 x) (+ 1 y)]  [(+ 1 x) (+ 2 y)]
 ;     [(+ 2 x) y] [(+ 2 x) (+ 1 y)]  [(+ 2 x) (+ 2 y)]]))
 
-(defn block-coordinates [coord]
-  (let [[x y] coord]
+(defn block-coordinates [top-left]
+  (let [[x y] top-left]
     (for [x-range (range 3)
           y-range (range 3)]
       [(+ x x-range) (+ y y-range)])))
@@ -54,25 +54,39 @@
 
 (defn set-board-all-values [board]
   (apply set/union (map (fn [x-coord]
-                    (row-values board [x-coord 0])) (range 8))))
+                    (row-values board [x-coord 0])) (range (count (first board))))))
 
 (defn filled? [board]
   (not (contains? (set-board-all-values board) 0)))
 
 (defn rows [board]
-  nil)
+  (map (fn [x-coord]
+         (row-values board [x-coord 0])) (range (count (first board)))))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (map (fn [y-coord]
+         (col-values board [0 y-coord])) (range (count (first board)))))
 
 (defn valid-cols? [board]
   nil)
 
+
+(defn all-top-left-coordinates []
+  (for [x-range [0 3 6]
+        y-range [0 3 6]]
+    [x-range y-range]))
+
+;(defn manual-all-top-left-coordinates []
+;  [[0 0] [0 3] [0 6]
+;   [3 0] [3 3] [3 6]
+;   [6 0] [6 3] [6 6]])
+
 (defn blocks [board]
-  nil)
+  (map (fn [[x-coord y-coord]]
+         (block-values board [x-coord y-coord])) (all-top-left-coordinates)))
 
 (defn valid-blocks? [board]
   nil)
