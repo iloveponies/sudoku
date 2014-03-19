@@ -63,15 +63,20 @@
   (map (fn [x-coord]
          (row-values board [x-coord 0])) (range (count (first board)))))
 
+(defn values-validity [f board]
+  (reduce set/union
+          #{}
+          (map  (fn [block] (set/difference all-values block)) (f board))))
+
 (defn valid-rows? [board]
-  nil)
+  (empty? (values-validity rows board)))
 
 (defn cols [board]
   (map (fn [y-coord]
          (col-values board [0 y-coord])) (range (count (first board)))))
 
 (defn valid-cols? [board]
-  nil)
+  (empty? (values-validity cols board)))
 
 
 (defn all-top-left-coordinates []
@@ -89,10 +94,12 @@
          (block-values board [x-coord y-coord])) (all-top-left-coordinates)))
 
 (defn valid-blocks? [board]
-  nil)
+  (empty? (values-validity blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (empty? (set/difference (set/union #{(valid-rows? board)}
+                                     #{(valid-cols? board)}
+                                     #{(valid-blocks? board)}) #{true})))
 
 (defn set-value-at [board coord new-value]
   nil)
