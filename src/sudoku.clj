@@ -105,7 +105,10 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (for [x (range 9)
+               y (range 9)
+               :while (not (has-value? board [x y]))]
+           [x y])))
 
 (defn solve [board]
   nil)
