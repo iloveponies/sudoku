@@ -5,6 +5,9 @@
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
+(defn print-board [board]
+  (reduce (fn [rep row] (str rep "\n" row)) board))
+
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -22,18 +25,12 @@
         col coords]
     [row col]))
 
-(defn block-top-left [block-y block-x]
-  [(* 3 block-y) (* 3 block-x)])
-
-(defn print-board [board]
-  (reduce (fn [rep row] (str rep "\n" row)) board))
-
 (defn block-values [board [cell-y cell-x]]
   (let [block-y (int (/ cell-y 3))
         block-x (int (/ cell-x 3))
         cell-coords (for [y (range 0 3)
-                                      x (range 0 3)]
-                                  [(+ (* 3 block-y) y) (+ (* 3 block-x) x)])]
+                          x (range 0 3)]
+                      [(+ (* 3 block-y) y) (+ (* 3 block-x) x)])]
     (reduce conj #{} (map (fn [cell-coord] (value-at board cell-coord)) cell-coords))))
 
 (defn valid-values-for [board coord]
@@ -80,12 +77,41 @@
 
 (defn find-empty-point [board]
   (let [coords (for [y (range 0 9) x (range 0 9)]
-                 [y y])]
+                 [y x])]
     (loop [candidates coords]
-       (cond
-          (empty? candidates) nil
-          (not (has-value? board (first candidates))) (first candidates)
-          :else (recur (rest candidates))))))
+      (cond
+       (empty? candidates) nil
+       (not (has-value? board (first candidates))) (first candidates)
+       :else (recur (rest candidates))))))
+
+(defn progress-impossible [board]
+  (if (nil? board) true
+      (let [coords (for [y (range 0 9) x (range 0 9)]
+                     [y y])]
+        (loop [candidates coords]
+          (cond
+           (empty? candidates) false
+           (and (not (has-value? board (first candidates))) (empty? (valid-values-for board (first candidates)))) true
+           :else (recur (rest candidates)))))))
+
+(defn solution-helper [depth board]
+  (cond
+   (valid-solution? board) board
+   (progress-impossible board) nil
+   :else (let [empty-pt (find-empty-point board)]
+           (if (nil? empty-pt)
+             nil
+             (loop [available-numbers (valid-values-for board empty-pt)]
+               (let [trial-value (first available-numbers)]
+                 (if (nil? trial-value)
+                   nil
+                   ( if (valid-solution? board)
+                     board
+                     (let [next-board (solution-helper (inc depth) (set-value-at board empty-pt trial-value))]
+                       (if (not (nil? next-board))
+                         (do
+                           next-board)
+                         (recur (disj available-numbers trial-value))))))))))))
 
 (defn solve [board]
-  nil)
+  (solution-helper 0 board))
