@@ -3,26 +3,43 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (== 0 (value-at board coord))))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [row col]]
+  (set (get board row)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [row col]]
+  (let [col-val (fn [acc curr] (set (cons (get curr col) acc)))]
+    (reduce col-val [] board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords
+        y coords]
+    [x y]))
 
-(defn block-values [board coord]
-  nil)
+(defn block-values [board [row col]]
+  (let [corner-row (* 3 (int (/ row 3)))
+        corner-col (* 3 (int (/ col 3)))
+        additions (coord-pairs [0 1 2])
+        all-coords-in-block (map (fn [[row-add col-add]] [(+ corner-row row-add) (+ corner-col col-add)]) additions)]
+
+    (reduce (fn [a-set curr] (conj a-set (value-at board curr))) #{} all-coords-in-block)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (let [curr-value (value-at board coord)]
+    (if (> curr-value 0)
+      #{}
+      (set/difference
+        all-values
+        (block-values board coord)
+        (row-values board coord)
+        (col-values board coord)))))
 
 (defn filled? [board]
   nil)
