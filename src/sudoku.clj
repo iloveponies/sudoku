@@ -42,34 +42,75 @@
         (col-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (flatten board)) 0)))
 
 (defn rows [board]
-  nil)
+  (reduce (fn [prev curr] (conj prev (set curr))) [] board))
 
 (defn valid-rows? [board]
-  nil)
+  (reduce (fn [prev curr]
+            (and
+              prev
+              (= 0
+                (count
+                  (set/difference
+                    all-values
+                    (set curr))))))
+    true
+    (rows board)))
 
 (defn cols [board]
-  nil)
+  (for [col (range 0 9)]
+    (col-values board [0 col])))
 
 (defn valid-cols? [board]
-  nil)
+  (reduce (fn [prev curr]
+            (and
+              prev
+              (= 0
+                (count
+                  (set/difference
+                    all-values
+                    (set curr))))))
+    true
+    (cols board)))
 
 (defn blocks [board]
-  nil)
+  (for [block (coord-pairs [0 3 6])]
+    (block-values board block)))
 
 (defn valid-blocks? [board]
-  nil)
+  (reduce (fn [prev curr]
+            (and
+              prev
+              (= 0
+                (count
+                  (set/difference
+                    all-values
+                    (set curr))))))
+    true
+    (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (and (valid-rows? board) (valid-cols? board)) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [empty-points (filter (fn [coord] (== 0 (value-at board coord))) (coord-pairs (range 0 9)))]
+    (if (empty? empty-points) nil (first empty-points))))
+
+(defn santas-little-helper [board]
+  (if (valid-solution? board)
+   board
+   (let [empty-point (find-empty-point board)]
+     (if (nil? empty-point) '()
+       (for [valid-choice (valid-values-for board empty-point)
+             solution (santas-little-helper (set-value-at board empty-point valid-choice))]
+         solution)))))
 
 (defn solve [board]
-  nil)
+  (santas-little-helper board))
+
+
