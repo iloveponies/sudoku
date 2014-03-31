@@ -107,8 +107,21 @@
 (defn find-empty-point [board]
   (first (for [x (range 9)
                y (range 9)
-               :while (not (has-value? board [x y]))]
+               :when (not (has-value? board [x y]))]
            [x y])))
 
+
+(defn remaining-values-for-empty-point [board coord]
+  (clojure.set/difference all-values (clojure.set/union (block-values board coord) (row-values board coord) (col-values board coord))))
+
+(defn solution-helper [board]
+  (if (valid-solution? board)
+    [board]
+    (let [empty-point (find-empty-point board)
+          remaining (remaining-values-for-empty-point board empty-point)]
+      (for [elem remaining
+            solution (solution-helper (set-value-at board empty-point elem))]
+        solution))))
+
 (defn solve [board]
-  nil)
+   (first (solution-helper board)))
