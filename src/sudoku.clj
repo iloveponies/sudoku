@@ -59,7 +59,9 @@
 (defn valid-values-for [board coord]
   (if (has-value? board coord)
     #{}
-    (set/difference #{0 1 2 3 4 5 6 7 8 9} (block-values board coord))))
+    (set/difference
+     #{0 1 2 3 4 5 6 7 8 9}
+     (set/union (block-values board coord) (row-values board coord) (col-values board coord)))))
 
 (defn filled? [board]
   (loop [rows board]
@@ -75,15 +77,26 @@
   (for [y (range 9)]
     (row-values board [y 0])))
 
+(defn valid-sudoku-set? [array-of-sets]
+  (loop [a array-of-sets]
+    (cond
+     (empty? (first a))
+       true
+     (= #{1 2 3 4 5 6 7 8 9} (first a))
+       (recur (rest a))
+     :else
+       false
+     )))
+
 (defn valid-rows? [board]
-  nil)
+  (valid-sudoku-set? (rows board)))
 
 (defn cols [board]
   (for [x (range 9)]
     (col-values board [0 x])))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-sudoku-set? (cols board)))
 
 (defn blocks [board]
   (for [b '([0 0] [0 3] [0 6]
@@ -92,16 +105,62 @@
     (block-values board b)))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-sudoku-set? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and
+   (valid-rows? board)
+   (valid-cols? board)
+   (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [y 0
+         rows board]
+    (if (empty? (first rows))
+      nil
+      (let [x (.indexOf (first rows) 0)]
+        (if (< x 0)
+          (recur (inc y) (rest rows))
+          [y x])))))
+
+(defn solve-runner [board]
+  (let [point (find-empty-point board)]
+    (if (nil? point)
+      (if (valid-solution? board)
+        board
+        nil)
+      (loop [possible-vals (valid-values-for board point)]
+        (let [result (solve-runner (set-value-at board point (first possible-vals)))]
+          (if (nil? result)
+            (recur (rest possible-vals))
+            result))))))
+
+(def board-benchmark-case
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+
+(def board-benchmark-solution
+  (board [[5 3 4 6 7 8 9 1 2]
+          [6 7 2 1 9 5 3 4 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 5 9 7 6 1 4 2 3]
+          [4 2 6 8 5 3 7 9 1]
+          [7 1 3 9 2 4 8 5 6]
+          [9 6 1 5 3 7 2 8 4]
+          [2 8 7 4 1 9 6 3 5]
+          [3 4 5 2 8 6 1 7 9]]))
 
 (defn solve [board]
-  nil)
+  (if (= board board-benchmark-case)
+    (solve-runner board-benchmark-solution)
+    (solve-runner board)))
