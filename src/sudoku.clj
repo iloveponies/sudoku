@@ -88,11 +88,59 @@
 (ctest/is (= (col-values sudoku-board [4 8])  #{3 1 6 0 5 9}))
 
 
+;; Exercise 5
+;; Write the function (coord-pairs coord-sequence) that returns all coordinate-pairs of the form [row col] where row is from coord-sequence and col is from coord-sequence.
+;; signature: vector -> vector of vectors
+;; purpose: Create all possible pairs of given numbers in a vector
+;; stub:
+;; (defn coord-pairs [coords]
+;;   [[] []])
+;;
 (defn coord-pairs [coords]
-  nil)
+  (for [a coords
+        b coords]
+    [a b]))
+;;
+(ctest/is (= (coord-pairs [0 1])    [[0 0] [0 1]
+                                     [1 0] [1 1]]))
+(ctest/is (= (coord-pairs [0 1 2])  [[0 0] [0 1] [0 2]
+                                     [1 0] [1 1] [1 2]
+                                     [2 0] [2 1] [2 2]]))
 
+;; Exercise 6
+;; Write the function (block-values board coordinates) that returns a set with all numbers in the block of coordinates.
+;; You might want to write a helper function that returns the coordinates for the top left corner of the block.
+;;
+;; signature: vector of vectors, vector -> vector
+;; purpose: create block coord [0 0]...[2 2]
+;; stub:
+;; (defn block-coord [board coord]
+;;   [nil nil])
+;;
+(defn block-coord [board coord]
+  ;; block-size = sqrt(nrow(board))
+  (let [block-size (int (Math/sqrt (count board)))]
+    (map #(quot % block-size) coord)))
+;;
+(ctest/is (= (block-coord sudoku-board [0 2])  [0 0]))
+(ctest/is (= (block-coord sudoku-board [4 5])  [1 1]))
+;;
+;; signature: vector of vectors, vector -> set
+;; purpose: get values in the corresponding block
+;; stub:
 (defn block-values [board coord]
-  nil)
+  #{})
+;;
+(defn block-values [board coord]
+  (let [block-size       (int (Math/sqrt (count board)))
+        block-coord      (block-coord board coord)
+        left-upper-coord (map #(* % block-size) block-coord)]
+    left-upper-coord
+    ))
+;;
+(ctest/is (= (block-values sudoku-board [0 2])  #{0 5 3 6 8 9}))
+(ctest/is (= (block-values sudoku-board [4 5])  #{0 6 8 3 2}))
+
 
 (defn valid-values-for [board coord]
   nil)
