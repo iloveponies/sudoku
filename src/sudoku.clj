@@ -1,5 +1,6 @@
 (ns sudoku
-  (:require [clojure.set :as set]))
+  (:require [clojure.set  :as set]
+            [clojure.test :as ctest]))
 
 (def board identity)
 
