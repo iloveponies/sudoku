@@ -128,15 +128,23 @@
 ;; signature: vector of vectors, vector -> set
 ;; purpose: get values in the corresponding block
 ;; stub:
-(defn block-values [board coord]
-  #{})
+;; (defn block-values [board coord]
+;;   #{})
 ;;
 (defn block-values [board coord]
-  (let [block-size       (int (Math/sqrt (count board)))
-        block-coord      (block-coord board coord)
-        left-upper-coord (map #(* % block-size) block-coord)]
-    left-upper-coord
-    ))
+  (->> (let [block-size       (int (Math/sqrt (count board)))
+             block-coord      (block-coord board coord)
+             left-upper-coord (map #(* % block-size) block-coord)]
+         ;;
+         ;; all possible combinations
+         (for [row (range (first left-upper-coord)  (+ (first left-upper-coord) block-size))
+               col (range (second left-upper-coord) (+ (second left-upper-coord) block-size))]
+           ;; value at coord
+           (value-at board [row col])))
+       ;;
+       ;; turn sequence into a set
+       (set,  )
+       ))
 ;;
 (ctest/is (= (block-values sudoku-board [0 2])  #{0 5 3 6 8 9}))
 (ctest/is (= (block-values sudoku-board [4 5])  #{0 6 8 3 2}))
