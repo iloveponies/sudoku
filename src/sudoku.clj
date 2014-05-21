@@ -150,11 +150,43 @@
 (ctest/is (= (block-values sudoku-board [4 5])  #{0 6 8 3 2}))
 
 
+;; Exercise 7
+;; Write the function (valid-values-for board coordinates) that returns a set with all valid numbers for the square at coordinates.
+;; If the square at coordinates already has a value, valid-values should return the empty set #{}.
+;; Remember that we already defined the set all-values .
+;;
+;; sig: vector -> set
+;; purpose: return a set of valid values for a cell
+;; (defn valid-values-for [board coord]
+;;   #{})
+;; Create all possible values, 
 (defn valid-values-for [board coord]
-  nil)
+  (let [all-set (set (range 1 (inc (count board))))]
+    ;;
+    (->> all-set
+         (#(set/difference % (row-values   board coord)),  )
+         (#(set/difference % (col-values   board coord)),  )
+         (#(set/difference % (block-values board coord)),  )
+         )
+    ))
+;;
+(row-values sudoku-board [0 0])
+(col-values sudoku-board [0 0])
+(block-values sudoku-board [0 0])
+(ctest/is (= (valid-values-for sudoku-board [0 0])  #{1 2}))    ; this was wrong on website #{}
+(ctest/is (= (valid-values-for sudoku-board [0 2])  #{1 2 4}))
 
+
+;; Exercise 8
+;; Write the function (filled? board) which returns true if there are no empty squares in board, and otherwise false.
+;; It might help to write a helper function that returns all numbers of the board in a sequence.
+;; Remember that (contains? set element) can be used to check if element is in set.
 (defn filled? [board]
   nil)
+;;
+(ctest/is (= (filled? sudoku-board)  false))
+(ctest/is (= (filled? solved-board)  true))
+
 
 (defn rows [board]
   nil)
