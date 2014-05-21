@@ -181,8 +181,15 @@
 ;; Write the function (filled? board) which returns true if there are no empty squares in board, and otherwise false.
 ;; It might help to write a helper function that returns all numbers of the board in a sequence.
 ;; Remember that (contains? set element) can be used to check if element is in set.
+;;
+;; sig: vector of vectors -> bool
+;; purpose: check the whole board for absence of zeros
+;; stab
+;; (defn filled? [board]
+;;   nil)
+;;
 (defn filled? [board]
-  nil)
+  (not (contains? (set (flatten board)) 0)))
 ;;
 (ctest/is (= (filled? sudoku-board)  false))
 (ctest/is (= (filled? solved-board)  true))
