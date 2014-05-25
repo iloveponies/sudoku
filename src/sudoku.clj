@@ -300,6 +300,7 @@
 ;; purpose: Check if all rows have all numbers
 (defn valid-rows? [board]
   (let [board-size (first (distinct (map count board)))]
+    ;; check if all sets are of the length of board-size
     (every? #(= (count %) board-size) (rows board))))
 ;;
 (valid-rows? solved-board)  ;=> truthy
@@ -317,15 +318,16 @@
 
 
 ;; Write the function (valid-blocks? board) that returns true if every block in board is a valid filled block.
+;; sig: vector of vectors -> bool
+;; purpose check all blocks
+(defn valid-blocks? [board]
+  (let [board-size (first (distinct (map count board)))]
+    ;; check if all sets are of the length of board-size
+    (every? #(= (count %) board-size) (blocks board))))
+;;
 (valid-blocks? solved-board)  ;=> truthy
 (valid-blocks? sudoku-board) ;=> falsey
 
-
-
-
-
-(defn valid-blocks? [board]
-  nil)
 
 (defn valid-solution? [board]
   nil)
