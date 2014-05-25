@@ -252,14 +252,35 @@
                                   #{1 2 3 4 5 6 7 8 9}]))
 
 
-
-
+;; Exercise 11
+;; Write the function (valid-rows? board) that returns true if every row in board is a valid filled row.
+;; sig: vector of vectors -> bool
+;; purpose: Check if all rows have all numbers
 (defn valid-rows? [board]
-  nil)
-
-
+  (let [board-size (first (distinct (map count board)))]
+    (every? #(= (count %) board-size) (rows board))))
+;;
+(valid-rows? solved-board)  ;=> truthy
+(valid-rows? sudoku-board) ;=> falsey
+;;
+;; Write the function (valid-cols? board) that returns true if every row in board is a valid filled column.
 (defn valid-cols? [board]
-  nil)
+  ;; transpose
+  (->> (apply map vector board)
+       ;; Apply valid-rows?
+       (valid-rows? ,  )))
+;;
+(valid-cols? solved-board)  ;=> truthy
+(valid-cols? sudoku-board) ;=> falsey
+
+
+;; Write the function (valid-blocks? board) that returns true if every block in board is a valid filled block.
+(valid-blocks? solved-board)  ;=> truthy
+(valid-blocks? sudoku-board) ;=> falsey
+
+
+
+
 
 (defn blocks [board]
   nil)
