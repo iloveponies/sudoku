@@ -551,3 +551,73 @@
                            (set-value-at board (first current-unfilled-coords) a))))))))
 ;;
 (solve sudoku-board)
+;;
+
+
+;;; helper-calling solve
+(defn solve [board]
+  (let [unfilled-coords   (find-empty-point board)
+        valid-values-sets (map #(valid-values-for board %) unfilled-coords)]
+    ;;
+    (solve-helper board  unfilled-coords valid-values-sets)))
+
+
+;; solve-helper without recursion first step only
+(defn solve-helper [current-board current-unfilled-coords current-valid-values-sets]
+  (if (valid-solution? current-board)
+    ;; if a valid solution is present return it
+    current-board
+    
+    ;; Otherwise branching by "for"
+    (for [valid-value (first current-valid-values-sets)]
+      (set-value-at current-board (first current-unfilled-coords) valid-value))
+    ))
+(solve sudoku-board)
+;; ([[5 3 1 0 7 0 0 0 0] ; [0 2] element filled
+;;   [6 0 0 1 9 5 0 0 0]
+;;   [0 9 8 0 0 0 0 6 0]
+;;   [8 0 0 0 6 0 0 0 3]
+;;   [4 0 0 8 0 3 0 0 1]
+;;   [7 0 0 0 2 0 0 0 6]
+;;   [0 6 0 0 0 0 2 8 0]
+;;   [0 0 0 4 1 9 0 0 5]
+;;   [0 0 0 0 8 0 0 7 9]]
+;;    [[5 3 2 0 7 0 0 0 0]
+;;     [6 0 0 1 9 5 0 0 0]
+;;     [0 9 8 0 0 0 0 6 0]
+;;     [8 0 0 0 6 0 0 0 3]
+;;     [4 0 0 8 0 3 0 0 1]
+;;     [7 0 0 0 2 0 0 0 6]
+;;     [0 6 0 0 0 0 2 8 0]
+;;     [0 0 0 4 1 9 0 0 5]
+;;     [0 0 0 0 8 0 0 7 9]]
+;;      [[5 3 4 0 7 0 0 0 0]
+;;       [6 0 0 1 9 5 0 0 0]
+;;       [0 9 8 0 0 0 0 6 0]
+;;       [8 0 0 0 6 0 0 0 3]
+;;       [4 0 0 8 0 3 0 0 1]
+;;       [7 0 0 0 2 0 0 0 6]
+;;       [0 6 0 0 0 0 2 8 0]
+;;       [0 0 0 4 1 9 0 0 5]
+;;       [0 0 0 0 8 0 0 7 9]])
+
+;; solve-helper with recursion
+;; need multiple stop conditions
+;; successful stop returning current-board, unsucessful stop returning nil, and recur
+;; 
+(defn solve-helper [current-board current-unfilled-coords current-valid-values-sets]
+  (if (valid-solution? current-board)
+    ;; if a valid solution is present return it
+    [current-board]
+    
+    ;; Otherwise branching by "for"
+    (for [valid-value (first current-valid-values-sets)
+          solution    (solve-helper (set-value-at current-board (first current-unfilled-coords) valid-value)
+                                    (rest current-unfilled-coords)
+                                    (rest current-valid-values-sets))]
+      solution
+      )
+    ))
+
+(solve sudoku-board)
+
