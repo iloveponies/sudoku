@@ -159,7 +159,7 @@
 ;; purpose: return a set of valid values for a cell
 ;; (defn valid-values-for [board coord]
 ;;   #{})
-;; Create all possible values, 
+;; Create all possible values,
 (defn valid-values-for [board coord]
   (let [all-set (set (range 1 (inc (count board))))]
     ;;
@@ -202,7 +202,7 @@
 ;; purpose: create a set for each row vector
 (defn rows [board]
   (map set board))
-;; 
+;;
 (ctest/is (= (rows sudoku-board)  [#{5 3 0 7}
                                    #{6 0 1 9 5}
                                    #{0 9 8 6}
@@ -355,7 +355,7 @@
 ;; Write the function (set-value-at board coord new-value) that changes the value at coord in board to new-value.
 ;;
 ;; Signature: vector of vectors, vector, a number -> vector of vectors
-;; 
+;;
 ;; (defn set-value-at [board coord new-value]
 ;;   [[] []])
 ;;
@@ -430,7 +430,7 @@
     [current-set]
     ;; Otherwise,
     (let [remaining (clojure.set/difference a-set current-set)]
-      
+
       (for [;; for each remaining element
             elem remaining
             ;; for each element, add it to the current set, and recur
@@ -478,22 +478,20 @@
 
 (map #(valid-values-for sudoku-board %) (find-empty-point sudoku-board))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+;; (set-value-at board coord new-value)
+(find-empty-point sudoku-board)
+;; ([0 2] [0 3] [0 5] [0 6] [0 7] [0 8] [1 1] [1 2] [1 6] [1 7] [1 8] [2 0] [2 3] [2 4] [2 5] [2 6] [2 8] [3 1] [3 2] [3 3] [3 5] [3 6] [3 7] [4 1] [4 2] [4 4] [4 6] [4 7] [5 1] [5 2] [5 3] [5 5] [5 6] [5 7] [6 0] [6 2] [6 3] [6 4] [6 5] [6 8] [7 0] [7 1] [7 2] [7 6] [7 7] [8 0] [8 1] [8 2] [8 3] [8 5] [8 6])
+(map #(valid-values-for sudoku-board %) (find-empty-point sudoku-board))
+;; (#{1 2 4} #{2 6} #{2 4 6 8} #{1 4 8 9} #{1 2 4 9} #{2 4 8} #{2 4 7} #{2 4 7} #{3 4 7 8} #{2 3 4} #{2 4 7 8} #{1 2} #{2 3} #{3 4} #{2 4} #{1 3 4 5 7} #{2 4 7} #{1 2 5} #{1 2 5 9} #{5 7 9} #{1 4 7} #{4 5 7 9} #{2 4 5 9} #{2 5} #{2 5 6 9} #{5} #{5 7 9} #{2 5 9} #{1 5} #{1 3 5 9} #{5 9} #{1 4} #{4 5 8 9} #{4 5 9} #{1 3 9} #{1 3 4 5 7 9} #{3 5 7} #{3 5} #{7} #{4} #{2 3} #{2 7 8} #{2 3 7} #{3 6} #{3} #{1 2 3} #{1 2 4 5} #{1 2 3 4 5} #{2 3 5 6} #{2 6} #{1 3 4 6})
+;;
+;; [0 2] #{1 2 4} ; pick one value by "for", recur with (rest coords) and (rest choices)
+;; [0 3] #{2 6}   ;
+;; [0 5] #{2 4 6 8}
+;;                ; stop when there is no coords left
+;;
+(defn solve [board]
+  (let [unfilled-coords (find-empty-point board)
+        valid-values    (map #(valid-values-for board %) unfilled-coords)]
+    (interleave unfilled-coords valid-values)
+    ))
+(solve sudoku-board)
