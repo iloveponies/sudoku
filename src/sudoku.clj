@@ -252,6 +252,48 @@
                                   #{1 2 3 4 5 6 7 8 9}]))
 
 
+
+;;; Exercise 10
+;; Write the function (blocks board) that returns the values of each block in board as a sequence of sets.
+;;
+;; sig vector of vectors -> vector of maps
+;; purpose: get all values at blocks [0 0] [0 1] [0 2], [1 0]
+;; (defn blocks [board]
+;;   [#{}])
+;;
+(defn blocks [board]
+  (let [board-size    (first (distinct (map count board)))
+        block-size    (int (Math/sqrt board-size))
+        ;; return 0, 3, 6 left/upper coords of each block
+        corner-coords (range 0 board-size block-size)]
+    ;; Cycle through these. b (col) changes faster
+    (for [a corner-coords
+          b corner-coords]
+      ;; get values for the corresponding block
+      (block-values board [a b]))))
+
+;;
+(ctest/is (= (blocks sudoku-board) [#{5 3 0 6 9 8}
+                                    #{0 7 1 9 5}
+                                    #{0 6}
+                                    #{8 0 4 7}
+                                    #{0 6 8 3 2}
+                                    #{0 3 1 6}
+                                    #{0 6}
+                                    #{0 4 1 9 8}
+                                    #{2 8 0 5 7 9}]))
+(ctest/is (= (blocks solved-board) [#{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}
+                                    #{1 2 3 4 5 6 7 8 9}]))
+
+
+
 ;; Exercise 11
 ;; Write the function (valid-rows? board) that returns true if every row in board is a valid filled row.
 ;; sig: vector of vectors -> bool
@@ -281,9 +323,6 @@
 
 
 
-
-(defn blocks [board]
-  nil)
 
 (defn valid-blocks? [board]
   nil)
