@@ -495,3 +495,59 @@
     (interleave unfilled-coords valid-values)
     ))
 (solve sudoku-board)
+;; ([0 2] #{1 2 4} [0 3] #{2 6} [0 5] #{2 4 6 8} [0 6] #{1 4 8 9} [0 7] #{1 2 4 9} [0 8] #{2 4 8} [1 1] #{2 4 7} [1 2] #{2 4 7} [1 6] #{3 4 7 8} [1 7] #{2 3 4} [1 8] #{2 4 7 8} [2 0] #{1 2} [2 3] #{2 3} [2 4] #{3 4} [2 5] #{2 4} [2 6] #{1 3 4 5 7} [2 8] #{2 4 7} [3 1] #{1 2 5} [3 2] #{1 2 5 9} [3 3] #{5 7 9} [3 5] #{1 4 7} [3 6] #{4 5 7 9} [3 7] #{2 4 5 9} [4 1] #{2 5} [4 2] #{2 5 6 9} [4 4] #{5} [4 6] #{5 7 9} [4 7] #{2 5 9} [5 1] #{1 5} [5 2] #{1 3 5 9} [5 3] #{5 9} [5 5] #{1 4} [5 6] #{4 5 8 9} [5 7] #{4 5 9} [6 0] #{1 3 9} [6 2] #{1 3 4 5 7 9} [6 3] #{3 5 7} [6 4] #{3 5} [6 5] #{7} [6 8] #{4} [7 0] #{2 3} [7 1] #{2 7 8} [7 2] #{2 3 7} [7 6] #{3 6} [7 7] #{3} [8 0] #{1 2 3} [8 1] #{1 2 4 5} [8 2] #{1 2 3 4 5} [8 3] #{2 3 5 6} [8 5] #{2 6} [8 6] #{1 3 4 6})
+
+(defn solve [board]
+  (let [unfilled-coords   (find-empty-point board)
+        valid-values-sets (map #(valid-values-for board %) unfilled-coords)]
+    ;;
+    (loop [current-unfilled-coords   unfilled-coords
+           current-valid-values-sets valid-values-sets
+           acc                       []]
+      ;;
+      ;; check for end condition
+    (if (empty? current-unfilled-coords)
+      acc
+      (recur (rest current-unfilled-coords)
+             (rest current-valid-values-sets) acc))
+      )
+    
+    ))
+(solve sudoku-board)
+;;
+;;
+(defn solve [board]
+  (let [unfilled-coords   (find-empty-point board)
+        valid-values-sets (map #(valid-values-for board %) unfilled-coords)]
+    ;;
+    (loop [current-unfilled-coords   unfilled-coords
+           current-valid-values-sets valid-values-sets
+           acc                       []]
+      ;;
+      ;; check for end condition
+      (if (empty? current-unfilled-coords)
+        acc
+        (recur (rest current-unfilled-coords)
+               (rest current-valid-values-sets)
+               (conj acc (for [a (first current-valid-values-sets)]
+                           a)))))))
+;;
+(solve sudoku-board)
+
+(defn solve [board]
+  (let [unfilled-coords   (find-empty-point board)
+        valid-values-sets (map #(valid-values-for board %) unfilled-coords)]
+    ;;
+    (loop [current-unfilled-coords   unfilled-coords
+           current-valid-values-sets valid-values-sets
+           acc                       []]
+      ;;
+      ;; check for end condition
+      (if (empty? current-unfilled-coords)
+        acc
+        (recur (rest current-unfilled-coords)
+               (rest current-valid-values-sets)
+               (conj acc (for [a (first current-valid-values-sets)]
+                           (set-value-at board (first current-unfilled-coords) a))))))))
+;;
+(solve sudoku-board)
