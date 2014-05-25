@@ -195,14 +195,68 @@
 (ctest/is (= (filled? solved-board)  true))
 
 
+;; Exercise 9
+;; Write the function (rows board) that returns a sequence of value sets for each row of board. That is, the first set in (rows board) is a set that has every element of the first row of board as element and so on.
+;;
+;; sig: vector of vectors -> vector of sets
+;; purpose: create a set for each row vector
 (defn rows [board]
-  nil)
+  (map set board))
+;; 
+(ctest/is (= (rows sudoku-board)  [#{5 3 0 7}
+                                   #{6 0 1 9 5}
+                                   #{0 9 8 6}
+                                   #{8 0 6 3}
+                                   #{4 0 8 3 1}
+                                   #{7 0 2 6}
+                                   #{0 6 2 8}
+                                   #{0 4 1 9 5}
+                                   #{0 8 7 9}]))
+
+(ctest/is (= (rows solved-board)  [#{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}
+                                   #{1 2 3 4 5 6 7 8 9}]))
+;;
+;; sig: vector of vectors -> vector of sets
+;; purpose: create a set for each column
+(defn cols [board]
+  ;; Transpose the board
+  (->> (apply map vector board)
+       ;; Apply rows
+       (rows ,  )))
+;; Write the function (cols board) that returns the values of each column in board as a sequence of sets.
+(ctest/is (= (cols sudoku-board) [#{5 6 0 8 4 7}
+                                  #{3 0 9 6}
+                                  #{0 8}
+                                  #{0 1 8 4}
+                                  #{7 9 0 6 2 1 8}
+                                  #{0 5 3 9}
+                                  #{0 2}
+                                  #{0 6 8 7}
+                                  #{0 3 1 6 5 9}]))
+
+(ctest/is (= (cols solved-board) [#{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}
+                                  #{1 2 3 4 5 6 7 8 9}]))
+
+
+
 
 (defn valid-rows? [board]
   nil)
 
-(defn cols [board]
-  nil)
 
 (defn valid-cols? [board]
   nil)
