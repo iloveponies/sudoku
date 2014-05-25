@@ -27,7 +27,7 @@
           [2 8 7 4 1 9 6 3 5]
           [3 4 5 2 8 6 1 7 9]]))
 
-;; Exercise 1
+;;; Exercise 1
 ;; Write the function (value-at board coordinates) that returns the value at coordinate in board:
 ;; signature: nested vector, vector -> number
 ;; purpose: get the number at the given coord
@@ -41,7 +41,7 @@
 (ctest/is (= (value-at sudoku-board [0 1])  3))
 (ctest/is (= (value-at sudoku-board [0 0])  5))
 
-;; Exercise 2
+;;; Exercise 2
 ;; Write the function (has-value? board coordinates) that returns false if the square at coordinates is empty (has 0), and otherwise true.
 ;; signature: nested vector, vector -> bool
 ;; purpose: check the given coord for non-zero value
@@ -55,7 +55,7 @@
 (ctest/is (= (has-value? sudoku-board [0 0])  true))
 (ctest/is (= (has-value? sudoku-board [0 2])  false))
 
-;; Exercise 3
+;;; Exercise 3
 ;; Write the function (row-values board coordinates) that returns a set with all numbers on the row of the coordinates
 ;; Remember that you can use destructing inside the parameter vector to get the row.
 ;; signature: nested vector, vector -> set
@@ -71,7 +71,7 @@
 (ctest/is (= (row-values sudoku-board [0 2])  #{0 5 3 7}))
 (ctest/is (= (row-values sudoku-board [3 2])  #{0 8 6 3}))
 
-;; Exercise 4
+;;; Exercise 4
 ;; Write the function (col-values board coordinates) that returns a set with all numbers on the col of the coordinates
 ;; signature: nested vector, vector -> set
 ;; purpose: get a set of col values
@@ -88,7 +88,7 @@
 (ctest/is (= (col-values sudoku-board [4 8])  #{3 1 6 0 5 9}))
 
 
-;; Exercise 5
+;;; Exercise 5
 ;; Write the function (coord-pairs coord-sequence) that returns all coordinate-pairs of the form [row col] where row is from coord-sequence and col is from coord-sequence.
 ;; signature: vector -> vector of vectors
 ;; purpose: Create all possible pairs of given numbers in a vector
@@ -107,7 +107,7 @@
                                      [1 0] [1 1] [1 2]
                                      [2 0] [2 1] [2 2]]))
 
-;; Exercise 6
+;;; Exercise 6
 ;; Write the function (block-values board coordinates) that returns a set with all numbers in the block of coordinates.
 ;; You might want to write a helper function that returns the coordinates for the top left corner of the block.
 ;;
@@ -150,7 +150,7 @@
 (ctest/is (= (block-values sudoku-board [4 5])  #{0 6 8 3 2}))
 
 
-;; Exercise 7
+;;; Exercise 7
 ;; Write the function (valid-values-for board coordinates) that returns a set with all valid numbers for the square at coordinates.
 ;; If the square at coordinates already has a value, valid-values should return the empty set #{}.
 ;; Remember that we already defined the set all-values .
@@ -177,7 +177,7 @@
 (ctest/is (= (valid-values-for sudoku-board [0 2])  #{1 2 4}))
 
 
-;; Exercise 8
+;;; Exercise 8
 ;; Write the function (filled? board) which returns true if there are no empty squares in board, and otherwise false.
 ;; It might help to write a helper function that returns all numbers of the board in a sequence.
 ;; Remember that (contains? set element) can be used to check if element is in set.
@@ -195,7 +195,7 @@
 (ctest/is (= (filled? solved-board)  true))
 
 
-;; Exercise 9
+;;; Exercise 9
 ;; Write the function (rows board) that returns a sequence of value sets for each row of board. That is, the first set in (rows board) is a set that has every element of the first row of board as element and so on.
 ;;
 ;; sig: vector of vectors -> vector of sets
@@ -294,7 +294,7 @@
 
 
 
-;; Exercise 11
+;;; Exercise 11
 ;; Write the function (valid-rows? board) that returns true if every row in board is a valid filled row.
 ;; sig: vector of vectors -> bool
 ;; purpose: Check if all rows have all numbers
@@ -329,7 +329,8 @@
 (ctest/is (= (valid-blocks? sudoku-board)  false))
 
 
-;; Exercise 12
+
+;;; Exercise 12
 ;; Write the function (valid-solution? board) that returns true if board is a valid solution to sudoku.
 ;; sig: vector of vectors -> bool
 (defn valid-solution? [board]
@@ -341,11 +342,81 @@
 
 
 
-(defn set-value-at [board coord new-value]
-  nil)
 
+(assoc-in [[:a :b] [:c :d]] [1                                  0] :E)
+;=> (assoc [[:a :b] [:c :d]]  1 (assoc (get [[:a :b] [:c :d]] 1) 0  :E))
+;=> (assoc [[:a :b] [:c :d]]  1 (assoc               [:c :d]     0  :E))
+;=> (assoc [[:a :b] [:c :d]]  1 [:E :d])
+;=>        [[:a :b] [:E :d]]
+
+
+
+;;; Exercise 13
+;; Write the function (set-value-at board coord new-value) that changes the value at coord in board to new-value.
+;;
+;; Signature: vector of vectors, vector, a number -> vector of vectors
+;; 
+;; (defn set-value-at [board coord new-value]
+;;   [[] []])
+;;
+(defn set-value-at [board coord new-value]
+  (assoc-in board coord new-value))
+;;
+(def before-change
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(def after-change
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 4 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(ctest/is (= (set-value-at before-change [2 1] 4) after-change))
+
+
+;;; Exercise 14
+;; Write the function (find-empty-point board) that returns coordinates to an empty point (that is, in our representation has value 0).
+;;
+;; sig: vector of vectors -> vector of vectors
+;; purpose: given board return vectors of coords
+;; (defn find-empty-point [board]
+;;   [nil nil])
+;;
 (defn find-empty-point [board]
-  nil)
+  (let [board-size (first (distinct (map count board)))]
+    ;; generate all possible coords
+    (->> (for [a (range 0 board-size)
+               b (range 0 board-size)]
+           [a b])
+         ;;
+         (filter #(zero? (value-at board %)),  )
+         )))
+;;
+(def two-more-to-go
+  (board [[5 3 4 6 7 8 9 1 2]
+          [6 0 2 1 9 5 3 4 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 5 9 7 6 1 4 2 3]
+          [4 2 6 8 5 3 7 0 1]
+          [7 1 3 9 2 4 8 5 6]
+          [9 6 1 5 3 7 2 8 4]
+          [2 8 7 4 1 9 6 3 5]
+          [3 4 5 2 8 6 1 7 9]]))
+;;
+(ctest/is (= (find-empty-point two-more-to-go) [[1 1] [4 7]]))
+(ctest/is (= (map #(valid-values-for two-more-to-go %) (find-empty-point two-more-to-go)) '(#{7} #{9})))
+
 
 (defn solve [board]
   nil)
