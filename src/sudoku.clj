@@ -303,8 +303,8 @@
     ;; check if all sets are of the length of board-size
     (every? #(= (count %) board-size) (rows board))))
 ;;
-(valid-rows? solved-board)  ;=> truthy
-(valid-rows? sudoku-board) ;=> falsey
+(ctest/is (= (valid-rows? solved-board)   true))
+(ctest/is (= (valid-rows? sudoku-board)  false))
 ;;
 ;; Write the function (valid-cols? board) that returns true if every row in board is a valid filled column.
 (defn valid-cols? [board]
@@ -313,8 +313,8 @@
        ;; Apply valid-rows?
        (valid-rows? ,  )))
 ;;
-(valid-cols? solved-board)  ;=> truthy
-(valid-cols? sudoku-board) ;=> falsey
+(ctest/is (= (valid-cols? solved-board)   true))
+(ctest/is (= (valid-cols? sudoku-board)  false))
 
 
 ;; Write the function (valid-blocks? board) that returns true if every block in board is a valid filled block.
@@ -325,12 +325,21 @@
     ;; check if all sets are of the length of board-size
     (every? #(= (count %) board-size) (blocks board))))
 ;;
-(valid-blocks? solved-board)  ;=> truthy
-(valid-blocks? sudoku-board) ;=> falsey
+(ctest/is (= (valid-blocks? solved-board)   true))
+(ctest/is (= (valid-blocks? sudoku-board)  false))
 
 
+;; Exercise 12
+;; Write the function (valid-solution? board) that returns true if board is a valid solution to sudoku.
+;; sig: vector of vectors -> bool
 (defn valid-solution? [board]
-  nil)
+  ;; check by all three valid checkers
+  (every? #(% board) [valid-rows? valid-cols? valid-blocks?]))
+;;
+(ctest/is (= (valid-solution? solved-board)   true))
+(ctest/is (= (valid-solution? sudoku-board)  false))
+
+
 
 (defn set-value-at [board coord new-value]
   nil)
