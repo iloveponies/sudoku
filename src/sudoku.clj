@@ -394,9 +394,10 @@
 ;; Fill one unfilled coord with one valid solution,
 ;; with that recur untill validly filled up.
 (defn solve-recur [current-board]
-  (let [unfilled-coords (empty-coords current-board)]
-    ;; Check if filled
-    (if (zero? (count unfilled-coords))
+  ;; Get the coord for the first unfilled point
+  (let [first-unfilled-coord (find-empty-point current-board)]
+    ;; Check if filled (nil? nil) if filled
+    (if (nil? first-unfilled-coord)
       ;; if filled, check if valid
       (if (valid-solution? current-board)
         
@@ -406,24 +407,17 @@
         [])
 
       ;; If unfilled, fill one location with one valid value (do "for" all possible combinations)
-      (for [;; pick first unfilled coord 
-            unfilled-coord [(first unfilled-coords)]
-            ;; pick one valid value for that coord
-            valid-value    (valid-values-for current-board unfilled-coord)
+      (for [;; pick one valid value for the first unfilled coord
+            valid-value (valid-values-for current-board first-unfilled-coord)
             ;; recurse with that one-more-coord-filled board
             ;; pick one board out of a sequence of validly filled boards
-            solution       (solve-recur (set-value-at current-board unfilled-coord valid-value))]
+            solution    (solve-recur (set-value-at current-board first-unfilled-coord valid-value))]
         ;; 
         solution))))
 
 ;; solve function that pick the first copy of the solutions
 (defn solve [board]
   (first (solve-recur board)))
-
-;; place-holder used while testing for other functions
-;; (defn solve [board]
-;;   board)
-
 
 ;; small scale example
 (def small-mostly-solved [[1 2 3 0]
