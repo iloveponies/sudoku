@@ -368,44 +368,6 @@
 ;;
 
 
-
-
-;;; subset sum as an example of
-;; sum functions
-(defn sum [a-seq]
-  (reduce + a-seq))
-;;
-(defn subset-sum-helper [a-set current-set target]
-  ;; check sum of current set
-  (if (= (sum current-set) target)
-    ;; if equal, return current set
-    [current-set]
-    ;; Otherwise,
-    (let [remaining (clojure.set/difference a-set current-set)]
-
-      (for [;; for each remaining element
-            elem remaining
-            ;; for each element, add it to the current set, and recur
-            solution (subset-sum-helper a-set
-                                        (conj current-set elem)
-                                        target)]
-        ;; return solution for each element remaining
-        solution)
-      ;; returned as a list of sets
-      )))
-;;
-;; duplication
-;; (defn subset-sum [a-set target]
-;;   (subset-sum-helper a-set #{} target))
-;; just get the first
-(defn subset-sum [a-set target]
-  (first (subset-sum-helper a-set #{} target)))
-;;
-
-
-
-
-
 ;;; Exercise 15
 ;; Write the function (solve board) which takes a sudoku board as a parameter and returns a valid solution to the given sudoku.
 ;;   (solve sudoku-board) => solved-board
