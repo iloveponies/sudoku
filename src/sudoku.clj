@@ -30,7 +30,7 @@
 
 ;;; board-printing function
 (defn print-board [board]
-  (println (apply str (interpose "\n" board))))
+  (println (clojure.string/replace (apply str (interpose "\n" board)) #"[0]" " ")))
 (print-board sudoku-board)
 
 
@@ -530,37 +530,38 @@
         ;; 
         solution))))
 
-;; solve 
+;; solve function that pick the first copy of the solutions
 (defn solve [board]
   (first (solve-recur board)))
 
-(def small-mostly-solved [[1 2 3 4]
-                          [3 0 1 2]
-                          [2 1 4 0]
-                          [4 3 2 0]])
-(solve small-mostly-solved)
 
+
+;; small scale example
+(def small-mostly-solved [[1 2 3 0]
+                          [3 0 0 2]
+                          [2 1 4 0]
+                          [0 3 2 0]])
+
+(print-board small-mostly-solved)
+(print-board (solve small-mostly-solved))
+
+;; larger scale example with a few unfilled spots
 (def full-mostly-solved-board
   (board [[5 3 4 6 7 8 9 1 2]
           [6 7 2 1 9 5 3 0 8]
-          [1 9 8 3 4 2 5 6 7]
+          [1 9 8 0 4 2 5 6 0]
           [8 0 9 7 6 1 4 2 3]
-          [4 2 0 8 5 3 0 9 1]
+          [4 2 0 8 0 3 0 9 1]
           [7 1 3 9 2 4 8 5 6]
           [9 6 1 5 3 0 2 8 4]
-          [2 8 7 4 1 9 6 3 5]
+          [2 8 7 4 1 9 6 3 0]
           [0 4 5 2 8 6 1 7 9]]))
 
-(solve full-mostly-solved-board)
-;; [[5 3 4 6 7 8 9 1 2]
-;;  [6 7 2 1 9 5 3 4 8]
-;;  [1 9 8 3 4 2 5 6 7]
-;;  [8 5 9 7 6 1 4 2 3]
-;;  [4 2 6 8 5 3 7 9 1]
-;;  [7 1 3 9 2 4 8 5 6]
-;;  [9 6 1 5 3 7 2 8 4]
-;;  [2 8 7 4 1 9 6 3 5]
-;;  [3 4 5 2 8 6 1 7 9]]
+;;
+(print-board full-mostly-solved-board)
+(print-board (solve full-mostly-solved-board))
+(ctest/is (= (solve full-mostly-solved-board) solved-board))
+
 
 ;; (solve sudoku-board)
 
