@@ -33,7 +33,6 @@
   (println (clojure.string/replace (apply str (interpose "\n" board)) #"[0]" " ")))
 
 
-
 ;;; Exercise 1
 ;; Write the function (value-at board coordinates) that returns the value at coordinate in board:
 ;; signature: nested vector, vector -> number
@@ -47,7 +46,6 @@
 ;;
 
 
-
 ;;; Exercise 2
 ;; Write the function (has-value? board coordinates) that returns false if the square at coordinates is empty (has 0), and otherwise true.
 ;; signature: nested vector, vector -> bool
@@ -59,7 +57,6 @@
 (defn has-value? [board coord]
   (not (zero? (value-at board coord))))
 ;;
-
 
 
 ;;; Exercise 3
@@ -77,7 +74,6 @@
 ;;
 
 
-
 ;;; Exercise 4
 ;; Write the function (col-values board coordinates) that returns a set with all numbers on the col of the coordinates
 ;; signature: nested vector, vector -> set
@@ -93,8 +89,6 @@
 ;;
 
 
-
-
 ;;; Exercise 5
 ;; Write the function (coord-pairs coord-sequence) that returns all coordinate-pairs of the form [row col] where row is from coord-sequence and col is from coord-sequence.
 ;; signature: vector -> vector of vectors
@@ -108,7 +102,6 @@
         b coords]
     [a b]))
 ;;
-
 
 
 ;;; Exercise 6
@@ -148,8 +141,6 @@
        (set,  )
        ))
 ;;
-
-
 
 
 ;;; Exercise 7
@@ -193,8 +184,6 @@
 ;;
 
 
-
-
 ;;; Exercise 9
 ;; Write the function (rows board) that returns a sequence of value sets for each row of board. That is, the first set in (rows board) is a set that has every element of the first row of board as element and so on.
 ;;
@@ -203,9 +192,6 @@
 (defn rows [board]
   (map set board))
 ;;
-
-
-
 ;;
 ;; sig: vector of vectors -> vector of sets
 ;; purpose: create a set for each column
@@ -215,10 +201,6 @@
        ;; Apply rows
        (rows ,  )))
 ;; Write the function (cols board) that returns the values of each column in board as a sequence of sets.
-
-
-
-
 
 
 ;;; Exercise 10
@@ -243,9 +225,6 @@
 ;;
 
 
-
-
-
 ;;; Exercise 11
 ;; Write the function (valid-rows? board) that returns true if every row in board is a valid filled row.
 ;; sig: vector of vectors -> bool
@@ -255,8 +234,6 @@
     ;; check if all sets are of the length of board-size
     (every? #(= (count %) board-size) (rows board))))
 ;;
-
-
 ;;
 ;; Write the function (valid-cols? board) that returns true if every row in board is a valid filled column.
 (defn valid-cols? [board]
@@ -265,10 +242,6 @@
        ;; Apply valid-rows?
        (valid-rows? ,  )))
 ;;
-
-
-
-
 ;; Write the function (valid-blocks? board) that returns true if every block in board is a valid filled block.
 ;; sig: vector of vectors -> bool
 ;; purpose check all blocks
@@ -279,9 +252,6 @@
 ;;
 
 
-
-
-
 ;;; Exercise 12
 ;; Write the function (valid-solution? board) that returns true if board is a valid solution to sudoku.
 ;; sig: vector of vectors -> bool
@@ -289,18 +259,6 @@
   ;; check by all three valid checkers
   (every? #(% board) [valid-rows? valid-cols? valid-blocks?]))
 ;;
-
-
-
-
-
-
-(assoc-in [[:a :b] [:c :d]] [1                                  0] :E)
-;=> (assoc [[:a :b] [:c :d]]  1 (assoc (get [[:a :b] [:c :d]] 1) 0  :E))
-;=> (assoc [[:a :b] [:c :d]]  1 (assoc               [:c :d]     0  :E))
-;=> (assoc [[:a :b] [:c :d]]  1 [:E :d])
-;=>        [[:a :b] [:E :d]]
-
 
 
 ;;; Exercise 13
@@ -314,27 +272,6 @@
 (defn set-value-at [board coord new-value]
   (assoc-in board coord new-value))
 ;;
-(def before-change
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 9 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
-(def after-change
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 4 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
-
 
 
 ;;; Exercise 14
@@ -345,7 +282,6 @@
 ;; (defn find-empty-point [board]
 ;;   [nil nil])
 ;;
-
 ;; Function to return all empty coords in a list in the board
 (defn empty-coords [board]
   (let [board-size (first (distinct (map count board)))]
@@ -355,21 +291,10 @@
            [a b])
          ;;
          (filter #(zero? (value-at board %)),  ))))
-
+;;
 ;; This just pick the first one (upper row, closer to left)
 (defn find-empty-point [board]
   (first (empty-coords board)))
-;;
-(def two-more-to-go
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 0 2 1 9 5 3 4 8]
-          [1 9 8 3 4 2 5 6 7]
-          [8 5 9 7 6 1 4 2 3]
-          [4 2 6 8 5 3 7 0 1]
-          [7 1 3 9 2 4 8 5 6]
-          [9 6 1 5 3 7 2 8 4]
-          [2 8 7 4 1 9 6 3 5]
-          [3 4 5 2 8 6 1 7 9]]))
 ;;
 
 
@@ -416,35 +341,6 @@
         solution))))
 
 ;; solve function that pick the first copy of the solutions
+;; Actually this is not necessary??
 (defn solve [board]
   (first (solve-recur board)))
-
-;; small scale example
-(def small-mostly-solved [[1 2 3 0]
-                          [3 0 0 2]
-                          [2 1 4 0]
-                          [0 3 2 0]])
-
-
-
-
-;; larger scale example with a few unfilled spots
-(def full-mostly-solved-board
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 7 2 1 9 5 3 0 8]
-          [1 9 8 0 4 2 5 6 0]
-          [8 0 9 7 6 1 4 2 3]
-          [4 2 0 8 0 3 0 9 1]
-          [7 1 3 9 2 4 8 5 6]
-          [9 6 1 5 3 0 2 8 4]
-          [2 8 7 4 1 9 6 3 0]
-          [0 4 5 2 8 6 1 7 9]]))
-
-;;
-
-
-
-
-
-;; (solve sudoku-board)
-
