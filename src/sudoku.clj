@@ -2,10 +2,11 @@
   (:require [clojure.set  :as set]
             [clojure.test :as ctest]))
 
-;; board formatting function (does nothing as of now)
+
+;;; board formatting function (does nothing as of now)
 (def board identity)
 
-;; board definition for testing
+;;; board definition for testing
 (def sudoku-board
   (board [[5 3 0 0 7 0 0 0 0]
           [6 0 0 1 9 5 0 0 0]
@@ -26,6 +27,12 @@
           [9 6 1 5 3 7 2 8 4]
           [2 8 7 4 1 9 6 3 5]
           [3 4 5 2 8 6 1 7 9]]))
+
+;;; board-printing function
+(defn print-board [board]
+  (println (apply str (interpose "\n" board))))
+(print-board sudoku-board)
+
 
 ;;; Exercise 1
 ;; Write the function (value-at board coordinates) that returns the value at coordinate in board:
