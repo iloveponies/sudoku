@@ -621,3 +621,89 @@
 
 (solve sudoku-board)
 
+
+;; solve one step only
+;; Fill one unfilled coord with one valid solution.
+;; 
+(defn solve [current-board]
+  (let [unfilled-coords (find-empty-point current-board)]
+    ;; Check if filled
+    (if (zero? (count unfilled-coords))
+      ;; if filled, check if valid
+      (if (valid-solution? current-board)
+        ;; if filled and valid, return in a vector
+        [current-board]
+        ;; if filled and invalid, return an empty sequence
+        [])
+
+      ;; If unfilled, fill one location with one valid value (do "for" all possible combinations)
+      (for [unfilled-coord unfilled-coords
+            valid-value    (valid-values-for current-board unfilled-coord)]
+
+        ;; one unfilled coord filled with one valid solution
+        (set-value-at current-board unfilled-coord valid-value)
+        )
+      )))
+(solve sudoku-board)
+
+
+;; solve-recur returns the correct solutions many times
+;; Fill one unfilled coord with one valid solution,
+;; with that recur untill validly filled up.
+(defn solve-recur [current-board]
+  (let [unfilled-coords (find-empty-point current-board)]
+    ;; Check if filled
+    (if (zero? (count unfilled-coords))
+      ;; if filled, check if valid
+      (if (valid-solution? current-board)
+        
+        ;; if filled and valid, return in a vector
+        [current-board]
+        ;; if filled and invalid, return an empty sequence
+        [])
+
+      ;; If unfilled, fill one location with one valid value (do "for" all possible combinations)
+      (for [;; pick one unfilled coord 
+            unfilled-coord unfilled-coords
+            ;; pick one valid value for that coord
+            valid-value    (valid-values-for current-board unfilled-coord)
+            ;; recurse with that one-more-coord-filled board
+            ;; pick one board out of a sequence of validly filled boards
+            solution       (solve-recur (set-value-at current-board unfilled-coord valid-value))]
+        ;; 
+        solution))))
+
+;; solve 
+(defn solve [board]
+  (first (solve-recur board)))
+
+(def small-mostly-solved [[1 2 3 4]
+                          [3 0 1 2]
+                          [2 1 4 0]
+                          [4 3 2 0]])
+(solve small-mostly-solved)
+
+(def full-mostly-solved-board
+  (board [[5 3 4 6 7 8 9 1 2]
+          [6 7 2 1 9 5 3 0 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 0 9 7 6 1 4 2 3]
+          [4 2 0 8 5 3 0 9 1]
+          [7 1 3 9 2 4 8 5 6]
+          [9 6 1 5 3 0 2 8 4]
+          [2 8 7 4 1 9 6 3 5]
+          [0 4 5 2 8 6 1 7 9]]))
+
+(solve full-mostly-solved-board)
+;; [[5 3 4 6 7 8 9 1 2]
+;;  [6 7 2 1 9 5 3 4 8]
+;;  [1 9 8 3 4 2 5 6 7]
+;;  [8 5 9 7 6 1 4 2 3]
+;;  [4 2 6 8 5 3 7 9 1]
+;;  [7 1 3 9 2 4 8 5 6]
+;;  [9 6 1 5 3 7 2 8 4]
+;;  [2 8 7 4 1 9 6 3 5]
+;;  [3 4 5 2 8 6 1 7 9]]
+
+;; (solve sudoku-board)
+
