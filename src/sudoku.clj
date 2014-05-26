@@ -152,7 +152,7 @@
 
 
 
-;;; Exercise 7 
+;;; Exercise 7
 ;; Write the function (valid-values-for board coordinates) that returns a set with all valid numbers for the square at coordinates.
 ;; If the square at coordinates already has a value, valid-values should return the empty set #{}.
 ;; Remember that we already defined the set all-values .
@@ -345,15 +345,20 @@
 ;; (defn find-empty-point [board]
 ;;   [nil nil])
 ;;
-(defn find-empty-point [board]
+
+;; Function to return all empty coords in a list in the board
+(defn empty-coords [board]
   (let [board-size (first (distinct (map count board)))]
     ;; generate all possible coords
     (->> (for [a (range 0 board-size)
                b (range 0 board-size)]
            [a b])
          ;;
-         (filter #(zero? (value-at board %)),  )
-         )))
+         (filter #(zero? (value-at board %)),  ))))
+
+;; This just pick the first one (upper row, closer to left)
+(defn find-empty-point [board]
+  (first (empty-coords board)))
 ;;
 (def two-more-to-go
   (board [[5 3 4 6 7 8 9 1 2]
@@ -389,7 +394,7 @@
 ;; Fill one unfilled coord with one valid solution,
 ;; with that recur untill validly filled up.
 (defn solve-recur [current-board]
-  (let [unfilled-coords (find-empty-point current-board)]
+  (let [unfilled-coords (empty-coords current-board)]
     ;; Check if filled
     (if (zero? (count unfilled-coords))
       ;; if filled, check if valid
@@ -401,8 +406,8 @@
         [])
 
       ;; If unfilled, fill one location with one valid value (do "for" all possible combinations)
-      (for [;; pick one unfilled coord 
-            unfilled-coord unfilled-coords
+      (for [;; pick first unfilled coord 
+            unfilled-coord [(first unfilled-coords)]
             ;; pick one valid value for that coord
             valid-value    (valid-values-for current-board unfilled-coord)
             ;; recurse with that one-more-coord-filled board
@@ -412,12 +417,12 @@
         solution))))
 
 ;; solve function that pick the first copy of the solutions
-;; (defn solve [board]
-;;   (first (solve-recur board)))
+(defn solve [board]
+  (first (solve-recur board)))
 
 ;; place-holder used while testing for other functions
-(defn solve [board]
-  board)
+;; (defn solve [board]
+;;   board)
 
 
 ;; small scale example
