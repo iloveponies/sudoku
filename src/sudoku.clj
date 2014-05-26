@@ -7,31 +7,31 @@
 (def board identity)
 
 ;;; board definition for testing
-(def sudoku-board
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 9 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
-(def solved-board
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 7 2 1 9 5 3 4 8]
-          [1 9 8 3 4 2 5 6 7]
-          [8 5 9 7 6 1 4 2 3]
-          [4 2 6 8 5 3 7 9 1]
-          [7 1 3 9 2 4 8 5 6]
-          [9 6 1 5 3 7 2 8 4]
-          [2 8 7 4 1 9 6 3 5]
-          [3 4 5 2 8 6 1 7 9]]))
+;; (def sudoku-board
+;;   (board [[5 3 0 0 7 0 0 0 0]
+;;           [6 0 0 1 9 5 0 0 0]
+;;           [0 9 8 0 0 0 0 6 0]
+;;           [8 0 0 0 6 0 0 0 3]
+;;           [4 0 0 8 0 3 0 0 1]
+;;           [7 0 0 0 2 0 0 0 6]
+;;           [0 6 0 0 0 0 2 8 0]
+;;           [0 0 0 4 1 9 0 0 5]
+;;           [0 0 0 0 8 0 0 7 9]]))
+;; (def solved-board
+;;   (board [[5 3 4 6 7 8 9 1 2]
+;;           [6 7 2 1 9 5 3 4 8]
+;;           [1 9 8 3 4 2 5 6 7]
+;;           [8 5 9 7 6 1 4 2 3]
+;;           [4 2 6 8 5 3 7 9 1]
+;;           [7 1 3 9 2 4 8 5 6]
+;;           [9 6 1 5 3 7 2 8 4]
+;;           [2 8 7 4 1 9 6 3 5]
+;;           [3 4 5 2 8 6 1 7 9]]))
 
 ;;; board-printing function
 (defn print-board [board]
   (println (clojure.string/replace (apply str (interpose "\n" board)) #"[0]" " ")))
-(print-board sudoku-board)
+
 
 
 ;;; Exercise 1
@@ -45,8 +45,8 @@
 (defn value-at [board coord]
   (get-in board coord))
 ;;
-(ctest/is (= (value-at sudoku-board [0 1])  3))
-(ctest/is (= (value-at sudoku-board [0 0])  5))
+
+
 
 ;;; Exercise 2
 ;; Write the function (has-value? board coordinates) that returns false if the square at coordinates is empty (has 0), and otherwise true.
@@ -59,8 +59,8 @@
 (defn has-value? [board coord]
   (not (zero? (value-at board coord))))
 ;;
-(ctest/is (= (has-value? sudoku-board [0 0])  true))
-(ctest/is (= (has-value? sudoku-board [0 2])  false))
+
+
 
 ;;; Exercise 3
 ;; Write the function (row-values board coordinates) that returns a set with all numbers on the row of the coordinates
@@ -75,8 +75,8 @@
   (let [[row col] coord]
     (set (get board row))))
 ;;
-(ctest/is (= (row-values sudoku-board [0 2])  #{0 5 3 7}))
-(ctest/is (= (row-values sudoku-board [3 2])  #{0 8 6 3}))
+
+
 
 ;;; Exercise 4
 ;; Write the function (col-values board coordinates) that returns a set with all numbers on the col of the coordinates
@@ -91,8 +91,8 @@
     ;; map to rows (vectors) of boards
     (set (map #(get % col) board))))
 ;;
-(ctest/is (= (col-values sudoku-board [0 2])  #{0 8}))
-(ctest/is (= (col-values sudoku-board [4 8])  #{3 1 6 0 5 9}))
+
+
 
 
 ;;; Exercise 5
@@ -108,11 +108,8 @@
         b coords]
     [a b]))
 ;;
-(ctest/is (= (coord-pairs [0 1])    [[0 0] [0 1]
-                                     [1 0] [1 1]]))
-(ctest/is (= (coord-pairs [0 1 2])  [[0 0] [0 1] [0 2]
-                                     [1 0] [1 1] [1 2]
-                                     [2 0] [2 1] [2 2]]))
+
+
 
 ;;; Exercise 6
 ;; Write the function (block-values board coordinates) that returns a set with all numbers in the block of coordinates.
@@ -129,8 +126,8 @@
   (let [block-size (int (Math/sqrt (count board)))]
     (map #(quot % block-size) coord)))
 ;;
-(ctest/is (= (block-coord sudoku-board [0 2])  [0 0]))
-(ctest/is (= (block-coord sudoku-board [4 5])  [1 1]))
+
+
 ;;
 ;; signature: vector of vectors, vector -> set
 ;; purpose: get values in the corresponding block
@@ -153,8 +150,8 @@
        (set,  )
        ))
 ;;
-(ctest/is (= (block-values sudoku-board [0 2])  #{0 5 3 6 8 9}))
-(ctest/is (= (block-values sudoku-board [4 5])  #{0 6 8 3 2}))
+
+
 
 
 ;;; Exercise 7
@@ -177,11 +174,6 @@
          )
     ))
 ;;
-(row-values sudoku-board [0 0])
-(col-values sudoku-board [0 0])
-(block-values sudoku-board [0 0])
-(ctest/is (= (valid-values-for sudoku-board [0 0])  #{1 2}))    ; this was wrong on website #{}
-(ctest/is (= (valid-values-for sudoku-board [0 2])  #{1 2 4}))
 
 
 ;;; Exercise 8
@@ -198,8 +190,8 @@
 (defn filled? [board]
   (not (contains? (set (flatten board)) 0)))
 ;;
-(ctest/is (= (filled? sudoku-board)  false))
-(ctest/is (= (filled? solved-board)  true))
+
+
 
 
 ;;; Exercise 9
@@ -210,25 +202,9 @@
 (defn rows [board]
   (map set board))
 ;;
-(ctest/is (= (rows sudoku-board)  [#{5 3 0 7}
-                                   #{6 0 1 9 5}
-                                   #{0 9 8 6}
-                                   #{8 0 6 3}
-                                   #{4 0 8 3 1}
-                                   #{7 0 2 6}
-                                   #{0 6 2 8}
-                                   #{0 4 1 9 5}
-                                   #{0 8 7 9}]))
 
-(ctest/is (= (rows solved-board)  [#{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}
-                                   #{1 2 3 4 5 6 7 8 9}]))
+
+
 ;;
 ;; sig: vector of vectors -> vector of sets
 ;; purpose: create a set for each column
@@ -238,25 +214,9 @@
        ;; Apply rows
        (rows ,  )))
 ;; Write the function (cols board) that returns the values of each column in board as a sequence of sets.
-(ctest/is (= (cols sudoku-board) [#{5 6 0 8 4 7}
-                                  #{3 0 9 6}
-                                  #{0 8}
-                                  #{0 1 8 4}
-                                  #{7 9 0 6 2 1 8}
-                                  #{0 5 3 9}
-                                  #{0 2}
-                                  #{0 6 8 7}
-                                  #{0 3 1 6 5 9}]))
 
-(ctest/is (= (cols solved-board) [#{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}
-                                  #{1 2 3 4 5 6 7 8 9}]))
+
+
 
 
 
@@ -280,24 +240,8 @@
       (block-values board [a b]))))
 
 ;;
-(ctest/is (= (blocks sudoku-board) [#{5 3 0 6 9 8}
-                                    #{0 7 1 9 5}
-                                    #{0 6}
-                                    #{8 0 4 7}
-                                    #{0 6 8 3 2}
-                                    #{0 3 1 6}
-                                    #{0 6}
-                                    #{0 4 1 9 8}
-                                    #{2 8 0 5 7 9}]))
-(ctest/is (= (blocks solved-board) [#{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}
-                                    #{1 2 3 4 5 6 7 8 9}]))
+
+
 
 
 
@@ -310,8 +254,8 @@
     ;; check if all sets are of the length of board-size
     (every? #(= (count %) board-size) (rows board))))
 ;;
-(ctest/is (= (valid-rows? solved-board)   true))
-(ctest/is (= (valid-rows? sudoku-board)  false))
+
+
 ;;
 ;; Write the function (valid-cols? board) that returns true if every row in board is a valid filled column.
 (defn valid-cols? [board]
@@ -320,8 +264,8 @@
        ;; Apply valid-rows?
        (valid-rows? ,  )))
 ;;
-(ctest/is (= (valid-cols? solved-board)   true))
-(ctest/is (= (valid-cols? sudoku-board)  false))
+
+
 
 
 ;; Write the function (valid-blocks? board) that returns true if every block in board is a valid filled block.
@@ -332,8 +276,8 @@
     ;; check if all sets are of the length of board-size
     (every? #(= (count %) board-size) (blocks board))))
 ;;
-(ctest/is (= (valid-blocks? solved-board)   true))
-(ctest/is (= (valid-blocks? sudoku-board)  false))
+
+
 
 
 
@@ -344,8 +288,8 @@
   ;; check by all three valid checkers
   (every? #(% board) [valid-rows? valid-cols? valid-blocks?]))
 ;;
-(ctest/is (= (valid-solution? solved-board)   true))
-(ctest/is (= (valid-solution? sudoku-board)  false))
+
+
 
 
 
@@ -389,7 +333,7 @@
           [0 6 0 0 0 0 2 8 0]
           [0 0 0 4 1 9 0 0 5]
           [0 0 0 0 8 0 0 7 9]]))
-(ctest/is (= (set-value-at before-change [2 1] 4) after-change))
+
 
 
 ;;; Exercise 14
@@ -421,8 +365,8 @@
           [2 8 7 4 1 9 6 3 5]
           [3 4 5 2 8 6 1 7 9]]))
 ;;
-(ctest/is (= (find-empty-point two-more-to-go) [[1 1] [4 7]]))
-(ctest/is (= (map #(valid-values-for two-more-to-go %) (find-empty-point two-more-to-go)) '(#{7} #{9})))
+
+
 
 
 ;;; subset sum as an example of
@@ -456,8 +400,8 @@
 (defn subset-sum [a-set target]
   (first (subset-sum-helper a-set #{} target)))
 ;;
-(ctest/is (= (subset-sum #{1 2 10 5 7} 23) #{1 5 7 10}))
-(ctest/is (= (subset-sum #{1 3 4 10 9 23} 20) #{1 9 10}))
+
+
 
 
 
@@ -477,32 +421,6 @@
 ;; purpose enter valid numbers.
 ;; (defn solve [board]
 ;;   nil)
-
-
-;; solve one step only
-;; Fill one unfilled coord with one valid solution.
-;; 
-(defn solve [current-board]
-  (let [unfilled-coords (find-empty-point current-board)]
-    ;; Check if filled
-    (if (zero? (count unfilled-coords))
-      ;; if filled, check if valid
-      (if (valid-solution? current-board)
-        ;; if filled and valid, return in a vector
-        [current-board]
-        ;; if filled and invalid, return an empty sequence
-        [])
-
-      ;; If unfilled, fill one location with one valid value (do "for" all possible combinations)
-      (for [unfilled-coord unfilled-coords
-            valid-value    (valid-values-for current-board unfilled-coord)]
-
-        ;; one unfilled coord filled with one valid solution
-        (set-value-at current-board unfilled-coord valid-value)
-        )
-      )))
-(solve sudoku-board)
-
 
 ;; solve-recur returns the correct solutions many times
 ;; Fill one unfilled coord with one valid solution,
@@ -542,8 +460,8 @@
                           [2 1 4 0]
                           [0 3 2 0]])
 
-(print-board small-mostly-solved)
-(print-board (solve small-mostly-solved))
+
+
 
 ;; larger scale example with a few unfilled spots
 (def full-mostly-solved-board
@@ -558,9 +476,9 @@
           [0 4 5 2 8 6 1 7 9]]))
 
 ;;
-(print-board full-mostly-solved-board)
-(print-board (solve full-mostly-solved-board))
-(ctest/is (= (solve full-mostly-solved-board) solved-board))
+
+
+
 
 
 ;; (solve sudoku-board)
