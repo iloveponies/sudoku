@@ -126,8 +126,6 @@
   (let [block-size (int (Math/sqrt (count board)))]
     (map #(quot % block-size) coord)))
 ;;
-
-
 ;;
 ;; signature: vector of vectors, vector -> set
 ;; purpose: get values in the corresponding block
@@ -141,7 +139,7 @@
              left-upper-coord (map #(* % block-size) block-coord)]
          ;;
          ;; all possible combinations
-         (for [row (range (first left-upper-coord)  (+ (first left-upper-coord) block-size))
+         (for [row (range (first  left-upper-coord) (+ (first  left-upper-coord) block-size))
                col (range (second left-upper-coord) (+ (second left-upper-coord) block-size))]
            ;; value at coord
            (value-at board [row col])))
@@ -154,7 +152,7 @@
 
 
 
-;;; Exercise 7
+;;; Exercise 7 
 ;; Write the function (valid-values-for board coordinates) that returns a set with all valid numbers for the square at coordinates.
 ;; If the square at coordinates already has a value, valid-values should return the empty set #{}.
 ;; Remember that we already defined the set all-values .
@@ -165,14 +163,17 @@
 ;;   #{})
 ;; Create all possible values,
 (defn valid-values-for [board coord]
-  (let [all-set (set (range 1 (inc (count board))))]
-    ;;
-    (->> all-set
-         (#(set/difference % (row-values   board coord)),  )
-         (#(set/difference % (col-values   board coord)),  )
-         (#(set/difference % (block-values board coord)),  )
-         )
-    ))
+  ;; Check if the coord is already filled
+  (if (not (zero? (value-at board coord)))
+    ;; if filled
+    #{}
+    ;; if not filled (zero)
+    (let [all-values  (set (range 1 (inc (count board))))
+          used-values (clojure.set/union (row-values   board coord)
+                                         (col-values   board coord)
+                                         (block-values board coord))]
+      ;; set difference
+      (clojure.set/difference all-values used-values))))
 ;;
 
 
@@ -449,9 +450,12 @@
         solution))))
 
 ;; solve function that pick the first copy of the solutions
-(defn solve [board]
-  (first (solve-recur board)))
+;; (defn solve [board]
+;;   (first (solve-recur board)))
 
+;; place-holder used while testing for other functions
+(defn solve [board]
+  board)
 
 
 ;; small scale example
