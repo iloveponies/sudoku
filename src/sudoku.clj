@@ -52,12 +52,13 @@
          set)))
 
 (defn valid-values-for [board coord]
-  (let [used-in-row   (row-values board coord)
+  (if (has-value? board coord) #{}
+    (let [used-in-row   (row-values board coord)
         used-in-col   (col-values board coord)
         used-in-block (block-values board coord)
         used          (clojure.set/union used-in-row used-in-col used-in-block)
         remaining     (clojure.set/difference all-values used)]
-    remaining))
+    remaining)))
 
 (defn filled? [board]
   (->>
