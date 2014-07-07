@@ -1,5 +1,7 @@
 (ns sudoku
-  (:require [clojure.set :as set]))
+  (:require [clojure.set :as set])
+  (:require [clojure.math.combinatorics :as combo])
+  )
 
 (def board identity)
 
@@ -16,7 +18,7 @@
   (set (map #(get-in board [% col]) (range 0 9))))
 
 (defn coord-pairs [coords]
-  nil)
+  (combo/permutations coords))
 
 (defn block-values [board coord]
   nil)
