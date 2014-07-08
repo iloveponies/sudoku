@@ -19,10 +19,21 @@
   (set (map (fn [row] (value-at board [row col])) (range 0 9))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [c1 coords
+        c2 coords]
+    [c1 c2]))
+
+(defn block-starts [[row col]]
+  [(* (int (/ row 3)) 3) (* (int (/ col 3)) 3)])
 
 (defn block-values [board coord]
-  nil)
+  (let [[start-row start-col] (block-starts coord)
+        rows (range start-row (+ start-row 3))
+        cols (range start-col (+ start-col 3))
+        coords (for [row rows
+                     col cols]
+                 [row col])]
+    (set (map (fn [coord] (value-at board coord)) coords))))
 
 (defn valid-values-for [board coord]
   nil)
