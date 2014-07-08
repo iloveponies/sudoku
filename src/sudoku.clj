@@ -46,14 +46,17 @@
         all-coords (for [row r col r] [row col])]
     (every? (fn [coord] (has-value? board coord)) all-coords)))
 
+(defn row-col-sets-help [board f]
+  (map (fn [x] (set (f board [x x]))) (range 0 9)))
+
 (defn rows [board]
-  nil)
+  (row-col-sets-help board row-values))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (row-col-sets-help board col-values))
 
 (defn valid-cols? [board]
   nil)
