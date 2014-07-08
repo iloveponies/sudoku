@@ -3,17 +3,20 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (let [value (value-at board coord)]
+    (not (= value 0))))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [row col]]
+  (set (get board row)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [_ col]]
+  (set (map (fn [row] (value-at board [row col])) (range 0 9))))
 
 (defn coord-pairs [coords]
   nil)
