@@ -52,14 +52,17 @@
 (defn rows [board]
   (row-col-sets-help board row-values))
 
+(defn valid-rows-cols-blocks-help [board f]
+  (every? (fn [rowset] (= rowset all-values)) (f board)))
+
 (defn valid-rows? [board]
-  nil)
+  (valid-rows-cols-blocks-help board rows))
 
 (defn cols [board]
   (row-col-sets-help board col-values))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-rows-cols-blocks-help board cols))
 
 (defn blocks [board]
   (let [r [0 3 6]
@@ -67,7 +70,7 @@
     (map (fn [coord] (set (block-values board coord))) block-coords)))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-rows-cols-blocks-help board blocks))
 
 (defn valid-solution? [board]
   nil)
