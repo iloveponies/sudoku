@@ -36,7 +36,10 @@
     (set (map (fn [coord] (value-at board coord)) coords))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (let [used (reduce set/union (map (fn [f] (f board coord)) [row-values col-values block-values]))]
+      (set/difference all-values used))))
 
 (defn filled? [board]
   nil)
