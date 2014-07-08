@@ -42,7 +42,9 @@
       (set/difference all-values used))))
 
 (defn filled? [board]
-  nil)
+  (let [r (range 0 9)
+        all-coords (for [row r col r] [row col])]
+    (every? (fn [coord] (has-value? board coord)) all-coords)))
 
 (defn rows [board]
   nil)
