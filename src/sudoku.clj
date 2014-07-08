@@ -76,7 +76,7 @@
   (every? (fn [p] (p board)) [valid-rows? valid-cols? valid-blocks?]))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
   nil)
