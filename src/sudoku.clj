@@ -87,9 +87,20 @@
         (not (has-value? board (first coords-to-check))) (first coords-to-check)
         :else (recur (rest coords-to-check))))))
 
-;(defn solve [board]
-;  (if (valid-solution? board)
-;    board
-    
+; This might not be the most elegant solution, but it worked
+; on the first try! Woo-hoo!
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [empty-spot (find-empty-point board)]
+      (if (nil? empty-spot)
+        nil
+        (let [candidate-moves (valid-values-for board empty-spot)]
+          (loop [moves-to-try candidate-moves]
+            (if (empty? moves-to-try)
+              nil
+              (let [move-to-try (first moves-to-try)
+                    candidate-solution (solve (set-value-at board empty-spot move-to-try))]
+                (if (not (nil? candidate-solution))
+                  candidate-solution
+                  (recur (rest moves-to-try)))))))))))
