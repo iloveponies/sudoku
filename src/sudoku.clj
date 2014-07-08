@@ -73,7 +73,7 @@
   (valid-rows-cols-blocks-help board blocks))
 
 (defn valid-solution? [board]
-  nil)
+  (every? (fn [p] (p board)) [valid-rows? valid-cols? valid-blocks?]))
 
 (defn set-value-at [board coord new-value]
   nil)
