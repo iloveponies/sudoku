@@ -80,9 +80,16 @@
 
 (defn find-empty-point [board]
   (let [r (range 0 9)
-        all-coords (for [row r col r] [row col])
-        empty (filter (fn [coord] (not (has-value? board coord))) all-coords)]
-    (first empty)))
+        all-coords (for [row r col r] [row col])]
+    (loop [coords-to-check all-coords]
+      (cond
+        (empty? coords-to-check) nil
+        (not (has-value? board (first coords-to-check))) (first coords-to-check)
+        :else (recur (rest coords-to-check))))))
 
+;(defn solve [board]
+;  (if (valid-solution? board)
+;    board
+    
 (defn solve [board]
   nil)
