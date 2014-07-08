@@ -62,7 +62,9 @@
   nil)
 
 (defn blocks [board]
-  nil)
+  (let [r [0 3 6]
+        block-coords (for [row r col r] [row col])]
+    (map (fn [coord] (set (block-values board coord))) block-coords)))
 
 (defn valid-blocks? [board]
   nil)
