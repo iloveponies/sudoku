@@ -43,7 +43,7 @@
                             (col-values board coords)]))))
 
 (defn filled? [board]
-  nil)
+  (some #(contains? % 0) row-values))
 
 (defn rows [board]
   nil)
