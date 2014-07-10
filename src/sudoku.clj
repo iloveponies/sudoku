@@ -42,35 +42,45 @@
                             (row-values board coords)
                             (col-values board coords)]))))
 
-(defn filled? [board]
-  (some #(contains? % 0) row-values))
-
 (defn rows [board]
-  nil)
+  (map #(row-values board [% 0]) (range 9)))
+
+(defn filled? [board]
+  (not (some #(contains? % 0) (rows))))
 
 (defn valid-rows? [board]
-  nil)
+  (every? #(and ( = 9 (count %1))
+                (not (contains? %1 0)))
+          (rows board)))
 
 (defn cols [board]
-  nil)
+  (map #(col-values board [0 %]) (range 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (every? #(and ( = 9 (count %1))
+                (not (contains? %1 0)))
+          (cols board)))
 
 (defn blocks [board]
-  nil)
+  (for [row [0 4 8]
+        col [0 4 8]]
+    (block-values board [row col])))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? #(and ( = 9 (count %1))
+                (not (contains? %1 0)))
+          (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter #(= 0 (value-at board %)) (coord-pairs [0 1 2 3 4 5 6 7 8]))))
 
 (defn solve [board]
   nil)
