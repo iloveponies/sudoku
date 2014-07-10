@@ -46,7 +46,7 @@
   (map #(row-values board [% 0]) (range 9)))
 
 (defn filled? [board]
-  (not (some #(contains? % 0) (rows))))
+  (not (some #(contains? % 0) (rows board))))
 
 (defn valid-rows? [board]
   (every? #(and ( = 9 (count %1))
@@ -80,7 +80,14 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  (first (filter #(= 0 (value-at board %)) (coord-pairs [0 1 2 3 4 5 6 7 8]))))
+  (first (filter #(= 0 (value-at board %))
+                 (coord-pairs [0 1 2 3 4 5 6 7 8]))))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (if (filled? board)
+      false
+      (let [pos (find-empty-point board)]
+        (some solve (map #(set-value-at board pos %)
+                         (valid-values-for board pos)))))))
