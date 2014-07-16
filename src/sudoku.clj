@@ -43,17 +43,20 @@
 (defn rows [board]
   (map set board))
 
-(defn valid-rows? [board]
-  nil)
-
 (defn cols [board]
   (for [c (range 0 9)]
     (col-values board [0 c])))
 
+(defn blocks [board]
+  (map (fn [coord] (block-values board coord))
+    (for [x (range 0 9 3)
+        y (range 0 9 3)]
+        [x y])))
+
 (defn valid-cols? [board]
   nil)
 
-(defn blocks [board]
+(defn valid-rows? [board]
   nil)
 
 (defn valid-blocks? [board]
