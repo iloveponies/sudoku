@@ -20,8 +20,15 @@
         y coords]
     [x y]))
 
+(defn top-left [[x y]]
+  [(* (int (/ x 3)) 3) (* (int (/ y 3)) 3)])
+
 (defn block-values [board coord]
-  nil)
+  (let [[tlx tly] (top-left coord)]
+    (set (map (fn [c] (value-at board c))
+      (for [x (range tlx (+ tlx 3))
+            y (range tly (+ tly 3))]
+          [x y])))))
 
 (defn valid-values-for [board coord]
   nil)
