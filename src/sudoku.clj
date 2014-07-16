@@ -69,7 +69,15 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (for [x (range 0 9)
+               y (range 0 9)
+               :when (not (has-value? board [x y]))]
+            [x y])))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [e (find-empty-point board)]
+      (first (filter identity (map (fn [v]
+        (solve (set-value-at board e v)))
+          (valid-values-for board e)))))))
