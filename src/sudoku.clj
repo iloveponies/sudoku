@@ -38,7 +38,7 @@
     (set/difference all-values (block-values board coord) (row-values board coord) (col-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (reduce set/union (map (fn [r] (row-values board r)) board)) 0)))
 
 (defn rows [board]
   nil)
