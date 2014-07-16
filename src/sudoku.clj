@@ -53,14 +53,14 @@
         y (range 0 9 3)]
         [x y])))
 
-(defn valid-cols? [board]
-  nil)
-
 (defn valid-rows? [board]
-  nil)
+  (reduce (fn [a b] (and a b)) (map (fn [values] (= all-values values)) (rows board))))
+
+(defn valid-cols? [board]
+  (reduce (fn [a b] (and a b)) (map (fn [values] (= all-values values)) (cols board))))
 
 (defn valid-blocks? [board]
-  nil)
+  (reduce (fn [a b] (and a b)) (map (fn [values] (= all-values values)) (blocks board))))
 
 (defn valid-solution? [board]
   nil)
