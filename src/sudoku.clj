@@ -16,7 +16,9 @@
   (set (map (fn [r] (get r col)) board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords
+        y coords]
+    [x y]))
 
 (defn block-values [board coord]
   nil)
