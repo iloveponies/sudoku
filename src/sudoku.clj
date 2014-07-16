@@ -41,13 +41,14 @@
   (not (contains? (reduce set/union (map (fn [r] (row-values board r)) board)) 0)))
 
 (defn rows [board]
-  nil)
+  (map set board))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (for [c (range 0 9)]
+    (col-values board [0 c])))
 
 (defn valid-cols? [board]
   nil)
