@@ -2,27 +2,40 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
+(def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (let [[row _] coord]
+    (into #{} (get board row))))
 
 (defn col-values [board coord]
-  nil)
+  (into #{} (map #(value-at board [% (last coord)]) all-values)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords
+        y coords]
+    [x y]))
+
+(defn up-cnr [coord]
+  [(* 3 (int (/ (first coord) 3))) (* 3 (int (/ (last coord) 3)))])
+
+(defn block-cords [coord]
+  (map (fn [x] (map + (up-cnr coord) x)) (coord-pairs [0 1 2])))
 
 (defn block-values [board coord]
-  nil)
+  (into #{} (map #(value-at board %) (block-cords coord))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord) #{}
+    (set/difference all-values (set/union (row-values board coord)
+                    (col-values board coord)
+                    (block-values board coord)))))
 
 (defn filled? [board]
   nil)
