@@ -15,7 +15,7 @@
     (into #{} (get board row))))
 
 (defn col-values [board coord]
-  (into #{} (map #(value-at board [% (last coord)]) all-values)))
+  (into #{} (map #(value-at board [% (last coord)]) (range 9))))
 
 (defn coord-pairs [coords]
   (for [x coords
@@ -38,10 +38,10 @@
                     (block-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (every? #(has-value? board %) (coord-pairs [0 1 2 3 4 5 6 7 8])))
 
 (defn rows [board]
-  nil)
+  (map #(row-values board [% 0]) (range 9)))
 
 (defn valid-rows? [board]
   nil)
