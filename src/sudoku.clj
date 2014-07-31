@@ -44,28 +44,39 @@
   (map #(row-values board [% 0]) (range 9)))
 
 (defn valid-rows? [board]
-  nil)
+  (every? #(= all-values %) (rows board)))
 
 (defn cols [board]
-  nil)
+  (map #(col-values board [0 %]) (range 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (every? #(= all-values %) (cols board)))
 
 (defn blocks [board]
-  nil)
+  (map #(block-values board %) (coord-pairs [0 3 6])))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? #(= all-values %) (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-cols? board) (valid-rows? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [coord [(rand-int 8) (rand-int 8)]]
+    (if (has-value? board coord)
+      (find-empty-point board)
+      coord)))
 
-(defn solve [board]
-  nil)
+(defn solve-helper [a-board]
+  (if (filled? a-board)
+    (if (valid-solution? a-board)  [a-board] [])
+    (let [next-pos (find-empty-point a-board)]
+      (for [elem (valid-values-for a-board next-pos)
+            solution (solve-helper (set-value-at a-board next-pos elem))]
+        solution))))
+
+(defn solve [my-board]
+  (first (solve-helper my-board)))
