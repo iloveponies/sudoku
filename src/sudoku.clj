@@ -65,18 +65,21 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  (let [coord [(rand-int 8) (rand-int 8)]]
-    (if (has-value? board coord)
-      (find-empty-point board)
-      coord)))
+  (let [coords (coord-pairs (range 9))]
+    (first (filter #(zero? (value-at board %)) coords))))
 
 (defn solve-helper [a-board]
-  (if (filled? a-board)
-    (if (valid-solution? a-board)  [a-board] [])
-    (let [next-pos (find-empty-point a-board)]
-      (for [elem (valid-values-for a-board next-pos)
-            solution (solve-helper (set-value-at a-board next-pos elem))]
-        solution))))
+  (let [emp (find-empty-point a-board)]
+    (if (nil? emp)
+      (if (valid-solution? a-board)
+        [a-board]
+        nil)
+      (let [nex (valid-values-for a-board emp)]
+        (for [elem nex
+              solution (solve-helper (set-value-at a-board emp elem))]
+          solution)))))
 
 (defn solve [my-board]
   (first (solve-helper my-board)))
+
+
