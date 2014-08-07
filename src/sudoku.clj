@@ -52,8 +52,10 @@
 (defn valid-cols? [board]
   (every? #(= % all-values) (cols board)))
 
+(def board-side-length 9)
+
 (defn blocks [board]
-  (let [board-side-length (count board) range (range 0 board-side-length block-side-length)]
+  (let [range (range 0 board-side-length block-side-length)]
     (for [row range col range]
       (block-values board [row col]))))
 
@@ -67,7 +69,16 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  [-1 -1])
+  (some #(if (has-value? board %) nil %) (coord-pairs (range 0 board-side-length))))
+
+(defn sols [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      ())
+    (let [coords (find-empty-point board) valid-vals (valid-values-for board coords)]
+      (for [val valid-vals sol (sols (set-value-at board coords val))]
+        sol))))
 
 (defn solve [board]
-  nil)
+  (-> board sols first))
