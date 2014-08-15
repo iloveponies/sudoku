@@ -35,10 +35,16 @@
   (set (map #(value-at board %) (block-coords (round-coords coord)))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if 
+    (zero? (value-at board coord))
+    (let [rv (row-values board coord)
+          cv (col-values board coord)
+          bv (block-values board coord)]
+      (set/difference (set/difference (set/difference all-values rv) cv) bv))
+    #{}))
 
 (defn filled? [board]
-  nil)
+  (empty? (filter #(not (nil? %)) (map #(some #{0} %) board))))
 
 (defn rows [board]
   nil)
