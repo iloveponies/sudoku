@@ -84,8 +84,21 @@
 (defn set-value-at [board coord new-value]
   (assoc-in board coord new-value))
 
+(defn index-of [coll v]
+  (loop [idx 0
+         c coll]
+    (cond
+      (empty? c) nil
+      (= v (first c)) idx
+      :else (recur (inc idx) (rest c)))))
+
 (defn find-empty-point [board]
-  nil)
+  (loop [row 0
+         da-board board]
+    (cond
+      (empty? da-board) nil
+      (not (nil? (index-of (first da-board) 0))) [row (index-of (first da-board) 0)]
+      :else(recur (inc row) (rest board)))))
 
 (defn solve [board]
   nil)
