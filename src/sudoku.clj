@@ -53,8 +53,7 @@
   (map set board))
 
 (defn valid-rows? [board]
-  (and (filled? board)
-       (empty? (filter #(not (all-valid-values? %)) (rows board)))))
+  (empty? (filter #(not (all-valid-values? %)) (rows board))))
 
 (defn cols [board]
   (let [col-num (count (first board))
@@ -62,8 +61,7 @@
     (map set (map #(col-values board %) cp))))
 
 (defn valid-cols? [board]
-  (and (filled? board)
-       (empty? (filter #(not (all-valid-values? %)) (cols board)))))
+  (empty? (filter #(not (all-valid-values? %)) (cols board))))
 
 (defn blocks [board]
   (let [block-coords (for [x [0 3 6]
@@ -72,8 +70,7 @@
     (map set (map #(block-values board %) block-coords))))
 
 (defn valid-blocks? [board]
-  (and (filled? board)
-       (empty? (filter #(not (all-valid-values? %)) (blocks board)))))
+  (empty? (filter #(not (all-valid-values? %)) (blocks board))))
 
 (defn valid-solution? [board]
   (and
@@ -84,21 +81,14 @@
 (defn set-value-at [board coord new-value]
   (assoc-in board coord new-value))
 
-(defn index-of [coll v]
-  (loop [idx 0
-         c coll]
-    (cond
-      (empty? c) nil
-      (= v (first c)) idx
-      :else (recur (inc idx) (rest c)))))
-
 (defn find-empty-point [board]
-  (loop [row 0
-         da-board board]
+  (loop [points (for [r (range 9)
+                      c (range 9)]
+                  [r c])]
     (cond
-      (empty? da-board) nil
-      (not (nil? (index-of (first da-board) 0))) [row (index-of (first da-board) 0)]
-      :else(recur (inc row) (rest board)))))
+      (empty? points) nil
+      (zero? (value-at board (first points))) (first points)
+      :else (recur (rest points)))))
 
 (defn solve-helper [board]
   (if 
