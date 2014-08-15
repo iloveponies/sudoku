@@ -17,10 +17,22 @@
   (set (map #(get % (last coord)) board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    [row col]))
+
+(defn round-coords [coord]
+  (let [row (first coord)
+        col (last coord)]
+  [(* 3 (int (/ row 3))) (* 3 (int (/ col 3)))]))
+
+(defn block-coords [coord]
+  (for [row [(first coord) (+ 1 (first coord)) (+ 2 (first coord))]
+        col [(last coord) (+ 1 (last coord)) (+ 2 (last coord))]]
+    [row col]))
 
 (defn block-values [board coord]
-  nil)
+  (set (map #(value-at board %) (block-coords (round-coords coord)))))
 
 (defn valid-values-for [board coord]
   nil)
