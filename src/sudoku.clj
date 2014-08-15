@@ -46,26 +46,40 @@
 (defn filled? [board]
   (empty? (filter #(not (nil? %)) (map #(some #{0} %) board))))
 
+(defn valid-values [coll]
+  (= all-values (set coll)))
+
 (defn rows [board]
-  nil)
+  (map set board))
 
 (defn valid-rows? [board]
-  nil)
+  (and (filled? board)
+       (empty? (filter #(not (valid-values %)) (rows board)))))
 
 (defn cols [board]
-  nil)
+  (let [col-num (count (first board))
+        cp (map vector (repeat col-num 0) (range col-num))]
+    (map set (map #(col-values board %) cp))))
 
 (defn valid-cols? [board]
-  nil)
+  (and (filled? board)
+       (empty? (filter #(not (valid-values %)) (cols board)))))
 
 (defn blocks [board]
-  nil)
+  (let [block-coords (for [x [0 3 6]
+                           y [0 3 6]]
+                       [x y])]
+    (map set (map #(block-values board %) block-coords))))
 
 (defn valid-blocks? [board]
-  nil)
+  (and (filled? board)
+       (empty? (filter #(not (valid-values %)) (blocks board)))))
 
 (defn valid-solution? [board]
-  nil)
+  (and
+    (valid-cols? board)
+    (valid-rows? board)
+    (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
