@@ -46,7 +46,7 @@
 (defn filled? [board]
   (empty? (filter #(not (nil? %)) (map #(some #{0} %) board))))
 
-(defn valid-values [coll]
+(defn all-valid-values? [coll]
   (= all-values (set coll)))
 
 (defn rows [board]
@@ -54,7 +54,7 @@
 
 (defn valid-rows? [board]
   (and (filled? board)
-       (empty? (filter #(not (valid-values %)) (rows board)))))
+       (empty? (filter #(not (all-valid-values? %)) (rows board)))))
 
 (defn cols [board]
   (let [col-num (count (first board))
@@ -63,7 +63,7 @@
 
 (defn valid-cols? [board]
   (and (filled? board)
-       (empty? (filter #(not (valid-values %)) (cols board)))))
+       (empty? (filter #(not (all-valid-values? %)) (cols board)))))
 
 (defn blocks [board]
   (let [block-coords (for [x [0 3 6]
@@ -73,7 +73,7 @@
 
 (defn valid-blocks? [board]
   (and (filled? board)
-       (empty? (filter #(not (valid-values %)) (blocks board)))))
+       (empty? (filter #(not (all-valid-values? %)) (blocks board)))))
 
 (defn valid-solution? [board]
   (and
@@ -100,5 +100,19 @@
       (not (nil? (index-of (first da-board) 0))) [row (index-of (first da-board) 0)]
       :else(recur (inc row) (rest board)))))
 
+(defn solve-helper [board]
+  (if 
+    (filled? board)
+    (if 
+      (valid-solution? board)
+      [board]
+      [])
+    (let [empty-coord (find-empty-point board)
+          valid-values (valid-values-for board empty-coord)]
+      (for [vv valid-values
+            solution (solve-helper (set-value-at board empty-coord vv))]
+        solution)
+    )))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
