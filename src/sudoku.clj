@@ -58,7 +58,11 @@
   nil)
 
 (defn blocks [board]
-  nil)
+  (let [b-range (range 0 (count (first board)) 3)
+        pairs   (for [x b-range
+                      y b-range]
+                  [x y])]
+    (map (fn [x] (block-values board x)) pairs)))
 
 (defn valid-blocks? [board]
   nil)
