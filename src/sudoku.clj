@@ -41,7 +41,8 @@
                                           (block-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (let [all-values (set (apply concat board))]
+    (not (contains? all-values 0))))
 
 (defn rows [board]
   nil)
