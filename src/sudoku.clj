@@ -47,15 +47,18 @@
 (defn rows [board]
   (map set board))
 
+(defn valid-values? [a-set]
+  (empty? (set/difference all-values a-set)))
+
 (defn valid-rows? [board]
-  nil)
+  (every? valid-values? (rows board)))
 
 (defn cols [board]
   (let [c-range (range (count (first board)))]
     (map (fn [x] (col-values board [0 x])) c-range)))
 
 (defn valid-cols? [board]
-  nil)
+  (every? valid-values? (cols board)))
 
 (defn blocks [board]
   (let [b-range (range 0 (count (first board)) 3)
@@ -65,7 +68,7 @@
     (map (fn [x] (block-values board x)) pairs)))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? valid-values? (blocks board)))
 
 (defn valid-solution? [board]
   nil)
