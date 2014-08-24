@@ -45,13 +45,14 @@
     (not (contains? all-values 0))))
 
 (defn rows [board]
-  nil)
+  (map set board))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (let [c-range (range (count (first board)))]
+    (map (fn [x] (col-values board [0 x])) c-range)))
 
 (defn valid-cols? [board]
   nil)
