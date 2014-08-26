@@ -77,3 +77,50 @@
 (take 3 (empty-points solved-board))
 (find-empty-point sudoku-board)
 (value-at sudoku-board [0 2])
+
+;; Write the function (solve board) which takes a sudoku board as a parameter
+;; and returns a valid solution to the given sudoku.
+;;   (solve sudoku-board) => solved-board
+;; Recap of backtracking:
+;; check if you are at the end
+;; if so, is the solution valid?
+;;    if not, return an empty sequence
+;;       otherwise return [solution]
+;; if not
+;;    select an empty location
+;;    try solving with each valid value for that location
+
+(defn sum [a-seq]
+  (reduce + a-seq))
+
+(defn subset-sum-helper [a-set current-set target]
+  (if (= (sum current-set) target)
+    [current-set]
+    (let [remaining (clojure.set/difference a-set current-set)]
+      (for [elem remaining
+            solution (subset-sum-helper a-set
+                                        (conj current-set elem)
+                                        target)]
+        solution))))
+
+(defn subset-sum [a-set target]
+  (subset-sum-helper a-set #{} target))
+
+(subset-sum #{1 3 4 10 9 23} 50)
+
+(empty-points sudoku-board)
+
+;; (map valid-solution?
+;; (for [point (empty-points sudoku-board)
+;;       option (valid-values-for sudoku-board point)]
+
+(valid-values-for sudoku-board [0 2])
+(set-value-at sudoku-board [0 2] 1)
+
+
+(solve sudoku-board)
+
+
+
+
+

@@ -103,4 +103,9 @@
   (first (empty-points board)))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [start-with (find-empty-point board)]
+      (for [option (valid-values-for board start-with)
+            solution (solve (set-value-at board start-with option))]
+        solution))))
