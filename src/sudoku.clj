@@ -40,7 +40,12 @@
         (value-at board [x y])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (let [block-vals (block-values board coord)
+        row-vals   (row-values board coord)
+        col-vals   (col-values board coord)]
+    (if (has-value? board coord)
+      #{}
+      (set/difference all-values row-vals col-vals block-vals))))
 
 (defn filled? [board]
   nil)

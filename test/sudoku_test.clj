@@ -87,3 +87,20 @@
               (block-values board [0 2]) => #{0 5 3 6 8 9})
         (fact "block-values for [4 5] are 0, 6, 8, 3, 2"
               (block-values board [4 5]) => #{0 6 8 3 2})))
+
+(facts "valid-values-for should return empty set if coord has valid value or a list of valid numbers for that coord if there's no valid value"
+       :mine
+       (let [board [[5 3 0 0 7 0 0 0 0]
+                    [6 0 0 1 9 5 0 0 0]
+                    [0 9 8 0 0 0 0 6 0]
+                    [8 0 0 0 6 0 0 0 3]
+                    [4 0 0 8 0 3 0 0 1]
+                    [7 0 0 0 2 0 0 0 6]
+                    [0 6 0 0 0 0 2 8 0]
+                    [0 0 0 4 1 9 0 0 5]
+                    [0 0 0 0 8 0 0 7 9]]]
+        (fact "valid-values-for returns empty set for coord with a valid values"
+              (valid-values-for board [0 0]) => #{})
+        (fact "valid-values-for returns valid numbers for coord which is empty (i.e. 0)"
+              (valid-values-for board [0 2]) => #{1 2 4}
+              (valid-values-for board [2 0]) => #{1 2})))
