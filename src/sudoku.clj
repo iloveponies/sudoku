@@ -30,8 +30,6 @@
         bottom-right-y (+ top-left-y 3)]
     [top-left-x top-left-y bottom-right-x bottom-right-y]))
 
-(-block-range [0 2])
-
 (defn block-values [board coord]
   (let [[topleft-x topleft-y bottomright-x bottomright-y] (-block-range coord)]
     (into #{}
@@ -47,23 +45,34 @@
       #{}
       (set/difference all-values row-vals col-vals block-vals))))
 
+(defn- -board-values [board]
+  (into #{}
+   (for [row board
+         value row ]
+     value)))
+
 (defn filled? [board]
-  nil)
+  (let [values (-board-values board)]
+    (not (contains? values 0))))
 
 (defn rows [board]
-  nil)
+  (map set board))
 
 (defn valid-rows? [board]
-  nil)
+  (every? #(= all-values %) (rows board)))
 
 (defn cols [board]
-  nil)
+  (map set (apply map list board)))
 
 (defn valid-cols? [board]
   nil)
 
 (defn blocks [board]
-  nil)
+  (let [num-cols (count (get board 0))
+        num-rows (count board)]
+    (for [x (range 0 num-cols 3)
+          y (range 0 num-rows 3)]
+      (block-values board [x y]))))
 
 (defn valid-blocks? [board]
   nil)

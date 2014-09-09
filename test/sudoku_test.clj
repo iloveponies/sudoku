@@ -104,3 +104,97 @@
         (fact "valid-values-for returns valid numbers for coord which is empty (i.e. 0)"
               (valid-values-for board [0 2]) => #{1 2 4}
               (valid-values-for board [2 0]) => #{1 2})))
+
+(facts "filled? returns true if there are no empty squares on the board, otherwise it returns false"
+       :mine
+       (fact "filled? returns true as no empty squares"
+             (let [board [[5 3 4 6 7 8 9 1 2]
+                          [6 7 2 1 9 5 3 4 8]
+                          [1 9 8 3 4 2 5 6 7]
+                          [8 5 9 7 6 1 4 2 3]
+                          [4 2 6 8 5 3 7 9 1]
+                          [7 1 3 9 2 4 8 5 6]
+                          [9 6 1 5 3 7 2 8 4]
+                          [2 8 7 4 1 9 6 3 5]
+                          [3 4 5 2 8 6 1 7 9]]]
+               (filled? board) => true))
+       (fact "filled? returns false as board has empty squares"
+             (let [board [[5 3 0 0 7 0 0 0 0]
+                          [6 0 0 1 9 5 0 0 0]
+                          [0 9 8 0 0 0 0 6 0]
+                          [8 0 0 0 6 0 0 0 3]
+                          [4 0 0 8 0 3 0 0 1]
+                          [7 0 0 0 2 0 0 0 6]
+                          [0 6 0 0 0 0 2 8 0]
+                          [0 0 0 4 1 9 0 0 5]
+                          [0 0 0 0 8 0 0 7 9]]]
+               (filled? board)) => false))
+
+(facts "rows returns a sequence of value sets for each row of the board supplied."
+       :mine
+       (let [board [[5 3 0 0 7 0 0 0 0]
+                    [6 0 0 1 9 5 0 0 0]
+                    [0 9 8 0 0 0 0 6 0]
+                    [8 0 0 0 6 0 0 0 3]
+                    [4 0 0 8 0 3 0 0 1]
+                    [7 0 0 0 2 0 0 0 6]
+                    [0 6 0 0 0 0 2 8 0]
+                    [0 0 0 4 1 9 0 0 5]
+                    [0 0 0 0 8 0 0 7 9]]]
+         (fact "rows returns a set of values from each row of the board."
+               (rows board) => '( #{0 3 5 7}
+                                  #{6 0 1 9 5}
+                                  #{0 9 8 6}
+                                  #{8 0 6 3}
+                                  #{4 0 8 3 1}
+                                  #{7 0 2 6}
+                                  #{0 6 2 8}
+                                  #{0 4 1 9 5}
+                                  #{0 8 7 9}))))
+
+(facts "cols returns a sequence of value sets for each col of the board supplied."
+       :mine
+       (let [board [[5 3 0 0 7 0 0 0 0]
+                    [6 0 0 1 9 5 0 0 0]
+                    [0 9 8 0 0 0 0 6 0]
+                    [8 0 0 0 6 0 0 0 3]
+                    [4 0 0 8 0 3 0 0 1]
+                    [7 0 0 0 2 0 0 0 6]
+                    [0 6 0 0 0 0 2 8 0]
+                    [0 0 0 4 1 9 0 0 5]
+                    [0 0 0 0 8 0 0 7 9]]]
+         (fact "cols returns a set of values from each col of the board."
+               (cols board) => '( #{5 6 0 8 4 7}
+                                  #{3 0 9 6}
+                                  #{0 8}
+                                  #{0 1 8 4}
+                                  #{7 9 0 6 2 1 8}
+                                  #{0 5 3 9}
+                                  #{0 2}
+                                  #{0 6 8 7}
+                                  #{0 3 1 6 5 9}))))
+
+(facts "valid-rows? returns true if every row in the board is a valid filled row"
+       :mine
+       (let [board [[5 3 0 0 7 0 0 0 0]
+                    [6 0 0 1 9 5 0 0 0]
+                    [0 9 8 0 0 0 0 6 0]
+                    [8 0 0 0 6 0 0 0 3]
+                    [4 0 0 8 0 3 0 0 1]
+                    [7 0 0 0 2 0 0 0 6]
+                    [0 6 0 0 0 0 2 8 0]
+                    [0 0 0 4 1 9 0 0 5]
+                    [0 0 0 0 8 0 0 7 9]]]
+         (fact "valid-rows? should return false as board has non-valid rows"
+               (valid-rows? board) => false))
+       (let [board [[5 3 4 6 7 8 9 1 2]
+                          [6 7 2 1 9 5 3 4 8]
+                          [1 9 8 3 4 2 5 6 7]
+                          [8 5 9 7 6 1 4 2 3]
+                          [4 2 6 8 5 3 7 9 1]
+                          [7 1 3 9 2 4 8 5 6]
+                          [9 6 1 5 3 7 2 8 4]
+                          [2 8 7 4 1 9 6 3 5]
+                          [3 4 5 2 8 6 1 7 9]]]
+         (fact "valid-rows? should return true as all rows are valid."
+               (valid-rows? board) => true)))
