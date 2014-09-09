@@ -2,6 +2,15 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
+(def board [[5 3 0 0 7 0 0 0 0]
+        [6 0 0 1 9 5 0 0 0]
+        [0 9 8 0 0 0 0 6 0]
+        [8 0 0 0 6 0 0 0 3]
+        [4 0 0 8 0 3 0 0 1]
+        [7 0 0 0 2 0 0 0 6]
+        [0 6 0 0 0 0 2 8 0]
+        [0 0 0 4 1 9 0 0 5]
+        [0 0 0 0 8 0 0 7 9]])
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
@@ -21,7 +30,7 @@
   (vec
    (for [coord-outer coords
           coord-inner coords]
-      (vector coord-outer coord-inner))))
+     (vector coord-outer coord-inner))))
 
 (defn- -block-range [[x y]]
   (let [top-left-x (* (quot x 3) 3)
@@ -35,7 +44,8 @@
     (into #{}
      (for [x (range topleft-x bottomright-x)
             y (range topleft-y bottomright-y)]
-        (value-at board [x y])))))
+       (value-at board [x y])))))
+
 
 (defn valid-values-for [board coord]
   (let [block-vals (block-values board coord)
@@ -81,10 +91,10 @@
   (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter #(zero? (value-at board %)) (coord-pairs (range 0 (count board))))))
 
 (defn solve [board]
   nil)
