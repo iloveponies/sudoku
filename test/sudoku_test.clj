@@ -198,3 +198,89 @@
                           [3 4 5 2 8 6 1 7 9]]]
          (fact "valid-rows? should return true as all rows are valid."
                (valid-rows? board) => true)))
+
+(facts "valid-cols? returns true if every row in the board is a valid filled row"
+       :mine
+       (let [board [[5 3 0 0 7 0 0 0 0]
+                    [6 0 0 1 9 5 0 0 0]
+                    [0 9 8 0 0 0 0 6 0]
+                    [8 0 0 0 6 0 0 0 3]
+                    [4 0 0 8 0 3 0 0 1]
+                    [7 0 0 0 2 0 0 0 6]
+                    [0 6 0 0 0 0 2 8 0]
+                    [0 0 0 4 1 9 0 0 5]
+                    [0 0 0 0 8 0 0 7 9]]]
+         (fact "valid-cols? should return false as board has non-valid cols"
+               (valid-cols? board) => false))
+       (let [board [[5 3 4 6 7 8 9 1 2]
+                    [6 7 2 1 9 5 3 4 8]
+                    [1 9 8 3 4 2 5 6 7]
+                    [8 5 9 7 6 1 4 2 3]
+                    [4 2 6 8 5 3 7 9 1]
+                    [7 1 3 9 2 4 8 5 6]
+                    [9 6 1 5 3 7 2 8 4]
+                    [2 8 7 4 1 9 6 3 5]
+                    [3 4 5 2 8 6 1 7 9]]]
+         (fact "valid-cols? should return true as all cols are valid."
+               (valid-cols? board) => true)))
+
+(facts "valid-blocks? returns true if every row in the board is a valid filled row"
+       :mine
+       (let [board [[5 3 0 0 7 0 0 0 0]
+                    [6 0 0 1 9 5 0 0 0]
+                    [0 9 8 0 0 0 0 6 0]
+                    [8 0 0 0 6 0 0 0 3]
+                    [4 0 0 8 0 3 0 0 1]
+                    [7 0 0 0 2 0 0 0 6]
+                    [0 6 0 0 0 0 2 8 0]
+                    [0 0 0 4 1 9 0 0 5]
+                    [0 0 0 0 8 0 0 7 9]]]
+         (fact "valid-blocks? should return false as board has non-valid blocks"
+               (valid-blocks? board) => false))
+       (let [board [[5 3 4 6 7 8 9 1 2]
+                    [6 7 2 1 9 5 3 4 8]
+                    [1 9 8 3 4 2 5 6 7]
+                    [8 5 9 7 6 1 4 2 3]
+                    [4 2 6 8 5 3 7 9 1]
+                    [7 1 3 9 2 4 8 5 6]
+                    [9 6 1 5 3 7 2 8 4]
+                    [2 8 7 4 1 9 6 3 5]
+                    [3 4 5 2 8 6 1 7 9]]]
+         (fact "valid-blocks? should return true as all blocks are valid."
+               (valid-blocks? board) => true)))
+
+(facts "valid-solution? returns true if every row, col and block in the board is valid"
+       :mine
+       (let [board [[5 3 2 1 7 4 0 0 0]
+                    [6 0 0 1 9 5 0 0 0]
+                    [0 9 8 0 0 0 0 6 0]
+                    [8 0 0 0 6 0 0 0 3]
+                    [4 0 0 8 0 3 0 0 1]
+                    [7 0 0 0 2 0 0 0 6]
+                    [0 6 0 0 0 0 2 8 0]
+                    [0 0 0 4 1 9 0 0 5]
+                    [0 0 0 0 8 0 0 7 9]]]
+         (fact "valid-solution? should return false as board doesn't have valid ros, cols and blocks"
+               (valid-solution? board) => false))
+       (let [board [[5 3 4 6 7 8 9 1 2]
+                    [6 7 2 1 9 5 3 4 8]
+                    [1 9 8 3 4 2 5 6 7]
+                    [8 5 9 7 6 1 4 2 3]
+                    [4 2 6 8 5 3 7 9 1]
+                    [7 1 3 9 2 4 8 5 6]
+                    [9 6 1 5 3 7 2 8 4]
+                    [2 8 7 4 1 9 6 3 5]
+                    [3 4 5 2 8 6 1 7 9]]]
+         (fact "valid-solution? should return true as all rows, cols and blocks are valid."
+               (valid-solution? board) => true))
+       (let [board [[5 3 4 6 7 8 9 2 2]
+                    [6 7 2 1 9 5 3 4 8]
+                    [1 9 8 3 4 2 5 6 7]
+                    [8 5 9 7 6 1 4 2 3]
+                    [4 2 6 8 5 3 7 9 1]
+                    [7 1 3 9 2 4 8 5 6]
+                    [9 6 1 5 3 7 2 8 4]
+                    [2 8 7 4 1 9 6 3 5]
+                    [3 4 5 2 8 6 1 7 9]]]
+         (fact "valid-solution? should return false as not all rows, cols and blocks are valid."
+               (valid-solution? board) => false)))

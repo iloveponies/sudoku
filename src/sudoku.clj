@@ -65,7 +65,7 @@
   (map set (apply map list board)))
 
 (defn valid-cols? [board]
-  nil)
+  (every? #(= all-values %) (cols board)))
 
 (defn blocks [board]
   (let [num-cols (count (get board 0))
@@ -75,10 +75,10 @@
       (block-values board [x y]))))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? #(= all-values %) (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
