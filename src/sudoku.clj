@@ -2,15 +2,6 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
-(def board [[5 3 0 0 7 0 0 0 0]
-        [6 0 0 1 9 5 0 0 0]
-        [0 9 8 0 0 0 0 6 0]
-        [8 0 0 0 6 0 0 0 3]
-        [4 0 0 8 0 3 0 0 1]
-        [7 0 0 0 2 0 0 0 6]
-        [0 6 0 0 0 0 2 8 0]
-        [0 0 0 4 1 9 0 0 5]
-        [0 0 0 0 8 0 0 7 9]])
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
@@ -58,7 +49,7 @@
 (defn- -board-values [board]
   (into #{}
    (for [row board
-         value row ]
+         value row]
      value)))
 
 (defn filled? [board]
@@ -97,4 +88,38 @@
   (first (filter #(zero? (value-at board %)) (coord-pairs (range 0 (count board))))))
 
 (defn solve [board]
-  nil)
+  (vec
+   (if (valid-solution? board)
+      board
+      (let [empty-point (find-empty-point board)
+            valid-vals  (valid-values-for board empty-point)]
+        (for [value valid-vals
+              solution (solve (set-value-at board  empty-point value))]
+          solution)))))
+
+
+(def before-change
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(solve before-change)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

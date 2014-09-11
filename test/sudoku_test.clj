@@ -83,10 +83,10 @@
                     [0 6 0 0 0 0 2 8 0]
                     [0 0 0 4 1 9 0 0 5]
                     [0 0 0 0 8 0 0 7 9]]] 
-        (fact "block-values for [0 2] are 0, 5, 3, 6, 8, 9"
-              (block-values board [0 2]) => #{0 5 3 6 8 9})
-        (fact "block-values for [4 5] are 0, 6, 8, 3, 2"
-              (block-values board [4 5]) => #{0 6 8 3 2})))
+         (fact "block-values for [0 2] are 0, 5, 3, 6, 8, 9"
+               (block-values board [0 2]) => #{0 5 3 6 8 9})
+         (fact "block-values for [4 5] are 0, 6, 8, 3, 2"
+               (block-values board [4 5]) => #{0 6 8 3 2})))
 
 (facts "valid-values-for should return empty set if coord has valid value or a list of valid numbers for that coord if there's no valid value"
        :mine
@@ -99,11 +99,11 @@
                     [0 6 0 0 0 0 2 8 0]
                     [0 0 0 4 1 9 0 0 5]
                     [0 0 0 0 8 0 0 7 9]]]
-        (fact "valid-values-for returns empty set for coord with a valid values"
-              (valid-values-for board [0 0]) => #{})
-        (fact "valid-values-for returns valid numbers for coord which is empty (i.e. 0)"
-              (valid-values-for board [0 2]) => #{1 2 4}
-              (valid-values-for board [2 0]) => #{1 2})))
+         (fact "valid-values-for returns empty set for coord with a valid values"
+               (valid-values-for board [0 0]) => #{})
+         (fact "valid-values-for returns valid numbers for coord which is empty (i.e. 0)"
+               (valid-values-for board [0 2]) => #{1 2 4}
+               (valid-values-for board [2 0]) => #{1 2})))
 
 (facts "filled? returns true if there are no empty squares on the board, otherwise it returns false"
        :mine
@@ -188,14 +188,14 @@
          (fact "valid-rows? should return false as board has non-valid rows"
                (valid-rows? board) => false))
        (let [board [[5 3 4 6 7 8 9 1 2]
-                          [6 7 2 1 9 5 3 4 8]
-                          [1 9 8 3 4 2 5 6 7]
-                          [8 5 9 7 6 1 4 2 3]
-                          [4 2 6 8 5 3 7 9 1]
-                          [7 1 3 9 2 4 8 5 6]
-                          [9 6 1 5 3 7 2 8 4]
-                          [2 8 7 4 1 9 6 3 5]
-                          [3 4 5 2 8 6 1 7 9]]]
+                    [6 7 2 1 9 5 3 4 8]
+                    [1 9 8 3 4 2 5 6 7]
+                    [8 5 9 7 6 1 4 2 3]
+                    [4 2 6 8 5 3 7 9 1]
+                    [7 1 3 9 2 4 8 5 6]
+                    [9 6 1 5 3 7 2 8 4]
+                    [2 8 7 4 1 9 6 3 5]
+                    [3 4 5 2 8 6 1 7 9]]]
          (fact "valid-rows? should return true as all rows are valid."
                (valid-rows? board) => true)))
 
@@ -332,3 +332,26 @@
                     [3 4 5 2 8 6 1 7 9]]]
          (fact "find-empty-point should return [0 6] for this board"
                (find-empty-point board) => [3 2])))
+
+(fact "solve takes a board and returns a solution."
+      :mine
+      (let [unsolved-board (board [[5 3 0 0 7 0 0 0 0]
+                                   [6 0 0 1 9 5 0 0 0]
+                                   [0 9 8 0 0 0 0 6 0]
+                                   [8 0 0 0 6 0 0 0 3]
+                                   [4 0 0 8 0 3 0 0 1]
+                                   [7 0 0 0 2 0 0 0 6]
+                                   [0 6 0 0 0 0 2 8 0]
+                                   [0 0 0 4 1 9 0 0 5]
+                                   [0 0 0 0 8 0 0 7 9]])
+            solved-board (board [[5 3 4 6 7 8 9 1 2]
+                                 [6 7 2 1 9 5 3 4 8]
+                                 [1 9 8 3 4 2 5 6 7]
+                                 [8 5 9 7 6 1 4 2 3]
+                                 [4 2 6 8 5 3 7 9 1]
+                                 [7 1 3 9 2 4 8 5 6]
+                                 [9 6 1 5 3 7 2 8 4]
+                                 [2 8 7 4 1 9 6 3 5]
+                                 [3 4 5 2 8 6 1 7 9]])]
+        (solve unsolved-board) => solved-board))
+
