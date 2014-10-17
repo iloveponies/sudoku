@@ -3,30 +3,6 @@
 
 (def board identity)
 
-(def sudoku-board
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 9 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
-
-(def solved-board
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 7 2 1 9 5 3 4 8]
-          [1 9 8 3 4 2 5 6 7]
-          [8 5 9 7 6 1 4 2 3]
-          [4 2 6 8 5 3 7 9 1]
-          [7 1 3 9 2 4 8 5 6]
-          [9 6 1 5 3 7 2 8 4]
-          [2 8 7 4 1 9 6 3 5]
-          [3 4 5 2 8 6 1 7 9]]))
-
-(def all-values #{1 2 3 4 5 6 7 8 9})
-
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -39,7 +15,7 @@
   )
 
 (defn col-values [board coord]
-  (into #{} (map (fn [x] (value-at sudoku-board [x (second coord)]))  (range 0 9)  )))
+  (into #{} (map (fn [x] (value-at board [x (second coord)]))  (range 0 9)  )))
 
 
 
@@ -91,7 +67,7 @@
 
   (if (has-value? board coord)
     #{}
-    (set/difference all-values (block-values board coord) (col-values board coord) (row-values board coord))
+    (set/difference #{0 1 2 3 4 5 6 7 8 9} (block-values board coord) (col-values board coord) (row-values board coord))
     )
 
   )
@@ -114,10 +90,9 @@
   nil)
 
 (defn blocks [board]
-  (for [k (range 0 9)]
-    nil
-    )
+  nil
   )
+
 
 (defn valid-blocks? [board]
   nil)
