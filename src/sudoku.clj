@@ -142,7 +142,7 @@
 (defn solve-helper [cur-board]
   (if (filled? cur-board)
     (if (valid-solution? cur-board)
-      [cur-board]
+      cur-board
       [])
     (let [empty-loc (find-empty-point cur-board)
           possible-vals (valid-values-for cur-board empty-loc)]
