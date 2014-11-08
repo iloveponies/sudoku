@@ -29,37 +29,53 @@
      (set (for [x (range 3) y (range 3)] (value-at board [(+ ox x) (+ oy y)])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (let [all-values #{1 2 3 4 5 6 7 8 9}]
+  (if (has-value? board coord)
+    #{}
+  (clojure.set/difference all-values (clojure.set/union (col-values board coord) (row-values board coord) (block-values board coord))))))
 
 (defn filled? [board]
-  nil)
+  (nil? (some #{0} (set (for [x (range 9) y (range 9)] (value-at board [x y]))))))
 
 (defn rows [board]
-  nil)
+  (vec (map #(row-values board [% 0]) (range 9))))
 
 (defn valid-rows? [board]
-  nil)
+  (let [all-values #{1 2 3 4 5 6 7 8 9}]
+    (every? true? (map #(= all-values %) (rows board)))))
 
 (defn cols [board]
-  nil)
+  (vec (map #(col-values board [0 %]) (range 9))))
 
 (defn valid-cols? [board]
-  nil)
+  (let [all-values #{1 2 3 4 5 6 7 8 9}]
+     (every? true? (map #(= all-values %) (cols board)))))
 
 (defn blocks [board]
-  nil)
+  (vec (for [x (range 0 9 3) y (range 0 9 3)] (block-values board [x y]))))
 
 (defn valid-blocks? [board]
-  nil)
+  (let [all-values #{1 2 3 4 5 6 7 8 9}]
+     (every? true? (map #(= all-values %) (blocks board)))))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+   (first (for [x (range 9) y (range 9) :let [v (value-at board [x y])] :when (= 0 v)] [x y])))
+
+(defn solver-helper [board]
+  (if (filled? board)
+     (if (valid-solution? board)
+       [board]
+       ())
+     (let [next-empty (find-empty-point board)]
+        (for [v (valid-values-for board next-empty)
+               solution (solver-helper (set-value-at board next-empty v))]
+         solution))))
 
 (defn solve [board]
-  nil)
+  (first (solver-helper board)))
