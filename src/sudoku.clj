@@ -20,8 +20,13 @@
 (defn coord-pairs [coords]
   (vec (for [x coords y coords] [x y])))
 
+(defn top-left-of-block [coord]
+  (let [[row col] coord]
+    (vector (- row (int (mod row 3))) (- col (int (mod col 3))))))
+
 (defn block-values [board coord]
-  nil)
+  (let [[ox oy] (top-left-of-block coord)]
+     (set (for [x (range 3) y (range 3)] (value-at board [(+ ox x) (+ oy y)])))))
 
 (defn valid-values-for [board coord]
   nil)
