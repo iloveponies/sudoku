@@ -93,5 +93,5 @@
    (and (filled? board) (not (valid-solution? board))) []
    :default (first (for [empty (empty-points board)
                   new-value all-values
-                  solved-board (solutions (set-value-at board empty new-value))]
+                  solved-board (solve (set-value-at board empty new-value))]
               solved-board))))
