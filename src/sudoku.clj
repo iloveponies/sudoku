@@ -81,8 +81,17 @@
 (defn set-value-at [board coord new-value]
   (assoc-in board coord new-value))
 
+(defn empty-points [board]
+  (filter (fn [coord] (not (has-value? board coord))) all-coords))
+
 (defn find-empty-point [board]
-  (first (filter (fn [coord] (not (has-value? board coord))) all-coords)))
+  (first (empty-points board)))
 
 (defn solve [board]
-  nil)
+  (cond 
+   (and (filled? board) (valid-solution? board)) [board]
+   (and (filled? board) (not (valid-solution? board))) []
+   :default (first (for [empty (empty-points board)
+                  new-value all-values
+                  solved-board (solutions (set-value-at board empty new-value))]
+              solved-board))))
