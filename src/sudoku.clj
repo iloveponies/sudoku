@@ -87,11 +87,14 @@
 (defn find-empty-point [board]
   (first (empty-points board)))
 
-(defn solve [board]
+(defn solve-helper [board]
   (cond 
    (and (filled? board) (valid-solution? board)) [board]
    (and (filled? board) (not (valid-solution? board))) []
-   :default (first (for [empty (empty-points board)
-                  new-value all-values
-                  solved-board (solve (set-value-at board empty new-value))]
-              solved-board))))
+   :default (first (let [empty (find-empty-point board)]
+                     (for [new-value (valid-values-for board empty)
+                           solved-board (solve-helper (set-value-at board empty new-value))]
+              [solved-board])))))
+
+(defn solve [board]
+  (first (solve-helper board)))
