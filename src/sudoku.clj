@@ -47,35 +47,76 @@
   )
 
 (defn valid-values-for [board coord]
-  
+  ( if (has-value? board coord)
+    #{}
+    (let [values-in-col (col-values board coord)
+          values-in-row (row-values board coord)
+          values-in-block (block-values board coord)
+          all-used-values (set/union values-in-col values-in-row values-in-block)
+          all-allowed-values (set (range 1 10))]
+      (set/difference all-allowed-values all-used-values)))
   )
 
 (defn filled? [board]
-  nil)
+  (let [cur-values-in-board (reduce #(conj %1 (value-at board %2))
+                                    []
+                                    (coord-pairs (range 0 9)))]
+    (if (some zero? cur-values-in-board)
+      false
+      true))
+  )
 
 (defn rows [board]
-  nil)
+  (let [row-coords (for  [row-id (range 0 9)]
+                     (vector row-id nil))]
+    (reduce #(conj %1 (row-values board %2)) [] row-coords))
+  )
+
+(defn is-valid-* [a-set]
+  ;; works for row/col/block
+  ;; should find a better name
+  (let [all-values (set (range 1 10))
+        diff (set/difference all-values a-set)]
+    (if (empty? diff)
+      true
+      false))
+  )
+
+(defn all-valid? [a-seq]
+  (if (some false? (map is-valid-* a-seq))
+    false
+    true)
+  )
 
 (defn valid-rows? [board]
-  nil)
+  (all-valid? (rows board))
+  )
 
 (defn cols [board]
-  nil)
+  (let [col-coords (for [col-id (range 0 9)]
+                     (vector nil col-id))]
+    (reduce #(conj %1 (col-values board %2)) [] col-coords))
+  )
 
 (defn valid-cols? [board]
-  nil)
+  (all-valid? (cols board))
+  )
 
 (defn blocks [board]
-  nil)
+  (let [block-coords (coord-pairs [0 3 6])]
+    (reduce #(conj %1 (block-values board %2)) [] block-coords))
+  )
 
 (defn valid-blocks? [board]
-  nil)
+  (all-valid? (blocks board))
+  )
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value)
+  )
 
 (defn find-empty-point [board]
   nil)
