@@ -91,5 +91,16 @@
                        [y x])]
     (first (filter #(not (has-value? board %1)) every-coords))))
 
+(defn solve-helper [board]
+  (cond
+   (and (filled? board) (valid-solution? board)) [board]
+   (and (filled? board) (not (valid-solution? board))) [nil]
+   :else (let [empty-coord (find-empty-point board)
+               remaing-values (valid-values-for board empty-coord)]
+           (for [avail-value remaing-values
+                 solution (solve-helper
+                           (set-value-at board empty-coord avail-value))]
+             solution))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
