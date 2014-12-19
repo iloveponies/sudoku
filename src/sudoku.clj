@@ -44,13 +44,13 @@
   (not (contains? (reduce set/union #{} (map set board)) 0)))
 
 (defn rows [board]
-  (mapv #(row-values board %) (for [r (range 0 9)] [r 0])))
+  (mapv #(row-values board %) (for [r (range 9)] [r 0])))
 
 (defn valid-rows? [board]
   (every? #(= % all-values) (rows board)))
 
 (defn cols [board]
-  (mapv #(col-values board %) (for [c (range 0 9)] [0 c])))
+  (mapv #(col-values board %) (for [c (range 9)] [0 c])))
 
 (defn valid-cols? [board]
   (every? #(= % all-values) (cols board)))
@@ -68,7 +68,7 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  (first (drop-while #(not= (value-at board %) 0) (coord-pairs (range 0 9)))))
+  (first (drop-while #(not= (value-at board %) 0) (coord-pairs (range 9)))))
 
 (defn solve [board]
   (letfn [(solve-helper [sol]
