@@ -108,5 +108,21 @@
   )
 )
 
+(defn solve-helper [board]
+	(if (filled? board); if at end
+	   (if (valid-solution? board) ; if valid board
+       [board]
+       []
+       )
+	   (let [empty-point (find-empty-point board)]; find first empty point
+	     (for [valid-value (valid-values-for board empty-point); find a valid value for empty point
+	           updated-board (solve-helper (set-value-at board empty-point valid-value))]; update the board
+	           updated-board
+         )
+       )
+     )
+  )
+
 (defn solve [board]
-  nil)
+   (first (solve-helper board)) ; return result as board
+  )
