@@ -45,7 +45,7 @@
     [row col]))
 
 (defn block-start [coord]
-  (map #(* 3 (Math/floorDiv %1 3)) coord))
+  (map #(* 3 (quot %1 3)) coord))
 
 (defn block-values [board coord]
   (let [[row-start col-start] (block-start coord)]
