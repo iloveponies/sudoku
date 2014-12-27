@@ -65,14 +65,20 @@
     #{}
     (set/difference all-values (block-values board coord) (col-values board coord) (row-values board coord))))
 
+(defn check-no-zero-in-set? [set]
+    (not (contains? set 0)))
+
 (defn filled? [board]
-  (not (contains? (reduce #(into %1 %2) #{} board) 0)))
+  (check-no-zero-in-set? (reduce #(into %1 %2) #{} board)))
 
 (defn rows [board]
   (map #(set %) board))
 
+(defn every-set-equal-to-all-values? [sets]
+  (every? #(= % all-values) sets))
+
 (defn valid-rows? [board]
-  nil)
+  (every-set-equal-to-all-values? (rows board)))
 
 (defn cols [board]
   (for [x (range 9)]
@@ -80,22 +86,51 @@
     ))
 
 (defn valid-cols? [board]
-  nil)
+  (every-set-equal-to-all-values? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (for [x (range 3)
+        y (range 3)]
+    (block-values board [(* 3 x) (* 3 y)])
+    ))
 
 (defn valid-blocks? [board]
-  nil)
+  (every-set-equal-to-all-values? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-blocks? board) (valid-cols? board) (valid-rows? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
+
+(defn find-all-empty-points [board]
+  (for [x (range 9)]
+    (let [row (get board x)]
+      (when (some #(= 0 %) row)
+        [x (.indexOf row 0)]
+      ))))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter identity (find-all-empty-points board))))
+
+
+(defn solve-helper [board empty-coord]
+  "- check if filled and after that iff check if valid. iff, return solution.
+   - get one valid value, set it to coords and then continue to the next empty with recursion.
+   "
+  (if (and (filled? board) (valid-solution? board))
+    [board]
+    (let [valid-values (valid-values-for board empty-coord)
+          new-board (set-value-at board empty-coord 1)
+          coord (find-empty-point new-board)]
+      (for [elem valid-values
+            solution (solve-helper (set-value-at board empty-coord elem) coord)]
+        solution
+        )
+      )
+    )
+  )
 
 (defn solve [board]
-  nil)
+  (let [coord  (find-empty-point board)]
+    (first (solve-helper board coord))))
