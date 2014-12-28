@@ -1,5 +1,6 @@
 (ns sudoku
   (:require [clojure.set :as set]))
+(use 'clojure.tools.trace)
 
 (def board identity)
 
@@ -118,8 +119,41 @@
   (assoc-in board coord new-value)
   )
 
+(defn next-coord [coord]
+  ;; Given a co-ordinate on a sudoku board, returns the co-ordinate
+  ;; next to it. Traversal is row first and if end of row is reached
+  ;; then next row
+  (let [[row col] coord]
+    (if (= col 8)
+      [(inc row) 0]
+      [row (inc col)])
+    )
+  )
+
 (defn find-empty-point [board]
-  nil)
+  (loop [row 0
+         col 0]
+    (cond
+     (and (= row 9) (= col 0)) nil
+     ((complement  has-value?) board [row col]) [row col]
+     :else (let [new-coords (next-coord [row col])]
+             (recur (first new-coords) (last new-coords)))
+     ))
+  )
+
+(defn solve-helper [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      '())
+    (for [empty-point [ (find-empty-point board)]
+          possible-value  (valid-values-for board empty-point)
+          solution (solve-helper (set-value-at board empty-point possible-value))]
+      solution
+      ))
+  )
+
 
 (defn solve [board]
-  nil)
+  (first (solve-helper board))
+  )
