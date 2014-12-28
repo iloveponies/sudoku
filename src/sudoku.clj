@@ -1,6 +1,5 @@
 (ns sudoku
   (:require [clojure.set :as set]))
-(use 'clojure.tools.trace)
 
 (def board identity)
 
