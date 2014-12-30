@@ -3,20 +3,43 @@
 
 (def board identity)
 
+(def sudoku-board-2
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not(zero?(get-in board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (let [[x] coord]
+    (set (get board x))))
+
+(defn col-values-acc [board y acc]
+  (if (empty? board) acc
+  (col-values-acc (rest board) y (conj acc (get (first board) y)))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[_ y] coord]
+    (col-values-acc board y #{})))
 
 (defn coord-pairs [coords]
-  nil)
+  (let [v []]
+    (for [col coords
+          row coords]
+      (conj v col row))))
+
+(defn block-values-helper [board coords acc]
+  (block-values-helper board (rest coords) (conj acc (value-at (first coords)))))
 
 (defn block-values [board coord]
   nil)
