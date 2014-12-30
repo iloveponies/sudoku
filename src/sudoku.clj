@@ -38,11 +38,23 @@
           row coords]
       (conj v col row))))
 
+(defn top-left-block-value [n]
+  (cond
+    (and (>= n 0)(< n 3)) 0
+    (and (>= n 3)(< n 6)) 3
+    :else 6))
+
+(defn top-left-corner [coords]
+  (let [[x y] coords]
+    (vector (top-left-block-value x)(top-left-block-value y))))
+
 (defn block-values-helper [board coords acc]
-  (block-values-helper board (rest coords) (conj acc (value-at (first coords)))))
+  (if (empty? coords) acc
+  (block-values-helper board (rest coords) (conj acc (value-at board (first coords))))))
 
 (defn block-values [board coord]
-  nil)
+  (let [[x y] (top-left-corner coord)]
+    (block-values-helper board (coord-pairs (range x (+ 3 y))) #{})))
 
 (defn valid-values-for [board coord]
   nil)
