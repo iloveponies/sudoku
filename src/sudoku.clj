@@ -1,4 +1,5 @@
 (ns sudoku
+  ;(:use iloveponies.tests.sudoku)
   (:require [clojure.set :as set]))
 
 (def board identity)
@@ -13,6 +14,8 @@
           [0 6 0 0 0 0 2 8 0]
           [0 0 0 4 1 9 0 0 5]
           [0 0 0 0 8 0 0 7 9]]))
+
+(def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
   (get-in board coord))
@@ -38,6 +41,12 @@
           row coords]
       (conj v col row))))
 
+(defn coord-pairs-2 [xs ys]
+  (let [v []]
+    (for [row xs
+          col ys]
+      (conj v col row))))
+
 (defn top-left-block-value [n]
   (cond
     (and (>= n 0)(< n 3)) 0
@@ -54,27 +63,41 @@
 
 (defn block-values [board coord]
   (let [[x y] (top-left-corner coord)]
-    (block-values-helper board (coord-pairs (range x (+ 3 y))) #{})))
+    (block-values-helper board (coord-pairs-2 (range x (+ 3 x)) (range y (+ 3 y))) #{})))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord) #{}
+    (set/difference all-values (row-values board coord)(col-values board coord)(block-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (cond
+   (empty? board) true
+   (contains? (set(first board)) 0) false
+   :else (filled? (rest board))))
+
+(defn rows-helper [board acc]
+  (if (empty? board) acc
+    (rows-helper (rest board) (conj acc (set (first board))))))
 
 (defn rows [board]
-  nil)
+  (rows-helper board []))
+
+(defn cols [board]
+  (loop [cols [] index 0]
+    (if (> index 8) cols
+      (recur (conj cols (col-values board [0 index])) (inc index)))))
+
+(defn blocks-helper [board coords acc]
+  (if (empty? coords) acc
+    (blocks-helper board (rest coords) (conj acc (block-values board (first coords))))))
+
+(defn blocks [board]
+  (blocks-helper board (coord-pairs-2 [0 3 6][0 3 6]) []))
 
 (defn valid-rows? [board]
   nil)
 
-(defn cols [board]
-  nil)
-
 (defn valid-cols? [board]
-  nil)
-
-(defn blocks [board]
   nil)
 
 (defn valid-blocks? [board]
