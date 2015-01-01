@@ -113,10 +113,16 @@
   (and(valid-rows? board)(valid-cols? board)(valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
+
+(defn find-empty-point-helper [board coords]
+  (cond
+   (empty? coords) []
+   (not(has-value? board (first coords))) (first coords)
+   :else (find-empty-point-helper board (rest coords))))
 
 (defn find-empty-point [board]
-  nil)
+  (find-empty-point-helper board (coord-pairs-2 (range 0 9)(range 0 9))))
 
 (defn solve [board]
   nil)
