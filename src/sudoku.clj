@@ -94,17 +94,23 @@
 (defn blocks [board]
   (blocks-helper board (coord-pairs-2 [0 3 6][0 3 6]) []))
 
+(defn valid-elems-helper [elems]
+  (cond
+   (empty? elems) true
+    (not(empty?(set/difference all-values (set(first elems))))) false
+    :else (valid-elems-helper (rest elems))))
+
 (defn valid-rows? [board]
-  nil)
+  (valid-elems-helper (rows board)))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-elems-helper (cols board)))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-elems-helper (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and(valid-rows? board)(valid-cols? board)(valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
