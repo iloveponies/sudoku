@@ -124,5 +124,38 @@
 (defn find-empty-point [board]
   (find-empty-point-helper board (coord-pairs-2 (range 0 9)(range 0 9))))
 
+;; (defn solve-helper-2 [board elems solution]
+;;   (println "solution: " solution)
+;;   (if (filled? solution)
+;;     (if (valid-solution? solution) [solution] [])
+;;     (let [coord (find-empty-point board)
+;;           _ (println "coord are: " coord)
+;;           remaining (set/difference (valid-values-for board coord) elems)
+;;           _ (println "remaining are: " remaining)]
+;;       (for [elem remaining
+;;             sol (solve-helper board (conj elems elem)(set-value-at solution coord elem))]
+;;         sol))))
+
+(defn print-board [board]
+  (if (empty? board) board
+  (do (println (first board))
+   (print-board (rest board)))))
+
+;(print-board sudoku-board-2)
+
+(defn solve-helper [board elems]
+  (println "board: " (print-board board))
+  (if (filled? board)
+    (if (valid-solution? board) [board] [])
+    (let [coord (find-empty-point board)
+          _ (println "coord are: " coord)
+          remaining (set/difference (valid-values-for board coord) elems)
+          _ (println "remaining are: " remaining)]
+      (for [elem remaining
+            sol (solve-helper (set-value-at board coord elem) (conj elems elem))]
+        sol))))
+
 (defn solve [board]
-  nil)
+  (solve-helper board #{}))
+
+;(solve sudoku-board-2)
