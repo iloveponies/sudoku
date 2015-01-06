@@ -83,5 +83,17 @@
                  res
                  coord))))))
 
+(defn my-solve [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      '())
+    (let [coord (find-empty-point board)
+          valid-values (valid-values-for board coord)]
+       (mapcat (fn [valid-value] (my-solve (set-value-at board coord valid-value))) valid-values))))
+
 (defn solve [board]
-  nil)
+  (first (my-solve board)))
+
+
+
