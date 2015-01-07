@@ -37,10 +37,9 @@
     (if (has-value? board coord)
         #{}
         (clojure.set/difference all-values 
-                                (clojure.set/union
-                                    (row-values board coord)
-                                    (col-values board coord)
-                                    (block-values board coord)))))
+                        (clojure.set/union (row-values board coord)
+                                   (col-values board coord)
+                                   (block-values board coord)))))
 
 (defn filled? [board]
     (every? true?
@@ -86,37 +85,49 @@
     (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-    (let [finder (fn [i j]
+    (loop [i 0
+           j 0]
         (cond
-            (and (= i 8) (= j 8))     nil
-            ((complement has-value?)  board [i j]) [i j]
-            :else (recur (if (= j 8) (inc i) i) (mod (inc j) 9))))]
-        (finder 0 0)))
+            (and (= i 9))                         nil
+            ((complement has-value?) board [i j]) [i j]
+            :else                                 (recur (if (= j 8) (inc i) i) (mod (inc j) 9)))))
 
-(defn sweep [board i j]
-    (let [next-i (if (= j 8) (inc i) i)
-          next-j (mod (inc j) 9)
-          valid-values (valid-values-for board [i j])]
-        (cond
-            (and (= i 8) (= j 8))       board
-            (= (count valid-values) 1) (sweep (set-value-at board [i j] (first valid-values)) next-i next-j)
-            :else                      (sweep board next-i next-j)
-        )
-    )
-)
+(defn sweep [board]
+    (loop [b board
+           i 0
+           j 0]
+        (if (and (= i 9))
+            b
+            (let [next-i (if (= j 8) (inc i) i)
+                  next-j (mod (inc j) 9)
+                  valid-values (valid-values-for b [i j])]
+                (if (= (count valid-values) 1)
+                    (recur (set-value-at b [i j] (first valid-values)) next-i next-j)
+                    (recur b next-i next-j))))))
 
 (defn solve-logically [board]
-    (let [next-board (sweep board 0 0)]
+    (let [next-board (sweep board)]
         (if (= board next-board)
             board
             (recur next-board))))
 
+(defn find-first [f a-seq]
+    (first (filter f a-seq)))
+
+(defn stall? [board]
+    ((complement nil?) (some (fn [x] (and ((complement has-value?) board x) 
+                                          (empty? (valid-values-for board x))))
+        (for [i (range 0 9)
+              j (range 0 9)]
+            [i j]))))
+
 (defn solve [board]
-    (let [solved-board (solve-logically board)
-          empty-coord (find-empty-point board)]
+    (let [next-step (solve-logically board)]
         (cond
-            (valid-solution? solved-board) solved-board
-            (nil? empty-coord)             []
-            :else                          (some (fn [x] (valid-solution? x))
-                                               (for [i (valid-values-for board empty-coord)]
-                                                   (solve (set-value-at board empty-coord i)))))))
+            (filled? next-step) next-step
+            (stall? next-step)  []
+            :else 
+                (let [empty-point (find-empty-point next-step)]
+                    (find-first (fn [x] (valid-solution? x))
+                                (for [i (valid-values-for next-step empty-point)]
+                                    (solve (set-value-at next-step empty-point i))))))))
