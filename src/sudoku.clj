@@ -3,16 +3,18 @@
 
 (def board identity)
 
-; (def sudoku-board
-;   (board [[5 3 0 0 7 0 0 0 0]
-;           [6 0 0 1 9 5 0 0 0]
-;           [0 9 8 0 0 0 0 6 0]
-;           [8 0 0 0 6 0 0 0 3]
-;           [4 0 0 8 0 3 0 0 1]
-;           [7 0 0 0 2 0 0 0 6]
-;           [0 6 0 0 0 0 2 8 0]
-;           [0 0 0 4 1 9 0 0 5]
-;           [0 0 0 0 8 0 0 7 9]]))
+(def valid-set (set (range 1 10)))
+
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
@@ -59,31 +61,38 @@
   (for [n (range 0 9)]
     (row-values board [n 0])))
 
+(defn set-is-valid? [s]
+  (= valid-set s))
+
+(defn aspect-is-valid? [board f]
+  (every? set-is-valid? (f board)))
+
 (defn valid-rows? [board]
-  nil)
+  (aspect-is-valid? board rows))
 
 (defn cols [board]
   (for [n (range 0 9)]
     (col-values board [0 n])))
 
 (defn valid-cols? [board]
-  nil)
+  (aspect-is-valid? board cols))
 
 (defn blocks [board]
   (for [p (coord-pairs [0 3 6])]
     (block-values board p)))
 
 (defn valid-blocks? [board]
-  nil)
+  (aspect-is-valid? board blocks))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [coords (coord-pairs (range 0 9))]
+    (first (filter #(not (has-value? board %)) coords))))
 
 (defn solve [board]
   nil)
