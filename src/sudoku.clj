@@ -3,23 +3,46 @@
 
 (def board identity)
 
+
+; (def sudoku-board
+;   (board [[5 3 0 0 7 0 0 0 0]
+;           [6 0 0 1 9 5 0 0 0]
+;           [0 9 8 0 0 0 0 6 0]
+;           [8 0 0 0 6 0 0 0 3]
+;           [4 0 0 8 0 3 0 0 1]
+;           [7 0 0 0 2 0 0 0 6]
+;           [0 6 0 0 0 0 2 8 0]
+;           [0 0 0 4 1 9 0 0 5]
+;           [0 0 0 0 8 0 0 7 9]]))
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (let [v (value-at board coord)]
+    (and (not (nil? v)) (not (= 0 v)))))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [r _]]
+  (set (get board r)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [_ c]]
+  (set (map #(get % c) board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [r coords
+        c coords]
+    [r c]))
+
+(defn top-left-coords [board [r c]]
+  (let [rm (mod r 3)
+        cm (mod c 3)]
+    [(- r rm) (- c cm)]))
 
 (defn block-values [board coord]
-  nil)
+  (let [[tr tc] (top-left-coords board coord)
+        pairs (coord-pairs [0 1 2])
+        block-values (map #(let [[r c] %] (value-at board [(+ r tr) (+ c tc)])) pairs)]
+    (set block-values)))
 
 (defn valid-values-for [board coord]
   nil)
