@@ -56,19 +56,22 @@
   (not (contains? (set (flatten board)) 0)))
 
 (defn rows [board]
-  nil)
+  (for [n (range 0 9)]
+    (row-values board [n 0])))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (for [n (range 0 9)]
+    (col-values board [0 n])))
 
 (defn valid-cols? [board]
   nil)
 
 (defn blocks [board]
-  nil)
+  (for [p (coord-pairs [0 3 6])]
+    (block-values board p)))
 
 (defn valid-blocks? [board]
   nil)
