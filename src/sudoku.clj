@@ -3,7 +3,6 @@
 
 (def board identity)
 
-
 ; (def sudoku-board
 ;   (board [[5 3 0 0 7 0 0 0 0]
 ;           [6 0 0 1 9 5 0 0 0]
@@ -14,6 +13,7 @@
 ;           [0 6 0 0 0 0 2 8 0]
 ;           [0 0 0 4 1 9 0 0 5]
 ;           [0 0 0 0 8 0 0 7 9]]))
+(def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
   (get-in board coord))
@@ -45,10 +45,15 @@
     (set block-values)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (let [r (row-values board coord)
+          c (col-values board coord)
+          b (block-values board coord)]
+      (set/difference all-values r c b))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (flatten board)) 0)))
 
 (defn rows [board]
   nil)
