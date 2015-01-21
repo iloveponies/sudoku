@@ -46,31 +46,50 @@
   (not (contains? (board-values board) 0)))
 
 (defn rows [board]
-  nil)
+  (for [row board]
+    (set row)))
 
 (defn valid-rows? [board]
-  nil)
+  (every? true? (for [a-row (rows board)]
+                  (= (set/difference all-values a-row) #{}))))
 
 (defn cols [board]
-  nil)
+  (for [col (range 0 9)]
+    (set (col-values board [0 col]))))
 
 (defn valid-cols? [board]
-  nil)
+  (every? true? (for [a-col (cols board)]
+                  (= (set/difference all-values a-col) #{}))))
 
 (defn blocks [board]
-  nil)
+  (for [block-coords (coord-pairs [0 3 6])]
+    (set (block-values board block-coords))))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? true? (for [a-block (blocks board)]
+                  (= (set/difference all-values a-block) #{}))))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (for [[x row] (map-indexed vector board)
+        [y value] (map-indexed vector row)
+        :when (zero? value)]
+    [x y])))
+
+(defn solve-helper [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      [])
+    (let [empty-point (find-empty-point board)]
+      (for [value-candidate (valid-values-for board empty-point)
+            solution (solve-helper (set-value-at board empty-point value-candidate))]
+        solution))))
 
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
