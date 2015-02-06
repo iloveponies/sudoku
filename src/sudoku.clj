@@ -98,8 +98,8 @@
 
 (defn solve [board]
   (if (valid-solution? board)
-    [board]
-    (let [e (find-empty-point board)
-          valid-values (valid-values-for board e)]
-      (partition 9 (flatten (for [v valid-values] 
-                              (solve (set-value-at board e v))))))))
+    board
+    (let [e (find-empty-point board)]
+         (for [valid-values (valid-values-for board e)
+               solution (solve (set-value-at board e valid-values))]
+           solution))))
