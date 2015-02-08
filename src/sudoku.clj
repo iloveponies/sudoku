@@ -50,26 +50,36 @@
 (defn filled? [board]
   (not (contains? (set (flatten board)) 0)))
 
+(defn valid? [sets]
+  (every? #(= all-values %) sets))
+
 (defn rows [board]
-  nil)
+  (reduce (fn [acc row] (conj acc (set row))) [] board))
 
 (defn valid-rows? [board]
-  nil)
+  (valid? (rows board)))
 
 (defn cols [board]
-  nil)
+  (let [get-col (fn [x] (set (col-values board [0 x])))
+        helper (fn [acc x] (conj acc (get-col (count acc))))]
+    (reduce helper [] board)))
 
 (defn valid-cols? [board]
-  nil)
+  (valid? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (let [beg-the-block (for [x [0 3 6]
+                            y [0 3 6]]
+                        [x y])
+        blockses (for [k beg-the-block]
+                   (block-values board k))]
+    (map set blockses)))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-cols? board) (valid-rows? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
