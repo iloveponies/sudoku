@@ -82,10 +82,18 @@
   (and (valid-cols? board) (valid-rows? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [coordinates (for [x (range 0 9)
+                         y (range 0 9)]
+                      [x y])]
+    (first (filter #(not (has-value? board %)) coordinates))))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [empty-loc (find-empty-point board)]
+      (for [valid-values (valid-values-for board empty-loc)
+            solution (solve (set-value-at board empty-loc valid-values))]
+        solution))))
