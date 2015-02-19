@@ -29,8 +29,20 @@
           y coords]
          (conj (conj [] x) y)))
 
-(defn block-values [board coord]
-  nil)
+(defn top-left-coords [coords]
+  [(* (int (/ (first coords) 3)) 3) (* (int (/ (first (rest coords)) 3)) 3)])
+
+
+	  (defn block-values [board coord]
+  (let [startY (first (top-left-coords coord))
+        startX (first (rest (top-left-coords coord)))]
+  (loop [ret-set '()
+         curY startY
+          curX startX]
+    (cond
+     (and (= (- curY startY) 2) (= (- curX startX) 2)) (set (conj ret-set (value-at board [curY curX])))
+      (= (- curY startY) 2) (recur (conj ret-set (value-at board [curY curX])) startY (inc curX))
+      :else (recur (conj ret-set (value-at board [curY curX])) (inc curY) curX)))))
 
 (defn valid-values-for [board coord]
   nil)
