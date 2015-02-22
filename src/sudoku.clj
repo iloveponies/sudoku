@@ -55,24 +55,29 @@
     (row-values board [r 0])))
 
 (defn valid-rows? [board]
-  nil)
+  (every? (fn [xs] (== 9 (count xs)))
+          (rows board)))
 
 (defn cols [board]
   (for [c (range 9)]
     (col-values board [0 c])))
 
 (defn valid-cols? [board]
-  nil)
+  (every? (fn [xs] (== 9 (count xs)))
+          (cols board)))
 
 (defn blocks [board]
   (for [r [0 3 6]
         c [0 3 6]]
     (block-values board [r c])))
 (defn valid-blocks? [board]
-  nil)
+  (every? (fn [xs] (== 9 (count xs)))
+          (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
