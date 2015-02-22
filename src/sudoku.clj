@@ -55,7 +55,8 @@
     (row-values board [r 0])))
 
 (defn valid-rows? [board]
-  (every? (fn [xs] (== 9 (count xs)))
+  (every? (fn [xs] (and (== 9 (count xs))
+                        (not (contains? xs 0))))
           (rows board)))
 
 (defn cols [board]
@@ -63,15 +64,18 @@
     (col-values board [0 c])))
 
 (defn valid-cols? [board]
-  (every? (fn [xs] (== 9 (count xs)))
+  (every? (fn [xs] (and (== 9 (count xs))
+                        (not (contains? xs 0))))
           (cols board)))
 
 (defn blocks [board]
   (for [r [0 3 6]
         c [0 3 6]]
     (block-values board [r c])))
+
 (defn valid-blocks? [board]
-  (every? (fn [xs] (== 9 (count xs)))
+  (every? (fn [xs] (and (== 9 (count xs))
+                        (not (contains? xs 0))))
           (blocks board)))
 
 (defn valid-solution? [board]
@@ -90,5 +94,16 @@
                                      board coord)))
                    coords))))
 
+(defn solve-helper [board]
+  (if (valid-solution? board)
+    [board]
+    (let [empty-coord (find-empty-point board)
+          valid-vals  (valid-values-for board empty-coord)
+          next-boards (for [val valid-vals]
+                        (set-value-at board empty-coord val))]
+      (for [board next-boards
+            solution (solve-helper board)]
+        solution))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
