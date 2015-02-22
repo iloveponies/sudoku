@@ -37,10 +37,18 @@
     (set  coords)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference #{1 2 3 4 5 6 7 8 9}
+                    (set/union (row-values board coord)
+                               (col-values board coord)
+                               (block-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (every? identity
+          (for [r (range 9)
+                c (range 9)]
+            (has-value? board [r c]))))
 
 (defn rows [board]
   nil)
