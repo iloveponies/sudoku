@@ -7,16 +7,20 @@
   (get-in board coord))
 
 (defn has-value? [board coord]
-  (> (get-in board coord) 0))
+  (> (value-at board coord) 0))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [row _]]
+  (set (get board row)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [_ col]]
+  (let [col-vect (for [row (range 9)]
+                   (value-at board [row col]))]
+    (set col-vect)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    [row col]))
 
 (defn block-values [board coord]
   nil)
