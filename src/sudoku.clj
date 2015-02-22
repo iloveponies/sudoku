@@ -51,20 +51,23 @@
             (has-value? board [r c]))))
 
 (defn rows [board]
-  nil)
+  (for [r (range 9)]
+    (row-values board [r 0])))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (for [c (range 9)]
+    (col-values board [0 c])))
 
 (defn valid-cols? [board]
   nil)
 
 (defn blocks [board]
-  nil)
-
+  (for [r [0 3 6]
+        c [0 3 6]]
+    (block-values board [r c])))
 (defn valid-blocks? [board]
   nil)
 
