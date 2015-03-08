@@ -61,7 +61,9 @@
   nil)
 
 (defn blocks [board]
-  nil)
+  (for [x (range 0 9 3)
+        y (range 0 9 3)]
+    (block-values board [x y])))
 
 (defn valid-blocks? [board]
   nil)
