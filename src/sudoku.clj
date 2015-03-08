@@ -47,13 +47,15 @@
   (not (contains? (set (flatten board)) 0)))
 
 (defn rows [board]
-  nil)
+  (for [row (range 9)]
+    (row-values board [row 0])))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (for [col (range 9)]
+    (col-values board [0 col])))
 
 (defn valid-cols? [board]
   nil)
