@@ -32,10 +32,18 @@
        (value-at board [x y])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (clojure.set/difference #{0 1 2 3 4 5 6 7 8 9}
+                            (row-values board coord)
+                            (col-values board coord)
+                            (block-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (every? false?
+          (map (fn [x] (contains? x 0))
+               (map (fn [r] (row-values board [r 0]))
+                    (range 0 9)))))
 
 (defn rows [board]
   nil)
