@@ -60,7 +60,11 @@
   nil)
 
 (defn blocks [board]
-  nil)
+  (vec
+   (map (fn [coord] (block-values board coord))
+        (for [x [0 3 6]
+              y [0 3 6]]
+          [x y]))))
 
 (defn valid-blocks? [board]
   nil)
