@@ -9,14 +9,16 @@
 (defn has-value? [board coord]
   (not (zero? (value-at board coord))))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [row _]]
+  (set (get board row)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [_ col]]
+  (reduce (fn [acc-set row] (conj acc-set (get row col))) #{} board))
 
-(defn coord-pairs [coords]
-  nil)
+(defn coord-pairs [coord]
+  (for [x coord
+        y coord]
+    [x y]))
 
 (defn block-values [board coord]
   nil)
