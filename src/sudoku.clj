@@ -50,14 +50,20 @@
    (map (fn [r] (row-values board [r 0])) (range 0 9))))
 
 (defn valid-rows? [board]
-  nil)
+  (every? true?
+          (map (fn [row] (empty? (clojure.set/difference #{1 2 3 4 5 6 7 8 9}
+                                                         row)))
+               (rows board))))
 
 (defn cols [board]
   (vec
    (map (fn [c] (col-values board [0 c])) (range 0 9))))
 
 (defn valid-cols? [board]
-  nil)
+  (every? true?
+          (map (fn [col] (empty? (clojure.set/difference #{1 2 3 4 5 6 7 8 9}
+                                                         col)))
+               (cols board))))
 
 (defn blocks [board]
   (vec
@@ -67,7 +73,10 @@
           [x y]))))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? true?
+          (map (fn [block] (empty? (clojure.set/difference #{1 2 3 4 5 6 7 8 9}
+                                                           block)))
+               (blocks board))))
 
 (defn valid-solution? [board]
   nil)
