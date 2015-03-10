@@ -21,7 +21,15 @@
     [x y]))
 
 (defn block-values [board coord]
-  nil)
+  (defn top-left [coord]
+    (map (fn [x] (cond (and (>= x 0) (<= x 2)) 0
+                       (and (>= x 3) (<= x 5)) 3
+                       (and (>= x 6) (<= x 8)) 6)) coord))
+  (let [tl (top-left coord)]
+    (set
+     (for [x (range (first tl) (+ (first tl) 3))
+           y (range (second tl) (+ (second tl) 3))]
+       (value-at board [x y])))))
 
 (defn valid-values-for [board coord]
   nil)
