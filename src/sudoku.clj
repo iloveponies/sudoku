@@ -46,13 +46,15 @@
                     (range 0 9)))))
 
 (defn rows [board]
-  nil)
+  (vec
+   (map (fn [r] (row-values board [r 0])) (range 0 9))))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (vec
+   (map (fn [c] (col-values board [0 c])) (range 0 9))))
 
 (defn valid-cols? [board]
   nil)
