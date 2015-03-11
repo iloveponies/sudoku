@@ -97,4 +97,10 @@
             :else (recur (first coord-tail) (rest coord-tail))))))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [empty-point (find-empty-point board)]
+      (for [potential-value (valid-values-for board empty-point)
+            potential-solution (solve (set-value-at board empty-point
+                                                    potential-value))]
+        potential-solution))))
