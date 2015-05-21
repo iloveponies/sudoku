@@ -16,8 +16,13 @@
           nums
           (recur (conj nums v) (inc i))))))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [row col]]
+  (loop [nums #{} i 0]
+    (let [v (value-at board [i col])]
+      (if (nil? v)
+        nums
+        (recur (conj nums v) (inc i))))))
+
 
 (defn coord-pairs [coords]
   nil)
