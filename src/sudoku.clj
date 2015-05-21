@@ -9,8 +9,12 @@
 (defn has-value? [board coord]
   (not (zero? (value-at board coord))))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [row col]]
+    (loop [nums #{} i 0]
+      (let [v (value-at board [row i])]
+        (if (nil? v)
+          nums
+          (recur (conj nums v) (inc i))))))
 
 (defn col-values [board coord]
   nil)
