@@ -97,5 +97,21 @@
           [row col])]
     (first all-empty-points)))
 
+(defn solve-helper [board current-coord left-valid-values]
+  (cond
+   (nil? current-coord) nil
+   (valid-solution? board) board
+   (filled? board) nil
+   (empty? left-valid-values) (let [new-empty-point (find-empty-point board)]
+                                (if (nil? new-empty-point) nil
+                                  (recur board  new-empty-point (valid-values-for board new-empty-point))))
+   (not (empty? left-valid-values)) (recur (set-value-at board current-coord (first left-valid-values)) current-coord (rest left-valid-values))))
+
+
 (defn solve [board]
-  nil)
+  (let [new-empty-point (find-empty-point board)]
+    (cond
+     (nil? new-empty-point) (if (valid-solution? board)
+                              board
+                              nil)
+    :else (solve-helper board new-empty-point (valid-values-for board new-empty-point)))))
