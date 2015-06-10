@@ -3,56 +3,99 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (let [[row-no col-no] coord
+        row (get-in board (vector row-no))]
+    (set row)))
 
 (defn col-values [board coord]
-  nil)
+  (let [[row-no col-no] coord
+        col (reduce (fn [acc row] (cons (get-in row (vector col-no)) acc)) [] board)]
+    (set col)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+  (vector row col)))
+
+(defn coord-pairs2 [row-coords col-coords]
+  (for [row row-coords
+        col col-coords]
+  (vector row col)))
+
+(defn coord-block [index]
+  (cond
+   (< index 3) [0 1 2]
+   (< index 6) [3 4 5]
+   (< index 9) [6 7 8]))
+
+(defn get-block [coord]
+  (let [[row-no col-no] coord]
+    (coord-pairs2 (coord-block row-no) (coord-block col-no))))
 
 (defn block-values [board coord]
-  nil)
+  (let [block-list
+        (for [cell (get-block coord)]
+          (value-at board cell))]
+    (set block-list)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference all-values (row-values board coord) (col-values board coord) (block-values board coord))))
+
+(defn board-as-set [board]
+  (if (empty? board)
+    #{}
+    (set/union (set (first board)) (board-as-set (rest board)))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (board-as-set board) 0)))
 
 (defn rows [board]
-  nil)
+  (for [row (range 9)]
+    (row-values board (vector row 0))))
 
 (defn valid-rows? [board]
-  nil)
+  (every? (fn [x] (= x #{1 2 3 4 5 6 7 8 9})) (rows board)))
 
 (defn cols [board]
-  nil)
+  (for [col (range 9)]
+    (col-values board (vector 0 col))))
 
 (defn valid-cols? [board]
-  nil)
+  (every? (fn [x] (= x #{1 2 3 4 5 6 7 8 9})) (cols board)))
 
 (defn blocks [board]
-  nil)
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board (vector row col))))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? (fn [x] (= x #{1 2 3 4 5 6 7 8 9})) (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [all-empty-points
+        (for [row (range 9)
+              col (range 9)
+              :let [filled (has-value? board [row col])]
+              :when (not filled)]
+          [row col])]
+    (first all-empty-points)))
 
 (defn solve [board]
   nil)
