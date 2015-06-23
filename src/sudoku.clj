@@ -3,15 +3,24 @@
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 (def board identity)
+(comment def valid-board (board [[6 3 2 7 8 1 9 4 5]
+                         [4 8 7 5 9 6 2 1 3]
+                         [5 1 9 2 4 3 8 7 6]
+                         [8 6 4 3 5 2 7 9 1]
+                         [7 5 1 9 6 8 3 2 4]
+                         [2 9 3 1 7 4 6 5 8]
+                         [9 4 5 6 3 7 1 8 2]
+                         [1 7 6 8 2 5 4 3 9]
+                         [3 2 8 4 1 9 5 6 0]]))
 (comment def solved-board (board [[1 2 3 4 5 6 7 8 9]
-[1 2 3 4 5 6 7 8 9]
-[1 3 2 4 5 6 7 8 9]
-[1 2 3 4 5 6 7 8 9]
-[1 2 9 4 5 6 7 8 3]
-[1 2 3 4 0 6 7 8 9]
-[1 2 3 4 5 6 7 8 9]
-[1 2 3 4 5 6 7 8 9]
-[1 2 3 4 5 6 7 8 0]]))
+                          [1 2 3 4 5 6 7 8 9]
+                          [1 3 2 4 5 6 7 8 9]
+                          [1 2 3 4 5 6 7 8 9]
+                          [1 2 9 4 5 6 7 8 3]
+                          [1 2 3 4 9 6 7 8 9]
+                          [1 2 3 4 5 6 7 8 9]
+                          [1 2 3 4 5 6 7 8 9]
+                          [1 2 3 4 5 6 7 8 0]]))
 (comment def sudoku-board
   (board [[5 3 0 0 7 0 0 0 0]
           [6 0 0 1 9 5 0 0 0]
@@ -40,11 +49,11 @@
 
 (defn coord-pairs 
   ([coords] (for [p coords
-        q coords]
-    [p q]))
+                  q coords]
+              [p q]))
   ([coord1 coord2] (for [p coord1
-                        q coord2]
-                    [p q])))
+                         q coord2]
+                     [p q])))
 
 
 (defn block-values [board coord]
@@ -100,14 +109,14 @@
         (if (has-value? board coord)
           (recur (rest allcoords))
           coord))))) 
-
 (defn solve-helper [board]
-  (if (filled? board)
-    (if (valid-solution? board) [board]
-    [board])
-    (let [coord (find-empty-point board)]
-     (for [poval (valid-values-for board coord)]
-      (solve-helper (set-value-at board coord poval)))))) 
+  (let [coord (find-empty-point board)]
+    (if (filled? board)
+      (if (valid-solution? board) [board] 
+        [])
+      (for [validvals (valid-values-for board coord)
+        solution (solve-helper (set-value-at board coord validvals))]
+        solution))))
 (defn solve[board]
   (first (solve-helper board)))
-(solve-helper sudoku-board)
+
