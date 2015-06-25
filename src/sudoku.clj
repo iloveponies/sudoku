@@ -128,10 +128,10 @@
 
 
 (defn solve [board]
-  (let [coord (find-empty-point board)]
-    (cond 
-     (and (nil? coord) (valid-solution? board)) board
-     (nil? coord) '()
-     :else (for [valid-value (valid-values-for board coord)
+   (let [coord (find-empty-point board)]
+     (cond 
+      (and (nil? coord) (valid-solution? board)) board
+      (nil? coord) '()
+      :else (for [valid-value (valid-values-for board coord)
                  result (solve (set-value-at board coord valid-value))]
              result))))
