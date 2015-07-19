@@ -90,7 +90,7 @@
     (let [x (find-empty-point board)
           vals (valid-values-for board x)
           sols (map #(solve (set-value-at board x %)) vals)]
-        (apply concat sols))))
+        (first (apply concat sols)))))
 
 
 
