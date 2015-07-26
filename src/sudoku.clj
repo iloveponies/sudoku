@@ -1,19 +1,29 @@
 (ns sudoku
   (:require [clojure.set :as set]))
 
+(def all-values (set (range 1 10)))
+
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
+
+(defn- nth-row [board row]
+  (get board row))
+
+(defn- nth-col [board col]
+  (map #(get % col) board))
 
 (defn has-value? [board coord]
-  nil)
+  (contains? all-values (value-at board coord)))
 
 (defn row-values [board coord]
-  nil)
+  (let [[row col] coord]
+    (set (nth-row board row))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[row col] coord]
+    (set (nth-col board col))))
 
 (defn coord-pairs [coords]
   nil)
