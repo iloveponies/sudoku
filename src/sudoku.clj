@@ -26,37 +26,58 @@
     (set (nth-col board col))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    [row col]))
 
 (defn block-values [board coord]
-  nil)
+  ; Perhaps there is a more elegant way to this..?
+  (let [block-top-left (fn [coord] (map (fn [value] (* (quot value 3) 3)) coord))
+        [top left] (block-top-left coord)]
+    (set (for [row (range top (+ top 3))
+               col (range left (+ left 3))]
+           (value-at board [row col])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (zero? (value-at board coord))
+    (set/difference all-values
+                (row-values board coord)
+                (col-values board coord)
+                (block-values board coord))
+    ; This might be overkill depending of how the solver actually operates :)
+    #{}))
 
 (defn filled? [board]
-  nil)
+  (not-any? zero? (flatten board)))
 
 (defn rows [board]
-  nil)
+  (map set board))
+
+(defn- valid-set? [set]
+  (empty? (set/difference all-values set)))
 
 (defn valid-rows? [board]
-  nil)
+  (every? valid-set? (rows board)))
 
 (defn cols [board]
-  nil)
+  (map set (for [col (range 9)]
+             (nth-col board col))))
 
 (defn valid-cols? [board]
-  nil)
+  (every? valid-set? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (for [top (range 0 9 3)
+        left (range 0 9 3)]
+    (block-values board [top left])))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? valid-set? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
