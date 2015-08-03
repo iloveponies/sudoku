@@ -1,6 +1,30 @@
 (ns sudoku
   (:require [clojure.set :as set]))
 
+(defn segment-vec [a-vec n]
+  (loop [acc   []
+         xs    a-vec]
+    (cond
+      (empty? xs) acc
+      (<= (count xs) n) (conj acc xs)
+      :else             (recur (conj acc (subvec xs 0 n)) (subvec xs n)))))
+
+(defn row->string [row]
+  (let [segs  (segment-vec row 3)
+        lanes (mapv (partial apply str) segs)]
+    (clojure.string/join "|" lanes)))
+
+(defn board->string [board]
+  (let [rows  (mapv row->string board)
+        lines (mapv #(str % \newline) rows)
+        segs  (segment-vec lines 3)
+        lanes (mapv clojure.string/join segs)
+        sep   (str "---+---+---" \newline)]
+    (clojure.string/join sep lanes)))
+
+(defn print-board [board]
+  (println (board->string board)))
+
 (def board identity)
 
 (defn value-at [board coord]
