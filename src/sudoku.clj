@@ -4,22 +4,63 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
+;8
 
 (defn has-value? [board coord]
-  nil)
+  (< 0 (value-at board coord)))
+;9
 
 (defn row-values [board coord]
-  nil)
+  (let [row (get board (first coord))]
+    (set row)))
+;12
 
 (defn col-values [board coord]
-  nil)
+  (let [col
+        (reduce
+          (fn[a-seq i]
+            (conj a-seq
+              (value-at board [i (second coord)]))) [] (range 9))]
+    (set col)))
+;15
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    [row col]))
+
+(defn nearest-multiple [x]
+  (cond
+    (<= x 2)
+      0
+    (<= x 5)
+      3
+    :else
+      6))
+
+(defn upper-right [coord]
+  [(nearest-multiple (first coord))
+    (nearest-multiple (second coord))])
+
+(defn block-coord-pairs [coord]
+  (let [up-right (upper-right coord)
+        firstRow (first up-right)
+        firstCol (second up-right)]
+    (for [row [firstRow (+ 1 firstRow) (+ 2 firstRow)]
+          col [firstCol (+ 1 firstCol) (+ 2 firstCol)]]
+      [row col])))
+;20
 
 (defn block-values [board coord]
-  nil)
+    (let [blockVals
+           (reduce
+             (fn[a-seq pt]
+               (conj a-seq
+                 (value-at board [(first pt) (second pt)])))
+             []
+             (block-coord-pairs coord))]
+      (set blockVals)))
 
 (defn valid-values-for [board coord]
   nil)
