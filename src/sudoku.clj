@@ -75,8 +75,12 @@
         not-in-col)))
 ;22
 
+(defn all-numbers-in-board [board]
+  (set (reduce (fn[a-seq row] (conj a-seq row)) [] board)))
+
 (defn filled? [board]
-  nil)
+  (let [nums (all-numbers-in-board board)]
+    (not (contains? nums 0))))
 
 (defn rows [board]
   nil)
