@@ -104,5 +104,17 @@
           :when  (not (has-value? board coord))]
       coord)))
 
+(defn- solve-helper [boards]
+  (let [filled (filter filled? boards)
+        solved (first (filter valid-solution? filled))]
+    (if (not (nil? solved))
+      solved
+      (recur
+        (for [incomplete (filter (complement filled?) boards)
+              coord      [(find-empty-point incomplete)]
+              value      (valid-values-for incomplete coord)
+              solution   [(set-value-at incomplete coord value)]]
+          solution)))))
+
 (defn solve [board]
-  nil)
+  (solve-helper [board]))
