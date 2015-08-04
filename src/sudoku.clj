@@ -50,7 +50,6 @@
     (for [row [firstRow (+ 1 firstRow) (+ 2 firstRow)]
           col [firstCol (+ 1 firstCol) (+ 2 firstCol)]]
       [row col])))
-;20
 
 (defn block-values [board coord]
     (let [blockVals
@@ -61,9 +60,20 @@
              []
              (block-coord-pairs coord))]
       (set blockVals)))
+;20
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (< 0 (value-at board coord))
+      #{}
+      (let [possible-vals #{1 2 3 4 5 6 7 8 9}
+            not-in-block
+              (set/difference possible-vals (block-values board coord))
+            not-in-row
+              (set/difference not-in-block (row-values board coord))
+            not-in-col
+              (set/difference not-in-row (col-values board coord))]
+        not-in-col)))
+;22
 
 (defn filled? [board]
   nil)
