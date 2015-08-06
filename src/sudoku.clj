@@ -63,37 +63,87 @@
       (set blockVals)))
 
 (defn valid-values-for [board coord]
-  nil)
+   (if (< 0 (value-at board coord))
+       #{}
+       (let [possible-vals #{1 2 3 4 5 6 7 8 9}
+             not-in-block
+               (set/difference possible-vals (block-values board coord))
+             not-in-row
+               (set/difference not-in-block (row-values board coord))
+             not-in-col
+               (set/difference not-in-row (col-values board coord))]
+         not-in-col)))
+;22
+
+
+(defn all-numbers-in-board [board]
+   (set (reduce (fn[a-seq row] (concat a-seq row)) [] board)))
 
 (defn filled? [board]
-  nil)
+   (let [nums (all-numbers-in-board board)]
+    (not (contains? nums 0))))
+;23
 
 (defn rows [board]
-  nil)
+  (map (fn[i] (row-values board [i 0])) (range 9)))
+;25
+
+(defn valid-helper? [board values]
+  (reduce
+     (fn[prev curr] (and prev (empty? (set/difference #{1 2 3 4 5 6 7 8 9} curr))))
+     true
+     values))
 
 (defn valid-rows? [board]
-  nil)
+  (valid-helper? board (rows board)))
+
+;30
 
 (defn cols [board]
-  nil)
+  (map (fn[i] (col-values board [0 i])) (range 9)))
+;27
 
 (defn valid-cols? [board]
-  nil)
+  (valid-helper? board (cols board)))
+;31
 
 (defn blocks [board]
-  nil)
+  (let [blockCoords
+        (for [row [0 3 6]
+              col [0 3 6]]
+            [row col])]
+    (map (fn[coord] (block-values board coord)) blockCoords)))
+;29
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-helper? board (blocks board)))
+;32
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
+;33
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
+;34
 
 (defn find-empty-point [board]
-  nil)
+  (let [boardCoords
+        (for [row (range 9)
+              col (range 9)]
+          [row col])]
+    (first (filter (fn[coord] (= 0 (value-at board coord))) boardCoords))))
+;35
+
+(defn solve-helper [board]
+  (let [nextPoint (find-empty-point board)]
+    (if nextPoint
+      (for [candidate #{1 2 3 4 5 6 7 8 9}
+            solution (solve-helper (set-value-at board nextPoint candidate))]
+        solution)
+      (if (valid-solution? board)
+          [board]
+          []))))
 
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
