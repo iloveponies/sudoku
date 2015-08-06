@@ -63,7 +63,6 @@
 ;20
 
 (defn valid-values-for [board coord]
-<<<<<<< HEAD
    (if (< 0 (value-at board coord))
        #{}
        (let [possible-vals #{1 2 3 4 5 6 7 8 9}
@@ -139,7 +138,7 @@
 (defn solve-helper [board]
   (let [nextPoint (find-empty-point board)]
     (if nextPoint
-      (for [candidate #{1 2 3 4 5 6 7 8 9}
+      (for [candidate (valid-values-for board nextPoint)
             solution (solve-helper (set-value-at board nextPoint candidate))]
         solution)
       (if (valid-solution? board)
@@ -147,4 +146,5 @@
           []))))
 
 (defn solve [board]
-  (first (solve-helper board)))
+  (first (filter (fn[x] (not (empty? x))) (solve-helper board))))
+;36
