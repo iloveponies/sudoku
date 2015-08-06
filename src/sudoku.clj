@@ -84,26 +84,6 @@
    (let [nums (all-numbers-in-board board)]
     (not (contains? nums 0))))
 ;23
-=======
-  (if (< 0 (value-at board coord))
-      #{}
-      (let [possible-vals #{1 2 3 4 5 6 7 8 9}
-            not-in-block
-              (set/difference possible-vals (block-values board coord))
-            not-in-row
-              (set/difference not-in-block (row-values board coord))
-            not-in-col
-              (set/difference not-in-row (col-values board coord))]
-        not-in-col)))
-;22
-
-(defn all-numbers-in-board [board]
-  (set (reduce (fn[a-seq row] (conj a-seq row)) [] board)))
-
-(defn filled? [board]
-  (let [nums (all-numbers-in-board board)]
-    (not (contains? nums 0))))
->>>>>>> 65d17c61288b015ebee6c2f2635d66bca2e4e4ba
 
 (defn rows [board]
   (map (fn[i] (row-values board [i 0])) (range 9)))
