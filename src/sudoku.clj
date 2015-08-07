@@ -80,10 +80,16 @@
        (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [coords (for [row (range 9)
+                      col (range 9)]
+                  [row col])]
+    (let [coord (first coords)]
+      (if (or (empty? coords) (zero? (value-at board coord)))
+        coord
+        (recur (rest coords))))))
 
 (defn solve [board]
   nil)
