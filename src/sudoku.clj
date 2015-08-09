@@ -118,4 +118,4 @@
       (for [possible-value
             (valid-values-for board empty-point)
             solution (solve (assoc-in board empty-point possible-value))]
-        solution))))
+        solution)))
