@@ -110,6 +110,7 @@
 
 ;jollei ratkaisua, palauttaa []
 ;brute force -ratkaisu backtracking searchilla
+(defn solve [board]
   (if (filled? board)
     (if (valid-solution? board)
       board
@@ -118,4 +119,4 @@
       (for [possible-value
             (valid-values-for board empty-point)
             solution (solve (assoc-in board empty-point possible-value))]
-        solution)))
+        solution))))
