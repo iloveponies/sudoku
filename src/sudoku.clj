@@ -108,10 +108,8 @@
 (defn find-empty-point [board]
   (first (find-all-empty-points board)))
 
-;annettava funktiolle sudokun saantoja noudattava taulu, koska
-;jos kayttaja tayttanyt vaaria arvoja sudokussa, ei ota sita huomioon
-;vaan syntyy ikuinen luuppi
-(defn solve [board]
+;jollei ratkaisua, palauttaa []
+;brute force -ratkaisu backtracking searchilla
   (if (filled? board)
     (if (valid-solution? board)
       board
