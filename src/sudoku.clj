@@ -108,5 +108,21 @@
        (= 0 (value-at board (first coords))) (first coords)
        :else (recur (rest coords)))))
 
+(defn solve-helper [board]
+    (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      [])
+    (let [coord (find-empty-point board)
+          possible-values (valid-values-for board coord)]
+      (for [value possible-values
+            solution (solve-helper (set-value-at board coord value))]
+        solution))))
+
+
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
+
+
+
