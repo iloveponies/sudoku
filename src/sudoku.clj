@@ -77,5 +77,15 @@
 (defn find-empty-point [board]
   (first (filter #(not (has-value? board %)) (coord-pairs (range 9)))))
 
+(defn solve-helper [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      [])
+    (let [point (find-empty-point board)]
+      (for [value (valid-values-for board point)
+            solution (solve-helper (set-value-at board point value))]
+        solution))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
