@@ -3,20 +3,26 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (if (= (value-at board coord) 0) false true))
 
 (defn row-values [board coord]
-  nil)
+  (let [[x y] coord]
+    (set (for [y-value (range 9)]
+           (value-at board [x y-value])))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[x y] coord]
+    (set (for [x-value (range 9)]
+           (value-at board [x-value y])))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [y coords x coords] [y x]))
 
 (defn block-values [board coord]
   nil)
@@ -25,19 +31,19 @@
   nil)
 
 (defn filled? [board]
-  nil)
+  (not (some zero? (flatten board))))
 
 (defn rows [board]
-  nil)
+  (map #(row-values board [%1 0]) (range 9)))
 
 (defn valid-rows? [board]
-  nil)
+  (every? #(= all-values %1) (rows board)))
 
 (defn cols [board]
-  nil)
+  (map #(col-values board [0 %1]) (range 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (every? #(= all-values %1) (cols board)))
 
 (defn blocks [board]
   nil)
@@ -49,7 +55,7 @@
   nil)
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
   nil)
