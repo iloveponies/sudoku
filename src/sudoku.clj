@@ -41,17 +41,20 @@
 (defn filled? [board]
   (every? #(every? (complement zero?) %) board))
 
+(defn valid-* [board f]
+  (every? #(= 9 (count %)) (f board)))
+
 (defn rows [board]
   (map set board))
 
 (defn valid-rows? [board]
-  (every? #(= 9 (count %)) (rows board)))
+  (valid-* board rows))
 
 (defn cols [board]
   (map #(col-values board [nil %]) (range 0 9)))
 
 (defn valid-cols? [board]
-  (every? #(= 9 (count %)) (cols board)))
+  (valid-* board cols))
 
 (defn blocks [board]
   (for [x (range 0 9) :when (= (mod x 3) 0)
@@ -59,7 +62,7 @@
   (block-values board [x y])))
 
 (defn valid-blocks? [board]
-  (every? #(= 9 (count %)) (blocks board)))
+  (valid-* board blocks))
 
 (defn valid-solution? [board]
   (and (valid-blocks? board)
@@ -70,10 +73,11 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  (into [] (first (for [x (range 9)
-        y (range 9)
-        :when (= (value-at board [x y]) 0)]
-      [x y]))))
+  (into []
+      (first (for [x (range 9)
+                   y (range 9)
+                   :when (= (value-at board [x y]) 0)]
+               [x y]))))
 
 
 (defn solve [board]
