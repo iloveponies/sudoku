@@ -39,10 +39,9 @@
                     (row-values board coord))))
 
 (defn filled? [board]
-  (not (every? identity
-               (map (fn [row]
-                      (contains? (into #{} row) 0))
-                     board))))
+  (every?
+    false?
+    (map (fn [row] (contains? (into #{} row) 0)) board)))
 
 (defn valid-sets? [xss]
   (every?
@@ -79,12 +78,21 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-points [board]
-  (take 1 (for [x (range 9) y (range 9)
-                :while (not (has-value? board [x y]))]
-             [x y])))
+  (for [x (range 9)
+        y (range 9)
+        :when (not (has-value? board [x y]))]
+    [x y]))
 
 (defn find-empty-point [board]
   (first (find-empty-points board)))
 
 (defn solve [board]
-  nil)
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      '())
+    (let [empty-spot (find-empty-point board)]
+      (for [possible-value (valid-values-for board empty-spot)
+            solution (solve (set-value-at board empty-spot possible-value))
+            :when (not (empty? solution))]
+        solution))))
