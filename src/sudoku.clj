@@ -116,7 +116,7 @@
         (coord-pairs (range 9))))
 
 
-; Non-backtracking branch. Sets a value in case there is only one that is valid.
+; Non-backtracking branch. Continuously sets a value in case there is only one that is valid.
 (defn solve-non-bt [initial-board]
   (loop [board initial-board]
     (let [res (find-empty-point-non-bt board)]
