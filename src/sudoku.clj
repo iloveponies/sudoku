@@ -45,10 +45,10 @@
   (let [r-vals (row-values board coord)
         c-vals (col-values board coord)
         b-vals (block-values board coord)
-        values (clojure.set/union r-vals c-vals b-vals)]
+        values (set/union r-vals c-vals b-vals)]
     (if (has-value? board coord)
       #{}
-      (clojure.set/difference all-values values))))
+      (set/difference all-values values))))
 
 (defn- board-values-as-seq [board] (apply concat board))
 
@@ -83,9 +83,21 @@
 
 (defn find-empty-point [board]
   (loop [coords (coord-pairs (range 9))]
-    (if
-      (not (has-value? board (first coords))) (first coords)
-                                              (recur (rest coords)))))
+    (let [coord (first coords)]
+      (cond
+        (nil? coord) nil
+        (not (has-value? board coord)) coord
+        :else (recur (rest coords))))))
+
+(defn- solve-helper [board]
+  (let [coord (find-empty-point board)]
+    (if (nil? coord)
+      (if (valid-solution? board)
+        [board]
+        [])
+      (for [value (valid-values-for board coord)
+            solution (solve-helper (set-value-at board coord value))]
+        solution))))
 
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
