@@ -1,6 +1,19 @@
 (ns sudoku
   (:require [clojure.set :as set]))
 
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (def board identity)
 
 (defn value-at [board coord]
@@ -24,12 +37,23 @@
         col coords]
         [row col])))
 
-
 (defn block-values [board coord]
-  nil)
+  (let [top-left-coord 
+          (fn [coord]
+            (let [[row col] coord]
+              [(- row (mod row 3)) (- col (mod col 3))]))
+        [top-left-x top-left-y] (top-left-coord coord)]
+    (set (for [x (range 3) y (range 3)]
+           (value-at board [(+ top-left-x x) (+ top-left-y y)])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (let [block-vals (block-values board coord)
+        row-vals (row-values board coord)
+        col-vals (col-values board coord)
+        combined-vals (set/union block-vals row-vals col-vals)]
+      (if (has-value? board coord)
+        #{}
+        (set/difference all-values combined-vals))))
 
 (defn filled? [board]
   nil)
