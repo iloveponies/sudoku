@@ -17,7 +17,6 @@
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
 
-
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -65,18 +64,29 @@
     (not (contains? (board-values board) 0))))
 
 (defn rows [board]
-  (for [x (range 9)]
-          (row-values board [x 0])))
+  (into [] (for [x (range 9)]
+          (row-values board [x 0]))))
+
 
 (defn valid-rows? [board]
-  nil)
+  (let [all-rows (rows board)]
+    (loop [each-row all-rows]
+            (cond
+              (empty? each-row) true
+              (not (= (first each-row) all-values)) false
+              :else (recur (rest each-row))))))
 
 (defn cols [board]
-  (for [y (range 9)]
-        (col-values board [0 y])))
+  (into [] (for [y (range 9)]
+        (col-values board [0 y]))))
 
 (defn valid-cols? [board]
-  nil)
+    (let [all-cols (cols board)]
+      (loop [each-col all-cols]
+            (cond
+              (empty? each-col) true
+              (not (= (first each-col) all-values)) false
+              :else (recur (rest each-col))))))
 
 (defn blocks [board]
   nil)
