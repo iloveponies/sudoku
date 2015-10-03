@@ -63,11 +63,13 @@
 
 
 (defn valid-values-for [board coord]
-  (set/difference
-     all-values
-     (block-values board coord)
-     (row-values board coord)
-     (col-values board coord)))
+  (if (= 0 (value-at board coord))
+    (set/difference
+       all-values
+       (block-values board coord)
+       (row-values board coord)
+       (col-values board coord))
+    #{}))
 
 (defn all-board-values [board]
   (reduce #(apply conj %1 %2) #{} board))
