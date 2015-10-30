@@ -26,7 +26,9 @@
       r)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords
+        y coords]
+    (vec [x y])))
 
 (defn block-values [board coord]
   nil)
