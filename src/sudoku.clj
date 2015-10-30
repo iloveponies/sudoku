@@ -25,10 +25,16 @@
                   (inc i))
       r)))
 
+
 (defn coord-pairs [coords]
   (for [x coords
         y coords]
     (vec [x y])))
+
+(defn craptacular [a b] 
+  (vec [(* (unchecked-divide-int a 3) 3)
+        (* (unchecked-divide-int b 3) 3)]
+       ))
 
 (defn block-values [board coord]
   nil)
