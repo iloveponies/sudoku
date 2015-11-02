@@ -110,28 +110,27 @@
 (defn filled? [board] (if (find-empty-point board) false true))
 
 (defn solve [board]
-  (if (valid-solution? board) 
-    board
-    (let [empty-point (find-empty-point board)]
-      (if (empty? empty-point)
-        #{}
-        (loop [value 1] 
-          (let [solution (solve (set-value-at board empty-point value))]
-            (cond 
-              (not-empty solution) solution
-              (= value 9) #{}
-              :else (recur (inc value)))))))))
-
+  (if (has-all-values? board)
+    ;; We're at the end...
+    (if (valid-solution? board)
+      board
+      nil)
+    ;; Not at the end...
+    (some 
+      (fn [value] (solve (set-value-at board (find-empty-point board) value)))
+      (range 1 10))
+    ))
 
 ;; (defn solve [board]
-;;   (let [empty-point (find-empty-point board)]
-;;     (cond
-;;       (not-empty empty-point) (loop [value 1]
-;;                                 (let [solution (solve (set-value-at board empty-point value))]
-;;                                   (cond 
-;;                                     (not-empty solution) solution
-;;                                     (> value 9) nil
-;;                                     :else (recur (inc value)))))
-;;       (valid-solution? board) board
-;;       :else #{})))
-
+;;   (if (valid-solution? board) 
+;;     board
+;;     (let [empty-point (find-empty-point board)]
+;;       (if (empty? empty-point)
+;;         #{}
+;;         (loop [value 1] 
+;;           (let [solution (solve (set-value-at board empty-point value))]
+;;             (cond 
+;;               (not-empty solution) solution
+;;               (= value 9) #{}
+;;               :else (recur (inc value)))))))))
+;;
