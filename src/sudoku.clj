@@ -3,38 +3,31 @@
 
 (def board identity)
 
+(defn coord-range [] (range 0 9))
+
+(defn all-values [] (set (range 1 10)))
+
 (defn value-at [board coord]
   (get-in board coord))
 
 (defn has-value? [board coord]
   (not(zero? (value-at board coord))))
 
-(defn row-values [board [row col]]
-  (loop [r #{}
-         i 0]
-    (if (< i 9) (recur 
-                  (conj r (value-at board [row, i]))
-                  (inc i))
-      r)))
+(defn row-values [board [row _]]
+  (set (for [col (coord-range)]
+         (value-at board [row col]))))
 
-(defn col-values [board [row col]]
-  (loop [r #{}
-         i 0]
-    (if (< i 9) (recur 
-                  (conj r (value-at board [i, col]))
-                  (inc i))
-      r)))
-
+(defn col-values [board [_ col]]
+  (set (for [row (coord-range)]
+         (value-at board [row col]))))
 
 (defn coord-pairs [coords]
-  (for [x coords
-        y coords]
-    (vec [x y])))
+  (for [row coords col coords]
+    [row col]))
 
 (defn top-left [[row col]] 
-  (vec [(* (unchecked-divide-int row 3) 3)
-        (* (unchecked-divide-int col 3) 3)]
-       ))
+  [(* 3 (unchecked-divide-int row 3))
+   (* 3 (unchecked-divide-int col 3))])
 
 (defn block-values [board coord]
   (let [[row col] (top-left coord)]
@@ -44,41 +37,39 @@
            ))))
 
 (defn valid-values-for [board coord]
-  (let [numbers (set (range 1 10))]
-    (if (> (value-at board coord) 0) 
-      #{}
-      (clojure.set/difference numbers
-                              (block-values board coord)
-                              (row-values board coord)
-                              (col-values board coord)
-                              ))))
+  (if (> (value-at board coord) 0) 
+    #{}
+    (clojure.set/difference (all-values)
+                            (block-values board coord)
+                            (row-values board coord)
+                            (col-values board coord)
+                            )))
 
-;; Moved this to use find-empty-point (minimize code copy-paste)
-;; (defn filled? [board]
-;;   (loop [i 0]
-;;     (let [row (unchecked-divide-int i 9) 
-;;           col (mod i 9)]
-;;       (cond 
-;;         (= 0 (value-at board [row col])) false
-;;         (= row 9) true
-;;         :else (recur (inc i))
-;;         ))))
+(defn counter-to-coord [i]
+  [(unchecked-divide-int i 9) 
+   (mod i 9)])
+
+(defn filled? [board]
+  (loop [i 0]
+    (cond 
+      (= 0 (value-at board (counter-to-coord i))) false
+      (>= i 81) true
+      :else (recur (inc i)))))
 
 (defn rows [board]
-  (for [row (range 0 9)]
+  (for [row (coord-range)]
     (row-values board [row 0])))
 
 (defn cols [board]
-  (for [col (range 0 9)]
+  (for [col (coord-range)]
     (col-values board [0 col])))
 
 (defn blocks [board]
-  (for [row (range 0 3)
-        col (range 0 3)]
-    (block-values board [(* row 3) (* col 3)])))
+  (for [row [0 3 6] col [0 3 6]]
+    (block-values board [row col])))
 
 (defn has-all-values? [values]
-  (empty? (clojure.set/difference (set (range 1 10)) values)))
+  (empty? (clojure.set/difference (all-values) values)))
 
 (defn valid-rows? [board]
   (every? has-all-values? (rows board)))
@@ -99,38 +90,25 @@
 
 (defn find-empty-point [board]
   (loop [i 0]
-    (let [row (unchecked-divide-int i 9) 
-          col (mod i 9)]
-      (cond 
-        (= 0 (value-at board [row col])) [row col]
-        (= row 9) nil
-        :else (recur (inc i))
-        ))))
-
-(defn filled? [board] (if (find-empty-point board) false true))
+    (cond 
+      (= 0 (value-at board (counter-to-coord i))) (counter-to-coord i)
+      (>= i 81) #{}
+      :else (recur (inc i))
+      )))
 
 (defn solve [board]
-  (if (has-all-values? board)
-    ;; We're at the end...
-    (if (valid-solution? board)
-      board
-      nil)
-    ;; Not at the end...
-    (some 
-      (fn [value] (solve (set-value-at board (find-empty-point board) value)))
-      (range 1 10))
-    ))
-
-;; (defn solve [board]
-;;   (if (valid-solution? board) 
-;;     board
-;;     (let [empty-point (find-empty-point board)]
-;;       (if (empty? empty-point)
-;;         #{}
-;;         (loop [value 1] 
-;;           (let [solution (solve (set-value-at board empty-point value))]
-;;             (cond 
-;;               (not-empty solution) solution
-;;               (= value 9) #{}
-;;               :else (recur (inc value)))))))))
-;;
+  (if (filled? board)
+    ;; We're at the end, check solution!
+    (if (valid-solution? board) board #{})
+    ;; We still got some empty points
+    (let [empty-point (find-empty-point board)]
+      (or 
+        (and (empty? empty-point) (throw (Throwable. "this shouldn't happen")))
+        ;; Either we find a value that works
+        (some 
+          (fn [value] 
+            (not-empty 
+              (solve (set-value-at board empty-point value))))
+          (all-values))
+        ;; Or we don't
+        #{}))))
