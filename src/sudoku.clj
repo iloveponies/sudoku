@@ -99,16 +99,9 @@
 (defn solve [board]
   (if (filled? board)
     ;; We're at the end, check solution!
-    (if (valid-solution? board) board #{})
+    (if (valid-solution? board) board nil)
     ;; We still got some empty points
     (let [empty-point (find-empty-point board)]
-      (or 
-        (and (empty? empty-point) (throw (Throwable. "this shouldn't happen")))
-        ;; Either we find a value that works
-        (some 
-          (fn [value] 
-            (not-empty 
-              (solve (set-value-at board empty-point value))))
-          (all-values))
-        ;; Or we don't
-        #{}))))
+      (some not-empty ;; Just take the first one that's okay
+            (for [value (valid-values-for board empty-point)]
+              (solve (set-value-at board empty-point value)))))))
