@@ -3,9 +3,7 @@
 
 (def board identity)
 
-
 (def all-values #{1 2 3 4 5 6 7 8 9})
-
 
 (defn value-at [board coord]
   (get-in board coord))
@@ -13,7 +11,6 @@
 (defn has-value? [board coord]
   (not (zero? (value-at board coord)))
 )
-
 
 (defn row-values [board [row col]]
   (set (get board row)))
@@ -57,6 +54,7 @@
   (empty? (flatten (map #(filter zero? %) board)))
 )
 
+
 (defn rows [board]
   (map #(row-values board [% 0]) (range 9))
 )
@@ -92,10 +90,13 @@
   (assoc-in board coord new-value)
 )
 
-(defn find-empty-point [board]
-  (first (filter #(not (nil? %)) (for [x (range 9) y (range 9)]
-      (if (zero? (value-at board [x y])) [x y] )))))
+(defn empty-points [board]
+  (for [  pairs        (coord-pairs (range 9))
+          empty-points (filter #(zero? (value-at board %)) pairs)]
+    empty-points ))
 
+(defn find-empty-point [board]
+  (first  (empty-points board)))
 
 (defn solve [board]
   (if (valid-solution? board) board
@@ -103,5 +104,5 @@
         (let [ next-coord   (find-empty-point board)
                next-values  (valid-values-for board next-coord)]
            (for [value next-values
-                 solution (solve (assoc-in board next-coord value))]
+                 solution (solve (set-value-at board next-coord value))]
                  solution )))))
