@@ -20,12 +20,31 @@
     [x y]))
 
 (defn block-values [board coord]
-  (let [[row col] coord
-        block-size 3
-        top-left-corner (fn [row col] (* (quot row block-size) block-size))
-        coords (fn [top-left] (range top-left (+ top-left block-size)))]
-    (reduce (fn [x y] (conj x (value-at board y))) #{}
-            (coord-pairs (coords (top-left-corner row col))))))
+  (let [block-size 3
+        top-left-coord (fn [coord]
+                          (let [[row col] coord]
+                            [(* block-size (quot row block-size))
+                             (* block-size (quot col block-size))]))
+        block-coords (fn [top-left]
+                 (let [[row col] top-left]
+                   (for [x (map (partial + row) [0 1 2])
+                         y (map (partial + col) [0 1 2])]
+                     [x y])))]
+        (reduce (fn [a-set coord] (conj a-set (value-at board coord)))
+                #{}
+                (block-coords (top-left-coord coord)))))
+
+
+(defn block-helper [coords]
+  (let [[x y] coords]
+    (for [i [x (+ x 1) (+ x 2)]
+          j [y (+ y 1) (+ y 2)]]
+      (conj [] i j))))
+
+(defn block-values [board coord]
+  (let [[x y] coord
+        value (fn [x] (value-at board x))]
+    (set (map value (block-helper [(* 3 (quot x 3)) (* 3 (quot y 3))])))))
 
 (defn valid-values-for [board coord]
   (let [all-values #{1 2 3 4 5 6 7 8 9}
@@ -78,15 +97,12 @@
   (first (filter (complement (partial has-value? board)) (coord-pairs (range 10)))))
 
 
-(defn solve-helper [board]
+(defn solve [board]
   (cond
-   (valid-solution? board) [board]
+   (valid-solution? board) board
    (filled? board) []
    :else (let [empty-point (find-empty-point board)
                valid-vals (valid-values-for board empty-point)]
            (for [v valid-vals
                  solution (solve (set-value-at board empty-point v))]
              solution))))
-
-(defn solve [board]
-  (solve-helper board))
