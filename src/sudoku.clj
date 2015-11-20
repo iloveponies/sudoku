@@ -15,9 +15,9 @@
           [0 0 0 0 8 0 0 7 9]]))
 
 (def sudoku-solved0
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 7 2 1 9 5 3 4 0]
-          [1 9 8 3 4 2 5 6 7]
+  (board [[0 3 4 6 7 8 9 1 2]
+          [0 7 2 1 9 5 3 4 0]
+          [0 9 8 3 4 2 5 6 7]
           [8 5 9 7 6 1 4 2 3]
           [4 2 6 8 5 3 7 9 1]
           [7 1 3 9 2 4 8 5 6]
@@ -123,35 +123,33 @@
           col (range 0 9)]
       [row col])))
 
-(defn solve [board]
-  (let [solution (solve-helper board)]
-    (if solution solution [])))
-
 (defn solve-helper [board]
+  "Recursive Backtracking for solving Sudoku"
   (let [empty-point (find-empty-point board)]
-    (println "board:" board)
+    ;; if there is another empty point - solve for it
     (if empty-point
       (let [row (first  empty-point)
             col (second empty-point)]
-        (println row " " col)
-        (reduce 
-          (fn [acc i]
-            (println "reduce-i : " i)
+        ;; find 'some' number in range [1, 10) that fits the current board
+        (some 
+          ;; 'some' either returns a solved board or nil
+          (fn [i]
+            ;; make a new board with a new value candidate
             (let [new-board (set-value-at board [row col] i)]
-              ;(println "new board: " new-board)
+              ;; is the new board correct?
               (if (and
                     (not (contains? (row-values board [row col]) i))
                     (not (contains? (col-values board [row col]) i))
                     (not (contains? (block-values board [row col]) i)))
+                 ;; true: recursively solve the new board
                  (let [new-board-solved (solve-helper new-board)]
-                    (println new-board-solved)
+                    ;; has this board been solved? 
                     (if new-board-solved
-                      (do
-                        (println "accumulator: " (conj acc new-board-solved))
-                        (conj acc new-board-solved)))))))
-          []
-          (range 1 10)))
-       board)))
+                      ;; true: return the solved board
+                      new-board-solved))))) ;; false: return nil
+          (range 1 10))) ;; 'some' returns either solved board or nil
+       board))) ;; recursion complete: no empty points left
 
-(solve sudoku-solved0)
+(defn solve [board]
+  (or (solve-helper board) []))
 
