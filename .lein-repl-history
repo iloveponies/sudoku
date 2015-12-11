@@ -44,3 +44,11 @@ board
 (get board 1)
 (def all-values #{1 2 3 4 5 6 7 8 9})
 (set (get board 1))
+(map (fn [x] (get x 0)) board)
+(set(map (fn [x] (get x 0)) board))
+(defn coord-pairs [coords]
+  (for [row coords
+        col coords]
+    [row col]))
+(coord-pairs [0 1])
+(coord-pairs [0 1 2])

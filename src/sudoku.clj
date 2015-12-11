@@ -13,10 +13,12 @@
   (set (get board (first coord))))
 
 (defn col-values [board coord]
-  nil)
+  (set ( map (fn [x] (get board (second coord))) board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    [row col]))
 
 (defn block-values [board coord]
   nil)
