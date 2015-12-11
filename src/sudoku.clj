@@ -21,7 +21,12 @@
     [row col]))
 
 (defn block-values [board coord]
-  nil)
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col])))
+    ))  
 
 (defn valid-values-for [board coord]
   nil)

@@ -66,3 +66,108 @@ board
   (set (map (fn [x] (get x (second coord))) board)))
 (col-values board [0 1])
 (col-values board [1 0 ])
+(doc mod)
+(mod 5 3)
+(mod 2 3)
+(mod 4 3)
+(- 4 (mod 4 3))
+(- 3 (mod 3 3))
+(defn tblock-values-helper
+        (fn [x y] ([(- x (mod x 3)) (- y (mod y 3))]))
+)
+(defn tblock-values-helper
+        [x y] ([(- x (mod x 3)) (- y (mod y 3))])
+)
+(tblock-values-helper [2 1])
+(tblock-values-helper 2 1)
+((fn [x y] ([(- x (mod x 3)) (- y (mode y 3))])) [1 2])
+(fn [x y] ([(- x (mod x 3)) (- y (mode y 3))])) [1 2]
+((fn [x y] ([(- x (mod x 3)) (- y (mod y 3))])) [1 2])
+((fn [x y] ([x y])) [1 2])
+((fn [x y] ([x y])) 1 2)
+(fn [x y] ([x y])) 1 2
+(fn [x y] (vector x y)) 1 2
+((fn [x y] (vector x y)) 1 2)
+((fn [x y] (vector (- x (mod x 3)) y)) 1 2)
+((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3))) 1 2)
+)
+((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3)))) 1 2)
+(defn block-values [board coord]
+  (let [corner-pos
+;        (fn [x y] ([(- x (mod x 3)) (- y (mod y 3))]))]
+    ((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3)))) coord)]
+  corner-pos))
+(block-values [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+;        (fn [x y] ([(- x (mod x 3)) (- y (mod y 3))]))]
+    ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+  corner-pos))
+(block-values [1 2])
+(block-values board [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+;        (fn [x y] ([(- x (mod x 3)) (- y (mod y 3))]))]
+                                        ;    ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+           ((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3)))) coord)]
+  corner-pos))
+(block-values board [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row '((first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col '((second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+      (value-at [row col])))
+    )) 
+(block-values board [0 0])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row '((first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col '((second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+      (value-at [row col]))
+    )) 
+(block-values board [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row '((first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col '((second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       [row col])
+    ))
+(block-values board [0 0])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       [row col])
+    ))
+(block-values board [1 1])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at [row col]))
+    ))
+(block-values board [ 1 2])
+(block-values board [1 1])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col]))
+    )) 
+(block-values board [1 1])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col])))
+    )) 
+(block-values board [1 1])
+(block-values board [1 2])
+(block-values board [1 5])
