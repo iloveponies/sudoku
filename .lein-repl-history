@@ -52,3 +52,17 @@ board
     [row col]))
 (coord-pairs [0 1])
 (coord-pairs [0 1 2])
+(defn coord-pairs [coords]
+  (for [row coords
+        col coords]
+    [row col]))
+(defn col-values [board coord]
+  (set ( map (fn [x] (get board (second coord))) board)))
+(col-values boad [ 0 0])
+(col-values board [ 0 0])
+board
+(map (fn [x] (get x 0)) board)
+(defn col-values [board coord]
+  (set (map (fn [x] (get x (second coord))) board)))
+(col-values board [0 1])
+(col-values board [1 0 ])

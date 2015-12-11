@@ -13,7 +13,7 @@
   (set (get board (first coord))))
 
 (defn col-values [board coord]
-  (set ( map (fn [x] (get board (second coord))) board)))
+  (set (map (fn [x] (get x (second coord))) board)))
 
 (defn coord-pairs [coords]
   (for [row coords
