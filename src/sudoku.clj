@@ -37,7 +37,8 @@
    ))
 
 (defn filled? [board]
-  nil)
+  (let [all-nums (reduce concat board)]
+    (not (contains? (set all-nums) 0))))
 
 (defn rows [board]
   nil)
