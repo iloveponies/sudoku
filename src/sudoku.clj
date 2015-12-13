@@ -44,13 +44,13 @@
   (map set board))
 
 (defn valid-rows? [board]
-  nil)
+  (not (contains? (set (map (fn [x] (= all-values x)) (rows board))) false)))
 
 (defn cols [board]
   (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 9)))
 
 (defn valid-cols? [board]
-  nil)
+    (not (contains? (set (map (fn [x] (= all-values x)) (cols board))) false)))
 
 (defn blocks [board]
   (for [row [0 3 6]
@@ -58,7 +58,7 @@
     (block-values board [row col])))
    
 (defn valid-blocks? [board]
-  nil)
+    (not (contains? (set (map (fn [x] (= all-values x)) (blocks board))) false)))
 
 (defn valid-solution? [board]
   nil)

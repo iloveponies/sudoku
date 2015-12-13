@@ -323,3 +323,9 @@ map (fn [x] ([x 0] [x 3] [x 6])) num)
         col [0 3 6]]
     (block-values board [row col])))
 (blocks sudoku-board)
+(= #{1 2} #{1 2})
+(= #{1 2} #{1 2 3})
+(defn valid-rows? [board]
+  (map (fn [x] (= all-values x)) (rows board)))
+(valid-rows? sudoku-board)
+(contains? (set (valid-rows? sudoku-board)) false)
