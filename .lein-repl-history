@@ -212,3 +212,4 @@ Contains? (set t2) 0)
   (let [all-nums (reduce concat board)]
     (not (contains? (set all-nums) 0))))
 (filled? sudoku-board)
+(map set sudoku-board)
