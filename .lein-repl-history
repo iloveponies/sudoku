@@ -238,3 +238,88 @@ Contains? (set t2) 0)
 (count (cols sudoku-board))
 (count (range 0 8))
 (count (range 0 9))
+(ns sudoku
+  (:require [clojure.set :as set]))
+(def board identity)
+(def all-values #{1 2 3 4 5 6 7 8 9})
+(defn value-at [board coord]
+  (get-in board coord))
+(defn has-value? [board coord]
+  (not (= (value-at board coord) 0)))
+(defn row-values [board coord]
+  (set (get board (first coord))))
+(defn col-values [board coord]
+  (set (map (fn [x] (get x (second coord))) board)))
+(defn coord-pairs [coords]
+  (for [row coords
+        col coords]
+    [row col]))
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col])))
+    ))  
+(defn valid-values-for [board coord]
+  ( if (has-value? board coord)
+   #{}
+   (set/difference all-values (set/union (row-values board coord) (col-values board coord ) (block-values board coord)))
+   ))
+(defn filled? [board]
+  (let [all-nums (reduce concat board)]
+    (not (contains? (set all-nums) 0))))
+(defn rows [board]
+  (map set board))
+(defn valid-rows? [board]
+  nil)
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 9)))
+(defn valid-cols? [board]
+  nil)
+(defn blocks [board]
+;  (let [blocks-helper
+;        (fn [x y] (set (map (value-at board [x y])
+;                        ])
+)
+(defn valid-blocks? [board]
+  nil)
+(defn valid-solution? [board]
+  nil)
+(defn set-value-at [board coord new-value]
+  nil)
+(defn find-empty-point [board]
+  nil)
+(defn solve [board]
+  nil)
+(block-values board [ 1 1])
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(block-values sudoku-board)
+(block-values sudoku-board [ 0 0]) 
+(block-values sudoku-board [ 0 3]) 
+(zip [0 3 6] [0 3 6])
+(doc zip)
+(doc zipper)
+(doc zipmap)
+(doc map)
+(zipmap [0 3 6] [0 3 6])
+(zipmap [0 3 6] [ 6 3 0])
+(zipmap [0 3 6 3 6 0 6 0 3] [ 6 3 0])
+(for num [0 3 6]
+map (fn [x] ([x 0] [x 3] [x 6])))
+(for num [0 3 6]
+map (fn [x] ([x 0] [x 3] [x 6])) num)
+(defn blocks [board]
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
+(blocks sudoku-board)

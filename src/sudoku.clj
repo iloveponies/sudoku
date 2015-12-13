@@ -53,8 +53,10 @@
   nil)
 
 (defn blocks [board]
-  nil)
-
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
+   
 (defn valid-blocks? [board]
   nil)
 
