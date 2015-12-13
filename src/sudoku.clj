@@ -61,7 +61,7 @@
     (not (contains? (set (map (fn [x] (= all-values x)) (blocks board))) false)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
