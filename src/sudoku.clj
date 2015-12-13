@@ -47,7 +47,7 @@
   nil)
 
 (defn cols [board]
-  nil)
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 9)))
 
 (defn valid-cols? [board]
   nil)

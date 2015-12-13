@@ -213,3 +213,28 @@ Contains? (set t2) 0)
     (not (contains? (set all-nums) 0))))
 (filled? sudoku-board)
 (map set sudoku-board)
+(doc range)
+(range 1 9)
+(map (fn [x] (get x 1)) sudoku-board)
+(map (fn [x] (get x 0)) sudoku-board)
+(set (map (fn [x] (get x 0)) sudoku-board))
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board)
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board)
+(rows sudoku-board)
+(defn rows [board]
+  (map set board))
+(rows sudoku-board)
+(defn cols [board]
+  (map (set (fn [col] (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board)
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board
+)
+(count (cols sudoku-board))
+(count (range 0 8))
+(count (range 0 9))
