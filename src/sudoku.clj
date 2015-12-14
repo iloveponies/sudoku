@@ -3,56 +3,86 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (= (value-at board coord) 0)))
 
 (defn row-values [board coord]
-  nil)
+  (set (get board (first coord))))
 
 (defn col-values [board coord]
-  nil)
+  (set (map (fn [x] (get x (second coord))) board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    [row col]))
 
 (defn block-values [board coord]
-  nil)
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col])))
+    ))  
 
 (defn valid-values-for [board coord]
-  nil)
+  ( if (has-value? board coord)
+   #{}
+   (set/difference all-values (set/union (row-values board coord) (col-values board coord ) (block-values board coord)))
+   ))
 
 (defn filled? [board]
-  nil)
+  (let [all-nums (reduce concat board)]
+    (not (contains? (set all-nums) 0))))
 
 (defn rows [board]
-  nil)
+  (map set board))
 
 (defn valid-rows? [board]
-  nil)
+  (not (contains? (set (map (fn [x] (= all-values x)) (rows board))) false)))
 
 (defn cols [board]
-  nil)
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 9)))
 
 (defn valid-cols? [board]
-  nil)
+    (not (contains? (set (map (fn [x] (= all-values x)) (cols board))) false)))
 
 (defn blocks [board]
-  nil)
-
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
+   
 (defn valid-blocks? [board]
-  nil)
+    (not (contains? (set (map (fn [x] (= all-values x)) (blocks board))) false)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter (fn [coord] (= 0 (value-at board coord)))
+                            (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col]))))
+
 
 (defn solve [board]
-  nil)
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      nil)
+    (let [emptypos (find-empty-point board)
+          vals (valid-values-for board emptypos)]
+      (for [elem vals
+            solution (solve (set-value-at board emptypos elem))]
+        solution)
+      )))
+
+

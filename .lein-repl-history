@@ -1,0 +1,500 @@
+((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3))) 1 2)
+)
+((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3)))) 1 2)
+(defn block-values [board coord]
+  (let [corner-pos
+;        (fn [x y] ([(- x (mod x 3)) (- y (mod y 3))]))]
+    ((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3)))) coord)]
+  corner-pos))
+(block-values [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+;        (fn [x y] ([(- x (mod x 3)) (- y (mod y 3))]))]
+    ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+  corner-pos))
+(block-values [1 2])
+(block-values board [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+;        (fn [x y] ([(- x (mod x 3)) (- y (mod y 3))]))]
+                                        ;    ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+           ((fn [x y] (vector (- x (mod x 3)) (- y (mod y 3)))) coord)]
+  corner-pos))
+(block-values board [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row '((first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col '((second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+      (value-at [row col])))
+    )) 
+(block-values board [0 0])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row '((first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col '((second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+      (value-at [row col]))
+    )) 
+(block-values board [1 2])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row '((first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col '((second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       [row col])
+    ))
+(block-values board [0 0])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       [row col])
+    ))
+(block-values board [1 1])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at [row col]))
+    ))
+(block-values board [ 1 2])
+(block-values board [1 1])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col]))
+    )) 
+(block-values board [1 1])
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col])))
+    )) 
+(block-values board [1 1])
+(block-values board [1 2])
+(block-values board [1 5])
+(def all-values #{1 2 3 4 5 6 7 8 9})
+(def board identity)
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(count sudoku-board)
+(first sudoku-board)
+(contains? (first sudoku-board) 0)
+(reduce concat sudoku-board)
+(contains? (reduce concat sudoku-board) 0)
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(defn filled? [board]
+  (let [all-nums (reduce concat board)]
+    (not (contains? all-nums 0))))
+(filled? sudoku-board)
+(def t2 (reduce concat sudoku-board))
+t2
+(set t2)
+Contains? (set t2) 0)
+(Contains? (set t2) 0)
+(contains? (set t2) 0)
+(defn filled? [board]
+  (let [all-nums (reduce concat board)]
+    (not (contains? (set all-nums) 0))))
+(filled? sudoku-board)
+(map set sudoku-board)
+(doc range)
+(range 1 9)
+(map (fn [x] (get x 1)) sudoku-board)
+(map (fn [x] (get x 0)) sudoku-board)
+(set (map (fn [x] (get x 0)) sudoku-board))
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board)
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board)
+(rows sudoku-board)
+(defn rows [board]
+  (map set board))
+(rows sudoku-board)
+(defn cols [board]
+  (map (set (fn [col] (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board)
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 8)))
+(cols sudoku-board
+)
+(count (cols sudoku-board))
+(count (range 0 8))
+(count (range 0 9))
+(ns sudoku
+  (:require [clojure.set :as set]))
+(def board identity)
+(def all-values #{1 2 3 4 5 6 7 8 9})
+(defn value-at [board coord]
+  (get-in board coord))
+(defn has-value? [board coord]
+  (not (= (value-at board coord) 0)))
+(defn row-values [board coord]
+  (set (get board (first coord))))
+(defn col-values [board coord]
+  (set (map (fn [x] (get x (second coord))) board)))
+(defn coord-pairs [coords]
+  (for [row coords
+        col coords]
+    [row col]))
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col])))
+    ))  
+(defn valid-values-for [board coord]
+  ( if (has-value? board coord)
+   #{}
+   (set/difference all-values (set/union (row-values board coord) (col-values board coord ) (block-values board coord)))
+   ))
+(defn filled? [board]
+  (let [all-nums (reduce concat board)]
+    (not (contains? (set all-nums) 0))))
+(defn rows [board]
+  (map set board))
+(defn valid-rows? [board]
+  nil)
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 9)))
+(defn valid-cols? [board]
+  nil)
+(defn blocks [board]
+;  (let [blocks-helper
+;        (fn [x y] (set (map (value-at board [x y])
+;                        ])
+)
+(defn valid-blocks? [board]
+  nil)
+(defn valid-solution? [board]
+  nil)
+(defn set-value-at [board coord new-value]
+  nil)
+(defn find-empty-point [board]
+  nil)
+(defn solve [board]
+  nil)
+(block-values board [ 1 1])
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(block-values sudoku-board)
+(block-values sudoku-board [ 0 0]) 
+(block-values sudoku-board [ 0 3]) 
+(zip [0 3 6] [0 3 6])
+(doc zip)
+(doc zipper)
+(doc zipmap)
+(doc map)
+(zipmap [0 3 6] [0 3 6])
+(zipmap [0 3 6] [ 6 3 0])
+(zipmap [0 3 6 3 6 0 6 0 3] [ 6 3 0])
+(for num [0 3 6]
+map (fn [x] ([x 0] [x 3] [x 6])))
+(for num [0 3 6]
+map (fn [x] ([x 0] [x 3] [x 6])) num)
+(defn blocks [board]
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
+(blocks sudoku-board)
+(= #{1 2} #{1 2})
+(= #{1 2} #{1 2 3})
+(defn valid-rows? [board]
+  (map (fn [x] (= all-values x)) (rows board)))
+(valid-rows? sudoku-board)
+(contains? (set (valid-rows? sudoku-board)) false)
+(doc value-at?)
+(doc value-at)
+(doc let)
+(value-at sudoku-board 1 1)
+(value-at sudoku-board [1 1])
+(value-at sudoku-board [1 0])
+(defn find-empty-point [board]
+  (first (filter (fn [x y] ((= 0 (value-at board [x y]))
+                            (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col])))))
+  )
+(find-empty-point sudoku-board)
+ (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col])
+(find-empty-point sudoku-board)
+(def mapped
+ (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col])
+)
+(first mapped)
+(doc filter
+)
+(Doc filter)
+(filter (fn [x] (= 0 (value-at sudoku-board x))) mapped)
+(value-at sudoku-board [0 2])
+(filter (fn [x] (= 0 (value-at sudoku-board x))) mapped)
+(first (filter (fn [x] (= 0 (value-at sudoku-board x))) mapped))
+(defn find-empty-point [board]
+  (first (filter (fn [coord] (= 0 (value-at board coord)))
+                            (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col]))))
+(find-empty-point sudoku-board)
+(defn solve [board]
+  (defn solve-helper [s-board]
+    (if (and (filled? s-board) (valid-solution? s-board))
+      [s-board]
+      (let [emptypos (find-empty-point s-board)
+            vals (valid-values-for s-board emptypos)]
+            (for [elem vals
+                  solution (solve-helper (set-value-at s-board emptypos elem))]
+              solution))))
+  (solve-helper board))
+(sudoku-board)
+sudoku-board
+(solve sudoku-board)
+(filled? sudoku-board)
+(valid-solution? sudoku-board)
+(defn solve [board]
+  (defn solve-helper [s-board]
+   ; (if (and (filled? s-board) (valid-solution? s-board))
+    (if (filled? board)
+      [s-board]
+      (let [emptypos (find-empty-point s-board)
+            vals (valid-values-for s-board emptypos)]
+            (for [elem vals
+                  solution (solve-helper (set-value-at s-board emptypos elem))]
+              solution))))
+  
+  (solve-helper board))
+(solve sudoku-board)
+(def solved-board
+  (board [[5 3 4 6 7 8 9 1 2]
+          [6 7 2 1 9 5 3 4 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 5 9 7 6 1 4 2 3]
+          [4 2 6 8 5 3 7 9 1]
+          [7 1 3 9 2 4 8 5 6]
+          [9 6 1 5 3 7 2 8 4]
+          [2 8 7 4 1 9 6 3 5]
+          [3 4 5 2 8 6 1 7 9]]))
+(solve solved-board)
+(solve (set-value-at  solved-board [0 0] 0)
+)
+ (set-value-at  solved-board [0 0] 0)
+ (set-value-at solved-board [0 0] 0)
+ (set-value-at solved-board [1 1] 0)
+ (set-value-at solved-board [1 1] 2)
+(assoc-in solved-board [1 1] 0)
+(assoc-in solved-board [0 0] 0)
+(defn set-value-at [board coord new-value]
+  (assoc-in board coord new-value))
+ (set-value-at solved-board [1 1] 2)
+ (set-value-at solved-board [0 0] 2)
+ (set-value-at solved-board [0 0] 0)
+(solve  (set-value-at solved-board [0 0] 0))
+(valid-values-for (set-value-at solved-board [0 0] 0) [0 0])
+(for [elem #{5}
+]
+[elem})
+(for [elem #{5}]
+[elem])
+(valid-values-for (set-value-at solved-board [0 0] 0) [0 0])
+(def b1 (set-value-at solved-board [0 0] 0))
+b1
+(def b2 (set-value-at b1 [0 1] 0))
+(valid-values-for b2 [0 0])
+(def b3 (set-value-at b2 [1 1] 0))
+(valid-values-for b3 [0 0])
+b3
+(def b4 (set-value-at b3 [0 1] 0))
+b4
+(def b4 (set-value-at b3 [1 0] 0))
+b4
+(def b1 (set-value-at b3 [ 0 2] 0))
+(valid-values-for b1 [0 0])
+(valid-values-for b1 [0 1])
+(valid-values-for b1 [1 1])
+(valid-values-for b1 [1 0])
+(valid-values-for b1 [ 0 2])
+(find-empty-point b1 )
+(find-empty-point b4 )
+(find-empty-point b2 )
+(solve b2)
+(solve b)
+(solve board)
+(solve solved-board)
+(defn solve [board]
+  (if (filled? board)
+    ((if (valid-solution? board)
+       [board]
+       []))
+    ((let [emptypos (find-empty-point board)
+           vals (valid-values-for board emptypos)]
+       (for [elem vals
+             solution (solve (set-value-at board emptypos elem))]
+         solution)
+  ))))
+(solve b1)
+b1
+b2
+(defn solve [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      [])
+    (let [emptypos (find-empty-point board)
+          vals (valid-values-for board emptypos)]
+      (for [elem vals
+            solution (solve (set-value-at board emptypos elem))]
+        solution)
+      )))
+(solve b2)
+(solve b1)
+(solve solved-board)
+solved-board
+(valid-solution? solved-board)
+(defn valid-solution? [board]
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
+(valid-solution? solved-board)
+(ns sudoku
+  (:require [clojure.set :as set]))
+(def board identity)
+(def all-values #{1 2 3 4 5 6 7 8 9})
+(defn value-at [board coord]
+  (get-in board coord))
+(defn has-value? [board coord]
+  (not (= (value-at board coord) 0)))
+(defn row-values [board coord]
+  (set (get board (first coord))))
+(defn col-values [board coord]
+  (set (map (fn [x] (get x (second coord))) board)))
+(defn coord-pairs [coords]
+  (for [row coords
+        col coords]
+    [row col]))
+(defn block-values [board coord]
+  (let [corner-pos
+        ((fn [c] (vector (- (first c) (mod (first c) 3)) (- (second c) (mod (second c) 3)))) coord)]
+    (set (for [row (list (first corner-pos) (inc (first corner-pos)) (+ 2 (first corner-pos)))
+          col (list (second corner-pos) (inc (second corner-pos)) (+ 2 (second corner-pos)))]
+       (value-at board [row col])))
+    ))  
+(defn valid-values-for [board coord]
+  ( if (has-value? board coord)
+   #{}
+   (set/difference all-values (set/union (row-values board coord) (col-values board coord ) (block-values board coord)))
+   ))
+(defn filled? [board]
+  (let [all-nums (reduce concat board)]
+    (not (contains? (set all-nums) 0))))
+(defn rows [board]
+  (map set board))
+(defn valid-rows? [board]
+  (not (contains? (set (map (fn [x] (= all-values x)) (rows board))) false)))
+(defn cols [board]
+  (map (fn [col] (set (map (fn [row] (get row col)) board))) (range 0 9)))
+(defn valid-cols? [board]
+    (not (contains? (set (map (fn [x] (= all-values x)) (cols board))) false)))
+(defn blocks [board]
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
+   
+(defn valid-blocks? [board]
+    (not (contains? (set (map (fn [x] (= all-values x)) (blocks board))) false)))
+(defn valid-solution? [board]
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
+(defn set-value-at [board coord new-value]
+  (assoc-in board coord new-value))
+(defn find-empty-point [board]
+  (first (filter (fn [coord] (= 0 (value-at board coord)))
+                            (for [row (range 0 9)
+                    col (range 0 9)]
+                              [row col]))))
+;(defn solve [board]
+;  (defn solve-helper [s-board]
+;    (if (and (filled? s-board) (valid-solution? s-board))
+;      [s-board]
+;      (let [emptypos (find-empty-point s-board)
+;            vals (valid-values-for s-board emptypos)]
+;        (for [elem vals
+;              solution (solve-helper (set-value-at s-board emptypos elem))]
+;          solution))
+;      ))
+  
+;  (solve-helper board))
+(defn solve [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      [])
+    (let [emptypos (find-empty-point board)
+          vals (valid-values-for board emptypos)]
+      (for [elem vals
+            solution (solve (set-value-at board emptypos elem))]
+        solution)
+      )))
+(defn solve-helper [board]
+  
+;Recap of backtracking:
+; - check if you are at the end
+; - if so, is the solution valid?
+;     if not, return an empty sequence
+;     otherwise return [solution]
+; - if not
+;     select an empty location
+;  with each valid value for that location
+(defn sum [a-seq]
+  (reduce + a-seq))
+(defn subset-sum-helper [a-set current-set target]
+  (if (= (sum current-set) target)
+    [current-set]
+    (let [remaining (clojure.set/difference a-set current-set)]
+      (for [elem remaining
+            solution (subset-sum-helper a-set
+                                        (conj current-set elem)
+                                        target)]
+        solution))
+    ))
+(defn subset-sum [a-set target]
+  (subset-sum-helper a-set #{} target))
+)
+(valid-solution? solved-board)
+(solve b1)
+(solve b2)
+(solve sudoku-board)
