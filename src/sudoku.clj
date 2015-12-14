@@ -72,5 +72,17 @@
                                   col (range 0 9)]
                               [row col]))))
 
+
 (defn solve [board]
-  nil)
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      nil)
+    (let [emptypos (find-empty-point board)
+          vals (valid-values-for board emptypos)]
+      (for [elem vals
+            solution (solve (set-value-at board emptypos elem))]
+        solution)
+      )))
+
+
