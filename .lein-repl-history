@@ -332,3 +332,36 @@ map (fn [x] ([x 0] [x 3] [x 6])) num)
 (doc value-at?)
 (doc value-at)
 (doc let)
+(value-at sudoku-board 1 1)
+(value-at sudoku-board [1 1])
+(value-at sudoku-board [1 0])
+(defn find-empty-point [board]
+  (first (filter (fn [x y] ((= 0 (value-at board [x y]))
+                            (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col])))))
+  )
+(find-empty-point sudoku-board)
+ (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col])
+(find-empty-point sudoku-board)
+(def mapped
+ (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col])
+)
+(first mapped)
+(doc filter
+)
+(Doc filter)
+(filter (fn [x] (= 0 (value-at sudoku-board x))) mapped)
+(value-at sudoku-board [0 2])
+(filter (fn [x] (= 0 (value-at sudoku-board x))) mapped)
+(first (filter (fn [x] (= 0 (value-at sudoku-board x))) mapped))
+(defn find-empty-point [board]
+  (first (filter (fn [coord] (= 0 (value-at board coord)))
+                            (for [row (range 0 9)
+                                  col (range 0 9)]
+                              [row col]))))
+(find-empty-point sudoku-board)
