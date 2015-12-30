@@ -3,16 +3,7 @@
 
 (def board identity)
 
-(def sudoku-board
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 9 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
+(def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
   (get-in board coord))
@@ -52,37 +43,87 @@
       real-coords))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference
+     all-values
+     (row-values board coord)
+     (col-values board coord)
+     (block-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (every? true?
+   (for [row (range 9)
+         col (range 9)]
+     (has-value? board [row col]))))
 
 (defn rows [board]
-  nil)
+  (map
+   (fn [row] (row-values board [row 0]))
+   (range 9)))
+
+(defn valid? [a-seq]
+  (every?
+   (fn [sub-seq]
+     (and
+      (== (count sub-seq) 9)
+      (not (contains? sub-seq 0))))
+   a-seq))
 
 (defn valid-rows? [board]
-  nil)
+  (valid? (rows board)))
 
 (defn cols [board]
-  nil)
+  (map
+   (fn [col] (col-values board [0 col]))
+   (range 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (valid? (cols board)))
 
 (defn blocks [board]
-  nil)
+  (for [row (range 3)
+        col (range 3)]
+    (block-values board [(* row 3) (* col 3)])))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and
+   (valid-rows? board)
+   (valid-cols? board)
+   (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [row 0
+         col 0]
+    (cond
+     (and (== row 9) (== col 9))
+     '()
+
+     (not (has-value? board [row col]))
+     [row col]
+
+     (== col 8)
+     (recur (inc row) 0)
+
+     :else
+     (recur row (inc col)))))
 
 (defn solve [board]
-  nil)
+  (cond
+   (and (filled? board) (valid-solution? board))
+    board
+
+   (filled? board)
+   nil
+
+  :else
+   (first (filter (complement empty?)
+                  (let [empty-point (find-empty-point board)]
+                    (for [n (valid-values-for board empty-point)]
+                      (solve (set-value-at board empty-point n))))))))
