@@ -46,29 +46,13 @@
   (vec (map (fn [i] (row-values board [i 0])) (range 9))))
 
 (defn valid-rows? [board]
-  (let [helper (fn [s coll]
-                 (if (empty? coll)
-                   true
-                   (if (empty? s)
-                     (recur
-                      (set/difference #{1 2 3 4 5 6 7 8 9} (first coll))
-                      (rest coll))
-                     false)))]
-    (helper #{} (rows board))))
+  (every? (fn [row] (= row #{1 2 3 4 5 6 7 8 9})) (rows board)))
 
 (defn cols [board]
   (vec (map (fn [i] (col-values board [0 i])) (range 9))))
 
 (defn valid-cols? [board]
-   (let [helper (fn [s coll]
-                 (if (empty? coll)
-                   true
-                   (if (empty? s)
-                     (recur
-                      (set/difference #{1 2 3 4 5 6 7 8 9} (first coll))
-                      (rest coll))
-                     false)))]
-    (helper #{} (cols board))))
+   (every? (fn [col] (= col #{1 2 3 4 5 6 7 8 9})) (cols board)))
 
 (defn blocks [board]
   (vec (map (fn [coord] (block-values board coord)) (coord-pairs [0 3 6]))))
