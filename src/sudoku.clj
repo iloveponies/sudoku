@@ -1,6 +1,7 @@
 (ns sudoku
   (:require [clojure.set :as set]))
 
+
 (def board identity)
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
@@ -183,8 +184,6 @@
         (if (== 0 (first row))
           [first-empty-row col]
           (recur (inc col) (rest row)))))))
-
-
 
 
 (defn solve [board]
