@@ -61,10 +61,10 @@
   nil)
 
 (defn filled? [board]
-  nil)
+  (not (some (fn [row] (contains? (set row) 0)) board)))
 
 (defn rows [board]
-  nil)
+  (vec (map set board)))
 
 (defn valid-rows? [board]
   nil)
