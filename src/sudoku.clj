@@ -66,7 +66,10 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [all-pairs (coord-pairs [0 1 2 3 4 5 6 7 8])]
+    (if (not (has-value? board (first all-pairs)))
+      (first all-pairs)
+      (recur (rest all-pairs)))))
 
 (defn solve [board]
   nil)
