@@ -71,5 +71,15 @@
       (first all-pairs)
       (recur (rest all-pairs)))))
 
+(defn solve-helper [current-board]
+  (if (filled? current-board)
+    (if (valid-solution? current-board)
+      [current-board]
+      nil)
+    (let [empty-location (find-empty-point current-board)]
+      (for [valid-value (valid-values-for current-board empty-location)
+            solution (solve-helper (set-value-at current-board empty-location valid-value))] solution)
+      ))
+  )
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
