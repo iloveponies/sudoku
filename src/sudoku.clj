@@ -4,19 +4,24 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  ((complement zero?) (value-at board coord)))
 
 (defn row-values [board coord]
-  nil)
+  (let [[x1 x2 x3 x4 x5 x6 x7 x8 x9] (get board (get coord 0)) ]
+    (conj #{} x1 x2 x3 x4 x5 x6 x7 x8 x9 )))
 
 (defn col-values [board coord]
-  nil)
+  (loop [x 0 colset #{}]
+    (if (> x 8)
+      colset
+      (recur (inc x) (conj colset (value-at board [x (get coord 1)]))))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [first coords second coords]
+    [first second]))
 
 (defn block-values [board coord]
   nil)
