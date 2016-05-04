@@ -53,15 +53,18 @@
   (for [row (range 9)]
     (set (row-values board [row 0]))))
 
+(defn subset-valid? [acc subset]
+  (and acc (empty? (set/difference all-values subset))))
+
 (defn valid-rows? [board]
-  nil)
+  (reduce subset-valid? #{true} (rows board)))
 
 (defn cols [board]
   (for [col (range 9)]
     (set (col-values board [0 col]))))
 
 (defn valid-cols? [board]
-  nil)
+  (reduce subset-valid? #{true} (cols board)))
 
 (defn blocks [board]
   (for [x [0 1 2]
@@ -71,16 +74,20 @@
     (set (block-values board [row col]))))
 
 (defn valid-blocks? [board]
-  nil)
+  (reduce subset-valid? #{true} (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (for [row (range 9)
+               col (range 9)
+               :while
+                 (not (has-value? board [row col]))]
+          [row col])))
 
 (defn solve [board]
   nil)
