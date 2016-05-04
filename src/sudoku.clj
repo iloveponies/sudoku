@@ -42,23 +42,33 @@
                     (col-values board coord)
                     (block-values board coord))))
 
+(defn filled-helper [board]
+  (set (apply concat (for [row (range 9)]
+                       (row-values board [row 0])))))
+
 (defn filled? [board]
-  nil)
+  (not (contains? (filled-helper board) 0)))
 
 (defn rows [board]
-  nil)
+  (for [row (range 9)]
+    (set (row-values board [row 0]))))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (for [col (range 9)]
+    (set (col-values board [0 col]))))
 
 (defn valid-cols? [board]
   nil)
 
 (defn blocks [board]
-  nil)
+  (for [x [0 1 2]
+        y [0 1 2]
+        :let [row (* x 3)
+              col (* y 3)]]
+    (set (block-values board [row col]))))
 
 (defn valid-blocks? [board]
   nil)
