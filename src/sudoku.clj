@@ -94,7 +94,8 @@
     (if (valid-solution? board)
       board
       [])
-    (let [next-empty-point (find-empty-point board)]
-      (for [number (valid-values-for board next-empty-point)
-            solution (solve (set-value-at board next-empty-point number))]
+    (let [next-empty-point (find-empty-point board)
+          valid-values (valid-values-for board next-empty-point)]
+      (for [new-value valid-values
+            solution (solve (set-value-at board next-empty-point new-value))]
         solution))))
