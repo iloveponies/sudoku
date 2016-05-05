@@ -92,9 +92,9 @@
 (defn solve [board]
   (if (filled? board)
     (if (valid-solution? board)
-      [board]
+      board
       [])
     (let [next-empty-point (find-empty-point board)]
       (for [number (valid-values-for board next-empty-point)
-            find-solution (solve (set-value-at board next-empty-point number))]
-        find-solution))))
+            solution (solve (set-value-at board next-empty-point number))]
+        solution))))
