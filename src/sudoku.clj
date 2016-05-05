@@ -89,13 +89,12 @@
                  (not (has-value? board [row col]))]
           [row col])))
 
-(defn solve [board]
+(defn solve [board]
   (if (filled? board)
     (if (valid-solution? board)
-      board
+      [board]
       [])
-    (let [next-empty-point (find-empty-point board)
-          valid-values (valid-values-for board next-empty-point)]
-      (for [new-value valid-values
+    (let [next-empty-point (find-empty-point board)]
+      (for [new-value (valid-values-for board next-empty-point)
             solution (solve (set-value-at board next-empty-point new-value))]
         solution))))
