@@ -23,11 +23,23 @@
   (for [first coords second coords]
     [first second]))
 
+(defn block-helper [coords]
+  (let [[x y] coords]
+  [(- x (mod x 3)) (- y (mod y 3))]))
+
 (defn block-values [board coord]
-  nil)
+  (let [[x y] (block-helper coord)]
+    (set (for [coordinate (coord-pairs [x (+ x 1) (+ x 2)])]
+       (value-at board coordinate)))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (zero? (value-at board coord))
+    (set/difference (set/difference (set/difference #{1 2 3 4 5 6 7 8 9}
+                                                    (block-values board coord))
+                                    (row-values board coord))
+                    (col-values board coord))
+    #{}))
+
 
 (defn filled? [board]
   nil)
