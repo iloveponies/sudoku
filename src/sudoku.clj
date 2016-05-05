@@ -82,9 +82,10 @@
 (defn set-value-at [board coord new-value]
   (assoc-in board coord new-value))
 
+; something's broken with this, doesn't show on tests
 (defn find-empty-point [board]
-  (first (for [row (range 9)
-               col (range 9)
+  (first (for [col (range 9)
+               row (range 9)
                :while
                  (not (has-value? board [row col]))]
           [row col])))
@@ -92,7 +93,7 @@
 (defn solve [board]
   (if (filled? board)
     (if (valid-solution? board)
-      [board]
+      board
       [])
     (let [next-empty-point (find-empty-point board)]
       (for [new-value (valid-values-for board next-empty-point)
