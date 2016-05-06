@@ -92,4 +92,8 @@
   (first (set/difference (find-empty-helper board) #{nil})))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [point (find-empty-point board) candidate-values (valid-values-for board point)]
+      (for [value candidate-values end (solve (set-value-at board point value))]
+        end))))
