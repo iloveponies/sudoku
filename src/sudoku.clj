@@ -5,16 +5,16 @@
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
-(def newspaper-sudoku-board
-  (board [[0 0 6 0 3 0 0 0 0]
-          [0 0 0 0 0 9 0 0 0]
-          [4 0 0 0 2 0 0 1 3]
-          [2 0 1 0 0 5 0 3 0]
-          [0 3 9 7 0 0 0 2 8]
-          [0 0 0 3 0 0 0 0 0]
-          [0 0 0 0 7 0 4 0 0]
-          [0 0 5 0 0 0 9 0 0]
-          [0 1 2 6 0 0 0 8 0]]))
+;; (def newspaper-sudoku-board
+;;   (board [[0 0 6 0 3 0 0 0 0]
+;;           [0 0 0 0 0 9 0 0 0]
+;;           [4 0 0 0 2 0 0 1 3]
+;;           [2 0 1 0 0 5 0 3 0]
+;;           [0 3 9 7 0 0 0 2 8]
+;;           [0 0 0 3 0 0 0 0 0]
+;;           [0 0 0 0 7 0 4 0 0]
+;;           [0 0 5 0 0 0 9 0 0]
+;;           [0 1 2 6 0 0 0 8 0]]))
 
 ;; (def sudoku-board
 ;;   (board [[5 3 0 0 7 0 0 0 0]
@@ -39,7 +39,6 @@
 ;;           [9 6 1 5 3 7 2 8 4]
 ;;           [2 8 7 4 1 9 6 3 5]
 ;;           [3 4 5 2 8 6 1 7 9]]))
-
 
 (defn value-at [board coord]
   (get-in board coord))
@@ -87,15 +86,13 @@
 ;;                       ;    [2 0] [2 1] [2 2]]
 
 (defn block-values [board coord]
-
-  (let [coordpairs (coord-pairs coord)])
-
-)
+  nil)
 
 ;(block-values sudoku-board [0 2]) ;=> #{0 5 3 6 8 9}
 ;(block-values sudoku-board [4 5]) ;=> #{0 6 8 3 2}
 
-(defn valid-values-for [board coord])
+(defn valid-values-for [board coord]
+  nil)
 
 (defn filled? [board]
   nil)
