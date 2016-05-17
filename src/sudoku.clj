@@ -45,7 +45,7 @@
     (col-values board [0 col])))
 
 (defn valid-cols? [board]
-  (every? (fn [x] (= x all-values)) (cols board)))
+  (every? (fn [x] (= x all-values)) (cols board))) 
 
 (defn blocks [board]
   nil)
