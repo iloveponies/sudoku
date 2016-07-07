@@ -2,6 +2,7 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
+(def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
   (get-in board coord))
