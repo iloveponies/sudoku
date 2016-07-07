@@ -88,17 +88,6 @@
                (if (not (has-value? board [x y]))
                  (concat [x y])))) nil)))
 
-(defn sudoku-helper [board empty-set]
-  (if (empty? empty-set)
-    '()
-	  (for [value (valid-values-for board (first empty-set))
-	        target (set-value-at board (first empty-set) value)]
-	    (if (valid-solution? target)
-	      target
-	      (sudoku-helper target (rest empty-set)))
-	    ))
-  )
-
 (defn solve [board]
   (if (filled? board)
     (if (valid-solution? board)
