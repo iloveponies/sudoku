@@ -128,16 +128,16 @@
   (assoc-in board coord new-value))
 
 (defn coord-next [coord]
-  (let [x-coord (first coord)
-        y-coord (second coord)
-        coord-index (+ (* x-coord 9) y-coord)
-        coord-index-next (inc coord-index)
-        x-coord-next (int (/ coord-index-next 9))
-        y-coord-next (mod coord-index-next 9)
-        at-max (>= coord-index 80)]
-    (if at-max
+  (let [r-coord (first coord)
+        c-coord (second coord)
+        at-max? (fn [x] (>= x 9))
+        c-coord-next (inc c-coord)
+        c-at-max (at-max? c-coord-next)
+        r-coord-next (if c-at-max (inc r-coord) r-coord)
+        r-at-max (at-max? r-coord-next)]
+    (if (and r-at-max c-at-max)
       nil
-      (list x-coord-next y-coord-next))))
+      (list r-coord-next (if c-at-max 0 c-coord-next)))))
 
 (defn find-empty-point [board]
   (loop [coord (list 0 0)
@@ -147,23 +147,46 @@
       (has-value? board coord) (recur (coord-next coord) board)
       :else coord)))
 
-(defn solve-value [board coord values]
-  (cond
-    (filled? board) (if (valid-solution? board) board nil)
-    (nil? coord) nil
-    (empty? values) nil
-    :else
-      (let [next-board (set-value-at board coord (first values))
-            next-coord (find-empty-point next-board)
-            next-values (valid-values-for next-board next-coord)
-            solution (solve-value next-board next-coord next-values)]
-        (if (nil? solution)
-          (solve-value board coord (next values))
-          solution))))
+; Example for empty 2x2 board
+; - [[[0 0] [0 0]]]
+; - [[[1 0] [0 0]]
+;    [[2 0] [0 0]]
+;    [[3 0] [0 0]]
+;    [[4 0] [0 0]]]
+; - [[[1 2] [0 0]]
+;    [[1 3] [0 0]]
+;    [[1 4] [0 0]]
+;    [[2 0] [0 0]]
+;    [[3 0] [0 0]]
+;    [[4 0] [0 0]]]
+; - [[[1 2] [3 0]]
+;    [[1 2] [4 0]]
+;    [[1 3] [0 0]]
+;    [[1 4] [0 0]]
+;    [[2 0] [0 0]]
+;    [[3 0] [0 0]]
+;    [[4 0] [0 0]]]
+; - [[[1 2] [3 4]]
+;    [[1 2] [4 0]]
+;    [[1 3] [0 0]]
+;    [[1 4] [0 0]]
+;    [[2 0] [0 0]]
+;    [[3 0] [0 0]]
+;    [[4 0] [0 0]]]
+; [[1 2] [3 4]]
+(defn solve-recur [boards]
+  (let [board (first boards)]
+    (cond
+      (empty? boards) nil
+      (filled? board) (if (valid-solution? board) board (recur (rest boards)))
+      :else
+        (let [point (find-empty-point board)
+              values (valid-values-for board point)
+              value-boards (map (fn [value] (set-value-at board point value)) values)
+              new-boards (concat value-boards (rest boards))]
+          (recur new-boards)))))
 
 
 (defn solve [board]
-  (let [coord (find-empty-point board)]
-    (solve-value board coord (valid-values-for board coord))))
-
+  (solve-recur (list board)))
 
