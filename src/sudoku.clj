@@ -30,8 +30,8 @@
          board)))
 
 (defn coord-pairs [coords]
-  (vec (set (apply concat (for [number coords]
-    (map (fn [other] (vector other number)) coords))))))
+  (vec (apply concat (for [number coords]
+    (map (fn [other] (vector other number)) coords)))))
 
 (coord-pairs [0 1 2])
 
