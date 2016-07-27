@@ -33,10 +33,36 @@
   (vec (apply concat (for [number coords]
     (map (fn [other] (vector number other)) coords)))))
 
-(coord-pairs [0 1 2])
+(defn top-left-corner [coord]
+  (vector
+    (* 3 (int (/ (first coord) 3)))
+    (* 3 (int (/ (second coord) 3)))))
+
+(defn next-in-block [coord maxX]
+  (cond
+    (> (inc (first coord)) maxX) (vector (- (first coord) 2) (inc (second coord)))
+    :else (vector (inc (first coord)) (second coord))))
+
+(defn get-block-values [out-set in-board in-top-left curr]
+  (if (not=
+        (top-left-corner curr)
+        in-top-left)
+    out-set
+    (recur
+      (conj out-set (value-at in-board curr))
+      in-board
+      in-top-left
+      (next-in-block curr (+ 2 (second in-top-left))))))
 
 (defn block-values [board coord]
-  nil)
+  (get-block-values #{} board (top-left-corner coord) (top-left-corner coord)))
+
+(block-values sudoku-board [4 5])
+
+(not= (top-left-corner [0 3])
+        [0 3])
+
+(top-left-corner [0 4])
 
 (defn valid-values-for [board coord]
   nil)
