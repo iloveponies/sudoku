@@ -3,20 +3,37 @@
 
 (def board identity)
 
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (set (get board (first coord))))
 
 (defn col-values [board coord]
-  nil)
+  (set (map
+         (fn [row]
+           (get row (second coord)))
+         board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (vec (set (apply concat (for [number coords]
+    (map (fn [other] (vector other number)) coords))))))
+
+(coord-pairs [0 1 2])
 
 (defn block-values [board coord]
   nil)
