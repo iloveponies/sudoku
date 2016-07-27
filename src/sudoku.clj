@@ -57,13 +57,6 @@
 (defn block-values [board coord]
   (get-block-values #{} board (top-left-corner coord) (top-left-corner coord)))
 
-(block-values sudoku-board [4 5])
-
-(not= (top-left-corner [0 3])
-        [0 3])
-
-(top-left-corner [0 4])
-
 (defn valid-values-for [board coord]
   nil)
 
