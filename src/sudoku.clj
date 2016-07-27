@@ -31,7 +31,7 @@
 
 (defn coord-pairs [coords]
   (vec (apply concat (for [number coords]
-    (map (fn [other] (vector other number)) coords)))))
+    (map (fn [other] (vector number other)) coords)))))
 
 (coord-pairs [0 1 2])
 
