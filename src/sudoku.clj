@@ -5,17 +5,6 @@
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
-(def sudoku-board
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 9 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
-
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -66,19 +55,6 @@
                           (row-values board coord)
                           (col-values board coord))
     #{}))
-
-(valid-values-for sudoku-board [0 2])
-
-(def solved-board
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 7 2 1 9 5 3 4 8]
-          [1 9 8 3 4 2 5 6 7]
-          [8 5 9 7 6 1 4 2 3]
-          [4 2 6 8 5 3 7 9 1]
-          [7 1 3 9 2 4 8 5 6]
-          [9 6 1 5 3 7 2 8 4]
-          [2 8 7 4 1 9 6 3 5]
-          [3 4 5 2 8 6 1 7 9]]))
 
 (defn filled? [board]
   (loop [x 8
@@ -138,18 +114,6 @@
             (row-values b (vector row 0))) false
       :else (recur (dec row) b))))
 
-
-(def invalid-board
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 7 2 1 9 5 3 4 4]
-          [1 9 8 3 4 2 5 6 7]
-          [8 5 9 7 6 1 4 2 3]
-          [4 2 6 8 5 3 7 9 1]
-          [7 1 3 9 2 4 8 5 6]
-          [9 6 1 5 3 7 2 8 4]
-          [2 8 7 4 1 9 6 3 5]
-          [3 4 5 2 8 6 1 7 9]]))
-
 (defn valid-cols? [board]
   (loop [col 8
          b board]
@@ -175,7 +139,25 @@
        (valid-rows? board)
        (valid-blocks? board)))
 
-(def before-change
+(defn set-value-at [board coord new-value]
+  (assoc-in board coord new-value))
+
+(defn next-coord [coord]
+  (let [left (vector (first coord) (- (second coord) 1))
+        up   (vector (- (first coord) 1) 8)]
+    (cond
+    (>= (second left) 0) left
+    :else up)))
+
+(defn find-empty-point [board]
+  (loop [coord [8 8]]
+    (cond
+      (< (first coord) 0) nil
+      (zero? (value-at board coord)) coord
+      :else (recur (next-coord coord)))))
+
+
+(def sud-board
   (board [[5 3 0 0 7 0 0 0 0]
           [6 0 0 1 9 5 0 0 0]
           [0 9 8 0 0 0 0 6 0]
@@ -186,11 +168,13 @@
           [0 0 0 4 1 9 0 0 5]
           [0 0 0 0 8 0 0 7 9]]))
 
-(defn set-value-at [board coord new-value]
-  (assoc-in board coord new-value))
-
-(defn find-empty-point [board]
-  nil)
-
 (defn solve [board]
-  nil)
+  (let [empty-point (find-empty-point board)]
+    (if (= nil empty-point)
+      board
+      (let [potentials (valid-values-for board empty-point)]
+        (for [elem potentials
+             solution (solve (set-value-at board empty-point elem))]
+        solution)))))
+
+(solve sud-board)
