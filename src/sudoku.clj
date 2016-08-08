@@ -17,7 +17,7 @@
 ;; (value-at sudoku-board [0 0]) ;=> 5
 
 (defn has-value? [board coord]
-  ((complement = )0  (value-at board coord)))
+  ((complement = ) 0  (value-at board coord)))
 
 ;; (has-value? sudoku-board [0 0]) ;=> true
 ;; (has-value? sudoku-board [0 2]) ;=> false
@@ -38,16 +38,6 @@
 ;;  (col-values sudoku-board [0 2]) ;=> #{0 8}
 ;;  (col-values sudoku-board [4 8]) ;=> #{3 1 6 0 5 9}
 
-
-
-;; (defn coord-pairs [coords]
-;;   (loop [ liste coords c []]
-;;     (cond
-;;       (empty? liste) c
-;;       :else (recur (rest liste)
-;;                    (concat
-;;                      c
-;;                      (map #(conj [(first liste)] % )coords))))))
 
 (defn coord-pairs [coords]
   (for [ i coords j coords ] [i j]))
@@ -98,8 +88,8 @@
     (set (map #(get-in board %) new-block))))
 
 
-;;   (block-values sudoku-board [0 2]) ;=> #{0 5 3 6 8 9}
-;;   (block-values sudoku-board [4 5]) ;=> #{0 6 8 3 2}
+;;    (block-values sudoku-board [0 2]) ;=> #{0 5 3 6 8 9}
+;;    (block-values sudoku-board [4 5]) ;=> #{0 6 8 3 2}
 
 
 (defn valid-values-for [board coord]
@@ -114,26 +104,44 @@
                                                     block-val))
     :else #{})))
 
+   ;(valid-values-for sudoku-board [0 0]) ;=> #{}
+;;    (valid-values-for sudoku-board [0 2]) ;=> #{1 2 4}
+;;  (valid-values-for solved2-board [2 6])
 
-;;   (valid-values-for sudoku-board [0 0]) ;=> #{}
-;;   (valid-values-for sudoku-board [0 2]) ;=> #{1 2 4}
 
-(defn full-block? [board corner]
-  (empty? (valid-values-for board corner)))
+(defn contains-in-line [value]
 
+  (fn [line]
+    (reduce (fn [c x]
+              (or c
+                 (= value x)))
+            false
+            line)))
+
+
+(defn number-zero [board]
+   (let [ size (count board)
+          contains0? (contains-in-line 0)]
+         (for  [ line board
+                :when (contains0? line )]
+          1)))
+
+;; (number-zero solved-board)
+;; (number-zero sudoku-board)
 
 
 (defn filled? [board]
-  (reduce (fn [c x]
-            (and c x))
-          true
-          (for [i [1 2 3] j [1 2 3]]
-       (full-block? board [i j]))))
-
+  (=  0  (count (number-zero board))))
 
 ;; (filled? sudoku-board);=> false
 ;; (filled? solved-board) ;=> true
 
+
+(defn valid-set? [board  a-set]
+  (let [ new-col (clojure.set/difference a-set #{0})]
+    (= (count board)
+       (count new-col))))
+;; (valid-set? solved-board #{})
 
 (defn rows [board]
   (for [ row  (range (count board))]
@@ -151,7 +159,7 @@
 ;;                     ;    #{0 4 1 9 5}
 ;;                     ;    #{0 8 7 9}]
 
-;; (rows solved-board) ;=> [#{1 2 3 4 5 6 7 8 9}
+;;  (rows solved-board) ;=> [#{1 2 3 4 5 6 7 8 9}
 ;;                     ;    #{1 2 3 4 5 6 7 8 9}
 ;;                     ;    #{1 2 3 4 5 6 7 8 9}
 ;;                     ;    #{1 2 3 4 5 6 7 8 9}
@@ -164,7 +172,9 @@
 (defn valid-rows? [board]
   (let [ size-board (count board) ]
        (= size-board
-          (count  (for [ row (rows board) :when (= (count row ) size-board)] 1)))))
+          (count  (for [ row (rows board)
+                         :when (valid-set? board row)]
+                         1)))))
 
 
 ;; (valid-rows? solved-board)  ;=> truthy
@@ -196,13 +206,19 @@
 ;;                     ;    #{1 2 3 4 5 6 7 8 9}]
 
 
-(defn valid-cols? [board]
-  (let [ size-board (count board) ]
-       (= size-board
-          (count  (for [ col(cols board) :when (= (count col ) size-board)] 1)))))
 
-;; (valid-cols? solved-board)  ;=> truthy
-;; (valid-cols? sudoku-board) ;=> falsey
+
+
+(defn valid-cols? [board]
+  (let [ size (count board) ]
+       (= size
+          (count
+            (for [ col(cols board)
+                          :when (valid-set? board col)]
+              1 )))))
+
+;;  (valid-cols? solved-board)  ;=> truthy
+;;  (valid-cols? sudoku-board) ;=> falsey
 
 
 (defn blocks [board]
@@ -232,7 +248,9 @@
 (defn valid-blocks? [board]
   (let [ size-board (count board) ]
        (= size-board
-          (count  (for [ block (blocks board) :when (= (count block ) size-board)] 1)))))
+          (count  (for [ block (blocks board)
+                         :when (valid-set? board block)]
+                    1)))))
 
 ;; (valid-blocks? solved-board)  ;=> truthy
 ;; (valid-blocks? sudoku-board) ;=> falsey
@@ -244,7 +262,7 @@
        (valid-cols? board)))
 
 
-;;  (valid-solution? solved-board)  ;=> truthy
+;; (valid-solution? solved2-board)  ;=> truthy
 ;;  (valid-solution? sudoku-board) ;=> falsey
 
 
@@ -285,27 +303,61 @@
                     (get line i))]
       i)))
 
+
 (defn find-empty-point [board]
-  (let [ size (count board)
-         set-points (for [ i (range size)
+  (let [ size (count  board)
+         point  (for [ i (range size)
                             j (range size)
-                            :when (= 0 (get-in board [i j]))]
-                       [i j] )
-         number-points (count set-points)
-         index (rand-int number-points)]
-     (get  (apply vector set-points) index)))
+                            :when  (= 0 (get-in board [i j]))]
+                       [i j])]
+  (first  point)))
+
+;;          number-points (count set-points)
+;;          index (rand-int number-points)]
+;;      (get  (apply vector set-points) index)))
 
 
+(defn set-zeros [board]
+   (let [ size (count board)
+          interval (range size)]
+          (for [ i interval j interval
+                 :when (zero? (value-at board [i j]))]
+            [i j])))
 
+(defn valid-value-empty? [board]
+  (let [ zeros (set-zeros board)]
+    (= 0(count zeros))))
+
+;; (valid-value-empty? solved-board)
+;; (valid-solution? solved-board)
 
 (defn solve [board]
- [:=])
+ (cond
+   (valid-solution?   board)   (into [] board)
+   (valid-value-empty? board ) []
+   :else (let [ position (find-empty-point board)]
+           position
+           (for [ value (valid-values-for board position)
+                   solution   (into [] (solve (into [] (set-value-at board position  value))))]
+             solution))))
+
 
 
 ;;   (def sudoku-board
 ;;   (board [[5 3 0 0 7 0 0 0 0]
 ;;           [6 0 0 1 9 5 0 0 0]
 ;;           [0 9 8 0 0 0 0 6 0]
+;;           [8 0 0 0 6 0 0 0 3]
+;;           [4 0 0 8 0 3 0 0 1]
+;;           [7 0 0 0 2 0 0 0 6]
+;;           [0 6 0 0 0 0 2 8 0]
+;;           [0 0 0 4 1 9 0 0 5]
+;;           [0 0 0 0 8 0 0 7 9]]))
+
+;;   (def sudoku1-board
+;;   (board [[5 3 1 0 7 0 0 0 0]
+;;           [6 2 4 1 9 5 0 0 0]
+;;           [7 9 8 0 0 0 0 6 0]
 ;;           [8 0 0 0 6 0 0 0 3]
 ;;           [4 0 0 8 0 3 0 0 1]
 ;;           [7 0 0 0 2 0 0 0 6]
@@ -323,5 +375,21 @@
 ;;           [9 6 1 5 3 7 2 8 4]
 ;;           [2 8 7 4 1 9 6 3 5]
 ;;           [3 4 5 2 8 6 1 7 9]]))
+
+;; (def solved2-board
+;;   (board [[5 0 4 6 7 8 9 1 2]
+;;           [6 7 2 1 9 5 3 4 8]
+;;           [1 9 8 3 4 2 0 6 7]
+;;           [8 5 9 0 6 1 4 2 3]
+;;           [4 2 6 8 5 3 7 0 1]
+;;           [7 1 3 9 2 4 8 5 6]
+;;           [9 6 0 5 3 7 2 8 4]
+;;           [2 8 7 0 1 9 6 3 5]
+;;           [3 4 5 2 8 6 1 7 9]]))
+;; (get-in solved-board [1 0])
+
+
+
+
 
 
