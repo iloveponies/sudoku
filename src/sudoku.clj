@@ -3,14 +3,17 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  ((complement zero?) (value-at board coord)))
 
 (defn row-values [board coord]
-  nil)
+  (let [[row _] coord]
+    (set (get-in board [row]))))
 
 (defn col-values [board coord]
   nil)
