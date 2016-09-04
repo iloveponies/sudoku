@@ -16,7 +16,10 @@
     (set (get-in board [row]))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[_ col] coord
+        column-values (fn [acc row]
+              (conj acc (get-in row [col])))]
+    (reduce column-values #{} board)))
 
 (defn coord-pairs [coords]
   nil)
