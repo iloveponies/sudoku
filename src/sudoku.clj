@@ -22,10 +22,23 @@
     (reduce column-values #{} board)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords
+        y coords]
+    [x y]))
+
+(defn block-top-left [coords]
+  (let [[x y] coords]
+    [(* 3 (int (/ x 3))) (* 3 (int (/ y 3)))]))
 
 (defn block-values [board coord]
-  nil)
+  (let [[x y] (block-top-left coord)
+        coords (for [offset-x [0 1 2]
+                     offset-y [0 1 2]]
+                 [(+ x offset-x) (+ y offset-y)])
+        values (fn [acc xy]
+                (conj acc (value-at board xy)))]
+    (reduce values #{} coords)))
+
 
 (defn valid-values-for [board coord]
   nil)
