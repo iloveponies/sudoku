@@ -41,10 +41,16 @@
 
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (let [values (set/union (block-values board coord)
+                            (row-values board coord)
+                            (col-values board coord))]
+      (set/difference all-values values))))
 
 (defn filled? [board]
-  nil)
+  (let [board-set (set (apply concat board))]
+    ((complement contains?) board-set 0)))
 
 (defn rows [board]
   nil)
