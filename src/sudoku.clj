@@ -102,4 +102,10 @@
                            [])))))
 
 (defn solve [board]
-  false)
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      [])
+    (let [empty-location (find-empty-point board)]
+      (for [value (valid-values-for board empty-location)]
+        (solve (set-value-at board empty-location value))))))
