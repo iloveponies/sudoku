@@ -101,11 +101,15 @@
                            [row col]
                            [])))))
 
-(defn solve [board]
+(defn solve-helper [board]
   (if (filled? board)
     (if (valid-solution? board)
       [board]
       [])
     (let [empty-location (find-empty-point board)]
-      (for [value (valid-values-for board empty-location)]
-        (solve (set-value-at board empty-location value))))))
+      (for [value (valid-values-for board empty-location)
+            solution (solve-helper (set-value-at board empty-location value))]
+        solution))))
+
+(defn solve [board]
+  (first (solve-helper board)))
