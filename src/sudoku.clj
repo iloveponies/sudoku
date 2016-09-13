@@ -16,7 +16,6 @@
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
-
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -111,13 +110,22 @@
             :else (recur (rest each-block))))))
 
 (defn valid-solution? [board]
-  nil)
+  (if (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)) true false))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [nulls-of-this-row (fn [i row]
+      (for [x (range 9)
+            :let [row-val (nth row x)]
+            :when (= 0 row-val)]
+        [i x]))
+    get-nulls (fn [index boardd null-coords]
+                (if (empty? boardd)
+                  null-coords
+                  (recur (inc index) (rest boardd) (concat null-coords (nulls-of-this-row index (first boardd))))))]
+    (get-nulls 0 board [])))
 
 (defn solve [board]
   nil)
