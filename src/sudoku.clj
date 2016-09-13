@@ -39,7 +39,7 @@
         [row col])))
 
 (defn block-values [board coord]
-  (let [top-left-coord 
+  (let [top-left-coord
           (fn [coord]
             (let [[row col] coord]
               [(- row (mod row 3)) (- col (mod col 3))]))
@@ -89,10 +89,26 @@
               :else (recur (rest each-col))))))
 
 (defn blocks [board]
-  nil)
+  (let [blocks-of-three (reduce (fn [res x] (concat res (partition 3 x))) [] board)
+        blocks-of-nine-of-three (partition 9 blocks-of-three)
+        block-sets (map (fn [x]
+              (for [row-num (range 3)]
+                (set
+                  (concat
+                    (nth x row-num)
+                    (nth x (+ 3 row-num))
+                    (nth x (+ 6 row-num)))))) blocks-of-nine-of-three)]
+      (into [] (reduce
+        (fn [res x]
+          (concat res x)) [] block-sets))))
 
 (defn valid-blocks? [board]
-  nil)
+  (let [all-blocks (blocks board)]
+    (loop [each-block all-blocks]
+          (cond
+            (empty? each-block) true
+            (not (= (first each-block) all-values)) false
+            :else (recur (rest each-block))))))
 
 (defn valid-solution? [board]
   nil)
