@@ -3,17 +3,6 @@
 
 (def board identity)
 
-(def sudoku-board
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 9 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
-
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
@@ -121,11 +110,21 @@
             :let [row-val (nth row x)]
             :when (= 0 row-val)]
         [i x]))
-    get-nulls (fn [index boardd null-coords]
-                (if (empty? boardd)
+    get-nulls (fn [index current-board null-coords]
+                (if (empty? current-board)
                   null-coords
-                  (recur (inc index) (rest boardd) (concat null-coords (nulls-of-this-row index (first boardd))))))]
-    (get-nulls 0 board [])))
+                  (recur (inc index)
+                          (rest current-board)
+                          (concat null-coords (nulls-of-this-row index (first current-board))))))]
+    ; Initially returned every empty point,
+    ;   fix it by returning first of them.
+    (first (get-nulls 0 board []))))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [this-empty-point (find-empty-point board)
+          valid-nums (valid-values-for board this-empty-point)]
+      (for [n valid-nums
+          solution (solve (set-value-at board this-empty-point n))]
+        solution))))
