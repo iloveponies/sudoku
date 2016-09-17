@@ -57,26 +57,34 @@
     (row-values board [row 0])))
 
 (defn valid-rows? [board]
-  nil)
+  (every? true? (for [row (rows board)]
+                 (= row all-values))))
+
 
 (defn cols [board]
   (for [col (range 0 9)]
     (col-values board [0 col])))
 
 (defn valid-cols? [board]
-  nil)
+  (every? true? (for [col (cols board)]
+                 (= col all-values))))
 
 (defn blocks [board]
-  nil)
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? true? (for [block (blocks board)]
+                 (= block all-values))))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
   nil)
