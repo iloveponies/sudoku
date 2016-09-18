@@ -97,5 +97,15 @@
             :else (recur (rest coords))))]
     (zero-value? coords)))
 
+(defn solve-helper [board]
+  (if (filled? board)
+    (when (valid-solution? board)
+      [board])
+      (let [empty-spot (find-empty-point board)]
+        (for [valid-value (valid-values-for board empty-spot)
+              new-board (solve-helper (set-value-at board empty-spot valid-value))]
+            (when (seq new-board)
+              new-board)))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
