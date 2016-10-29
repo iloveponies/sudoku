@@ -90,5 +90,11 @@
     (for [x (range 0 8) y (range 0 8)]
       (if (zero? (value-at board [x y])) [x y])))))
 
+;(defn solve-helper [current-board board]
+;  (for [empty-point (find-empty-points board)]
+;    (for [valid-value (valid-values-for board empty-point)]
+;      (set-value-at board empty-point valid-value))))
+
 (defn solve [board]
-  nil)
+;  (solve-helper board #{})
+  )
