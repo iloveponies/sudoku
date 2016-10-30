@@ -40,8 +40,13 @@
          (block-values board coord))]
     (set/difference all-values used-values))))
 
+(defn values-in [board]
+  (apply set/union
+    (for [row-n (range 0 9)]
+      (set/union (row-values board [row-n 0])))))
+
 (defn filled? [board]
-  nil)
+  (not (contains? (values-in board) 0)))
 
 (defn rows [board]
   nil)
