@@ -49,29 +49,32 @@
 (defn filled? [board]
   (not (contains? (values-in board) 0)))
 
+(defn valid? [values]
+  (= values (set (range 1 10))))
+
 (defn rows [board]
   (for [row-n (range 0 9)]
     (set/union (row-values board [row-n 0]))))
 
 (defn valid-rows? [board]
-  nil)
+  (every? true? (map valid? (rows board))))
 
 (defn cols [board]
   (for [col-n (range 0 9)]
     (set/union (col-values board [0 col-n]))))
 
 (defn valid-cols? [board]
-  nil)
+  (every? true? (map valid? (cols board))))
 
 (defn blocks [board]
   (let [coords (coord-pairs [0 3 6])]
     (map (fn [coord] (block-values board coord)) coords)))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? true? (map valid? (blocks board))))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
