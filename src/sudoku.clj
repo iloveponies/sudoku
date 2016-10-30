@@ -80,7 +80,8 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [coords (coord-pairs (range 0 9))]
+    (some (fn [coord] (if (has-value? board coord) false coord)) coords)))
 
 (defn solve [board]
   nil)
