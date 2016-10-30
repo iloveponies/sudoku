@@ -49,13 +49,15 @@
   (not (contains? (values-in board) 0)))
 
 (defn rows [board]
-  nil)
+  (for [row-n (range 0 9)]
+    (set/union (row-values board [row-n 0]))))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (for [col-n (range 0 9)]
+    (set/union (col-values board [0 col-n]))))
 
 (defn valid-cols? [board]
   nil)
