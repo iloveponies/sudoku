@@ -10,10 +10,12 @@
   (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (let [[row-n _] coord]
+    (set (get board row-n))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[_ col-n] coord]
+    (set (map (fn [row-n] (get row-n col-n)) board))))
 
 (defn coord-pairs [coords]
   nil)
