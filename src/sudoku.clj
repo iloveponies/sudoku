@@ -22,8 +22,14 @@
         col coords]
       (concat [row col])))
 
+(defn top-left [coord]
+  (let [[row col] coord]
+    [(- row (mod row 3)) (- col (mod col 3))]))
+
 (defn block-values [board coord]
-  nil)
+  (let [[row col] (top-left coord)
+        coords (coord-pairs (range row (+ row 3)))]
+   (set (map (fn [coord] (value-at board coord)) coords))))
 
 (defn valid-values-for [board coord]
   nil)
