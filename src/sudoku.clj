@@ -27,9 +27,10 @@
     [(- row (mod row 3)) (- col (mod col 3))]))
 
 (defn block-values [board coord]
-  (let [[row col] (top-left coord)
-        coords (coord-pairs (range row (+ row 3)))]
-   (set (map (fn [coord] (value-at board coord)) coords))))
+  (let [[top left] (top-left coord)]
+    (set (map first (for [row (range top (+ top 3))
+                          col (range left (+ left 3))]
+                     (cons (value-at board [row col]) nil))))))
 
 (defn valid-values-for [board coord]
   (if (has-value? board coord) #{}
@@ -63,7 +64,8 @@
   nil)
 
 (defn blocks [board]
-  nil)
+  (let [coords (coord-pairs [0 3 6])]
+    (map (fn [coord] (block-values board coord)) coords)))
 
 (defn valid-blocks? [board]
   nil)
