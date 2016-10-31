@@ -83,5 +83,13 @@
   (let [coords (coord-pairs (range 0 9))]
     (some (fn [coord] (if (has-value? board coord) false coord)) coords)))
 
+(defn solver [board]
+  (let [empty (find-empty-point board)]
+    (if (not empty)
+      (if (valid-solution? board) [board] nil)
+      (for [value (valid-values-for board empty)
+            result (solver (set-value-at board empty value))]
+            result))))
+
 (defn solve [board]
-  nil)
+  (first (solver board)))
