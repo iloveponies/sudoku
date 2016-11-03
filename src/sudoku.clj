@@ -85,16 +85,29 @@
 (defn set-value-at [board coord new-value]
   (assoc-in board coord new-value))
 
-(defn find-empty-point [board]
-  (first (filter vector?
-    (for [x (range 0 8) y (range 0 8)]
-      (if (zero? (value-at board [x y])) [x y])))))
+(defn find-empty-points [board]
+  (filter vector?
+    (for [x (range 0 9) y (range 0 9)]
+      (if (zero? (value-at board [x y])) [x y]))))
 
-;(defn solve-helper [current-board board]
-;  (for [empty-point (find-empty-points board)]
-;    (for [valid-value (valid-values-for board empty-point)]
-;      (set-value-at board empty-point valid-value))))
+(defn find-empty-point [board]
+  (first (find-empty-points board)))
+
+(defn find-solvable-points [board]
+  (filter (fn [x] (= 1 (count (valid-values-for board x)))) (find-empty-points board)))
+
+(defn find-solvable-point [board]
+  (first (find-solvable-points board)))
+
+(defn solve-helper [current-board]
+  (let [solvable-point (find-solvable-point current-board)
+        valid-values (valid-values-for current-board solvable-point)
+        solution (if (= (count valid-values) 1) (set-value-at current-board solvable-point (first valid-values)))]
+      solution))
 
 (defn solve [board]
-;  (solve-helper board #{})
-  )
+  (let [solution (solve-helper board)]
+    (if (valid-solution? solution)
+      solution
+      (solve solution))))
+
