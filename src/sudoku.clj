@@ -3,20 +3,45 @@
 
 (def board identity)
 
+; (value-at sudoku-board [0 1])
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (if (= (value-at board coord) 0)
+    false
+    true))
+
+;(row-values sudoku-board [0 2]) ;=> #{0 5 3 7}
+;(row-values sudoku-board [3 2]) ;=> #{0 8 6 3}
+
+(defn unique-values [coll]
+    (loop [items coll
+           uniq-vals #{} ]
+      (if (empty? items)
+        uniq-vals
+        (do 
+          (if (contains? uniq-vals (first items))
+            (recur (rest items) uniq-vals)
+            (recur (rest items) (conj uniq-vals (first items) )))))))
+  
 
 (defn row-values [board coord]
-  nil)
-
+  (let [ row (get board (first coord))]
+    (unique-values row)))
+    
+;(col-values sudoku-board [4 8]) ;=> #{3 1 6 0 5 9}
 (defn col-values [board coord]
-  nil)
+  (let [columns (map #(get % (second coord)) board) ]
+    (unique-values columns)))
 
+;(coord-pairs [0 1])   ;=> [[0 0] [0 1]
+                      ;    [1 0] [1 1]]
 (defn coord-pairs [coords]
-  nil)
+  (let [ pairs [] ]
+    (for [ row coords
+          column coords ]
+      (conj pairs row column ))))
 
 (defn block-values [board coord]
   nil)
