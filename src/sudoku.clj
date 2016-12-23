@@ -77,19 +77,25 @@
         (empty? (filter false? (map is-filled? board)))))
 
 (defn rows [board]
-  nil)
+  (for [ row (range 0 9) ]
+    (row-values board [row 1])))
+    
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (for [ column (range 0 9) ]
+    (col-values board [0 column] )))
 
 (defn valid-cols? [board]
   nil)
 
 (defn blocks [board]
-  nil)
+  (let [ block-coords [ [0 0] [0 3] [0 6]
+                        [3 0] [3 3] [3 6]
+                        [6 0] [6 3] [6 6] ]]
+    (map #(block-values board %) block-coords)))
 
 (defn valid-blocks? [board]
   nil)
