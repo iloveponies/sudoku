@@ -43,8 +43,22 @@
           column coords ]
       (conj pairs row column ))))
 
+(defn coord->left-top [coord]
+  (let [ helper (fn [num] 
+                  (cond
+                    (<= num 2) 0
+                    (<= 3 num 5) 3
+                    (<= 6 num 8) 6
+                  :else -1 ))]
+    [(helper (first coord))  (helper (second coord))]))
+
+
 (defn block-values [board coord]
-  nil)
+  (let [ left-top (coord->left-top coord)
+         start (first left-top)
+         all-coords (coord-pairs (range start (+ start 3))) ]
+    (unique-values (map #(value-at board %) all-coords))))
+       
 
 (defn valid-values-for [board coord]
   nil)
