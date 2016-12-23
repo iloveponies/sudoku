@@ -2,6 +2,7 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
+(def all-values #{1 2 3 4 5 6 7 8 9})
 
 ; (value-at sudoku-board [0 1])
 (defn value-at [board coord]
@@ -61,10 +62,19 @@
        
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (= (value-at board coord) 0)
+    (do (let [ block-vals (block-values board coord) 
+               row-vals (row-values board coord) 
+               col-vals (col-values board coord)
+               taken-vals (clojure.set/union block-vals row-vals col-vals) ]
+          (clojure.set/difference all-values taken-vals)))
+    #{} ))
+      
 
 (defn filled? [board]
-  nil)
+  (let [ is-filled? (fn [row] 
+                      (empty? (filter true? (map #(= 0 %) row )))) ]
+        (empty? (filter false? (map is-filled? board)))))
 
 (defn rows [board]
   nil)
