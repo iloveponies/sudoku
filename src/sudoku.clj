@@ -53,11 +53,14 @@
                   :else -1 ))]
     [(helper (first coord))  (helper (second coord))]))
 
+(defn get-block [ coord ]
+  (for [ y (range (first coord) (+ (first coord) 3))
+         x  (range (second coord) (+ (second coord) 3)) ]
+    [y x]))
 
 (defn block-values [board coord]
   (let [ left-top (coord->left-top coord)
-         start (first left-top)
-         all-coords (coord-pairs (range start (+ start 3))) ]
+         all-coords (get-block left-top) ]
     (unique-values (map #(value-at board %) all-coords))))
        
 
