@@ -110,13 +110,18 @@
   (valid-helper? (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (and (valid-rows? board) (valid-cols? board)) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (remove nil?
+                 (for [ y (range 0 9)
+                       x  (range 0 9) ]
+                   (if (= (value-at board [y x]) 0)
+                     [y x])))))
+    
 
 (defn solve [board]
   nil)
