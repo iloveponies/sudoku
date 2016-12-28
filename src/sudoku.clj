@@ -83,16 +83,22 @@
   (for [ row (range 0 9) ]
     (row-values board [row 1])))
     
-
+(defn valid-helper? [ lines ]
+  (= (count (filter #(= (count %) 9) lines )) 9))
+       
+  
 (defn valid-rows? [board]
-  nil)
+  (valid-helper? (rows board)))
+;  (let [ rows-status (for [ row (rows board)]
+;                       (= (count row) 9 )) ]
+;    (empty? (filter false? rows-status))))
 
 (defn cols [board]
   (for [ column (range 0 9) ]
     (col-values board [0 column] )))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-helper? (cols board)))
 
 (defn blocks [board]
   (let [ block-coords [ [0 0] [0 3] [0 6]
@@ -101,7 +107,7 @@
     (map #(block-values board %) block-coords)))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-helper? (blocks board)))
 
 (defn valid-solution? [board]
   nil)
