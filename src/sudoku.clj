@@ -98,7 +98,9 @@
     (col-values board [0 column] )))
 
 (defn valid-cols? [board]
-  (valid-helper? (cols board)))
+  (if (empty? board)
+    []
+    (valid-helper? (cols board))))
 
 (defn blocks [board]
   (let [ block-coords [ [0 0] [0 3] [0 6]
@@ -122,6 +124,16 @@
                    (if (= (value-at board [y x]) 0)
                      [y x])))))
     
+(defn solve-helper [board curr-board]
+  (if (valid-solution? curr-board)
+    curr-board
+    (let [ remaining (find-empty-point curr-board) 
+           valid-values (valid-values-for curr-board remaining) ]
+      (for [value valid-values 
+            solution (solve-helper board (set-value-at curr-board remaining value))]
+        solution))))
+            
 
 (defn solve [board]
-  nil)
+  (vec (solve-helper board board )))
+
