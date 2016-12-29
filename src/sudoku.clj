@@ -4,6 +4,17 @@
 (def board identity)
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
+(def aamulehti-five-stars
+	(board [ [6 0 0 0 9 0 0 0 0]
+                 [0 0 3 6 0 2 4 0 0]
+                 [0 0 2 3 0 0 0 5 7]
+                 [0 5 0 8 0 0 0 0 1]
+                 [0 0 0 0 0 0 0 0 0]
+                 [1 0 0 0 0 5 0 3 0]
+                 [2 4 0 0 0 8 9 0 0]
+                 [0 0 8 7 0 6 5 0 0]
+                 [0 0 0 0 4 0 0 0 2] ]))
+
 ; (value-at sudoku-board [0 1])
 (defn value-at [board coord]
   (get-in board coord))
@@ -85,14 +96,10 @@
     
 (defn valid-helper? [ lines ]
   (empty? (filter #(not (empty? (clojure.set/difference all-values %))) lines))) 
-;  (= (count (filter #(= (count %) 9) lines )) 9))
        
   
 (defn valid-rows? [board]
   (valid-helper? (rows board)))
-;  (let [ rows-status (for [ row (rows board)]
-;                       (= (count row) 9 )) ]
-;    (empty? (filter false? rows-status))))
 
 (defn cols [board]
   (for [ column (range 0 9) ]
@@ -123,16 +130,17 @@
                    (if (= (value-at board [y x]) 0)
                      [y x])))))
     
-(defn solve-helper [board curr-board]
+(defn solve-helper [curr-board]
   (if (valid-solution? curr-board)
     curr-board
     (let [ remaining (find-empty-point curr-board) 
            valid-values (valid-values-for curr-board remaining) ]
       (for [value valid-values 
-            solution (solve-helper board (set-value-at curr-board remaining value))]
+            solution (solve-helper (set-value-at curr-board remaining value))]
         solution))))
-            
 
 (defn solve [board]
-  (vec (solve-helper board board )))
+  (vec (solve-helper board)))
+
+            
 
