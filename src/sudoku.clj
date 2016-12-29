@@ -84,7 +84,8 @@
     (row-values board [row 1])))
     
 (defn valid-helper? [ lines ]
-  (= (count (filter #(= (count %) 9) lines )) 9))
+  (empty? (filter #(not (empty? (clojure.set/difference all-values %))) lines))) 
+;  (= (count (filter #(= (count %) 9) lines )) 9))
        
   
 (defn valid-rows? [board]
@@ -98,9 +99,7 @@
     (col-values board [0 column] )))
 
 (defn valid-cols? [board]
-  (if (empty? board)
-    []
-    (valid-helper? (cols board))))
+  (valid-helper? (cols board)))
 
 (defn blocks [board]
   (let [ block-coords [ [0 0] [0 3] [0 6]
