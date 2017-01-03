@@ -3,56 +3,158 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (let [[y x] coord]
+    (get-in board [y x])))
 
 (defn has-value? [board coord]
-  nil)
+  (if (= 0 (value-at board coord)) false true))
+
 
 (defn row-values [board coord]
-  nil)
+  (let [[y x] coord
+        row (get board y)]
+    (set row)))
 
 (defn col-values [board coord]
-  nil)
+  (let [[y x ] coord
+        sarakkeen-arvo (fn [rivi] (get rivi x))
+        sarakkeen-arvot (map sarakkeen-arvo board)]
+    (set sarakkeen-arvot)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [row coords
+        col coords]
+    (vector row col)))
+
+
+;helper to find the top-left corner of the square of the coordinate
+(defn top-left-corner [coord]
+  (let [[y x] coord
+        corner-x (* 3 (int (/ x 3)))
+        corner-y (* 3 (int (/ y 3)))]
+    [corner-y corner-x]))
+
+
 
 (defn block-values [board coord]
-  nil)
+  (let [[y x] (top-left-corner coord)
+        y-values [y (+ 1 y) (+ 2 y)]
+        x-values [x (+ 1 x) (+ 2 x)]
+        values-in-block (for [row y-values
+                              col x-values]
+                          (value-at board [row col]))]
+    (set values-in-block)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference all-values (set/union (row-values board coord) (col-values board coord) (block-values board coord)))))
+
+
+
+
+;helper function returning all the 81 values as a sequence
+(defn values-as-a-seq [board]
+  (for [row [0 1 2 3 4 5 6 7 8]
+        col [0 1 2 3 4 5 6 7 8]]
+    (value-at board [row col])))
+
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (values-as-a-seq board)) 0)))
+
 
 (defn rows [board]
-  nil)
+  (for [row [0 1 2 3 4 5 6 7 8]]
+    (row-values board [row 0])))
+
+
+;general-helper recursive helper function. Parameter must be a sequence of sets (rows, columns or blocks)
+(defn general-helper [a-seq]
+  (cond
+    (empty? a-seq)
+       true
+    (not= (first a-seq) all-values)
+       false
+    :else
+      (general-helper (rest a-seq))))
 
 (defn valid-rows? [board]
-  nil)
+  (let [row-sequence (rows board)]
+    (general-helper row-sequence)))
 
 (defn cols [board]
-  nil)
+  (for [col [0 1 2 3 4 5 6 7 8]]
+    (col-values board [0 col])))
 
 (defn valid-cols? [board]
-  nil)
+  (let [col-sequence (cols board)]
+    (general-helper col-sequence)))
 
 (defn blocks [board]
-  nil)
+  (for [row [0 3 6]
+        col [0 3 6]]
+    (block-values board [row col])))
 
 (defn valid-blocks? [board]
-  nil)
+  (let [block-sequence (blocks board)]
+    (general-helper block-sequence)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)) )
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
+
+;presumably there is at least one. Otherwise the current implementation will result in error.
+(defn empty-point-helper [board row col]
+    (if (has-value? board [row col])
+      (if (= col 8)
+        (empty-point-helper board (inc row) 0)
+        (empty-point-helper board row (inc col)))
+      [row col]))
 
 (defn find-empty-point [board]
-  nil)
+  (empty-point-helper board 0 0 ))
+
+
+
+(defn solver-helper [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      nil)
+    (let [[y x] (find-empty-point board)]
+      (for [possibility (valid-values-for board [y x])
+            solution (solver-helper (set-value-at board [y x] possibility))]
+        solution))))
 
 (defn solve [board]
-  nil)
+  (first (solver-helper board)))
+
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+
+(def solved-board
+  (board [[0 3 4 6 7 8 9 1 2]
+          [6 7 2 1 9 5 3 4 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 5 9 7 6 1 4 2 3]
+          [4 2 6 8 5 3 7 9 1]
+          [7 1 3 9 2 4 8 5 6]
+          [9 6 1 5 3 7 2 8 4]
+          [2 8 7 4 1 9 6 3 5]
+          [3 4 5 2 8 6 1 7 9]]))
+
+
