@@ -109,11 +109,14 @@
         :else (recur row (inc col))))))
 
 (defn solve [board]
-  (let [b board
-        ep (find-empty-point b)]
-      (cond
-        (valid-solution? b) b
-        (nil? ep) ()
-        :else (for [v all-values]
-                (solve (set-value-at b ep v))))))
+  (if (valid-solution? board)
+    board
+    (let [empty-point (find-empty-point board)
+          remaining (valid-values-for board empty-point)]
+      (for [elem remaining
+            solved-board (solve (set-value-at board empty-point elem))]
+        solved-board))))
+
+
+
 
