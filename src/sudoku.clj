@@ -77,15 +77,12 @@
 (defn find-empty-point [board]
   (some (fn [coord] (if (not (has-value? board coord)) coord)) (for [c1 (range 9) c2 (range 9)] [c1 c2])))
 
-(defn solve-helper [board]
+(defn solve [board]
   (cond
     (valid-solution? board) board
     (filled? board) []
     :else (let [empty-point (find-empty-point board)
-          remaining (valid-values-for board empty-point)]
-      ( for [number remaining
-           solution (solve-helper (set-value-at board empty-point number))]
-      solution))))
-
-(defn solve [board]
-  (solve-helper board))
+                remaining (valid-values-for board empty-point)]
+            (for [number remaining
+                  solution (solve (set-value-at board empty-point number))]
+              solution))))
