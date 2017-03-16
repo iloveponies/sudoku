@@ -4,16 +4,18 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (if (< 0 (value-at board coord))
+      true
+      false))
 
-(defn row-values [board coord]
-  nil)
+(defn row-values [board [y _]]
+  (set (get board y)))
 
-(defn col-values [board coord]
-  nil)
+(defn col-values [board [_ x]]
+  (reduce (fn [a b] (conj a (get-in board [b x]))) #{} (range 0 9)))
 
 (defn coord-pairs [coords]
   nil)
