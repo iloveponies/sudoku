@@ -15,9 +15,9 @@
   (set (get board (first coord))))
 
 (defn col-values [board coord]
-  (let [helper (fn [nums elem]
-                 (conj nums (get elem (second coord))))]
-    (reduce helper #{} board)))
+  (let [col (for [row [0 1 2 3 4 5 6 7 8]]
+              (value-at board [row (second coord)]))]
+    (set col)))
 
 (defn coord-pairs [coords]
   (for [x coords
@@ -49,9 +49,8 @@
                     (col-values board coord))))
 
 (defn filled? [board]
-  (let [helper (fn [nums elem]
-                 (apply conj nums elem))]
-    (not (contains? (reduce helper #{} board) 0))))
+  (let [contains-zero? (fn [row] (some #{0} row))]
+    (not (first (filter contains-zero? board)))))
 
 (defn rows [board]
   (let [halp (fn [rows row]
@@ -92,10 +91,22 @@
   (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [coords (coord-pairs [0 1 2 3 4 5 6 7 8])
+        checker (fn [coord] (not (has-value? board coord)))]
+    (first (filter checker coords))))
+
+(defn solve-helper [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      '())
+    (let [empty-loc (find-empty-point board)]
+      (for [value all-values
+            solution (solve-helper (set-value-at board empty-loc value))]
+        solution))))
 
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
