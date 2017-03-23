@@ -4,19 +4,30 @@
 (def board identity)
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (let [[row _] coord]
+    (set (get board row))))
 
 (defn col-values [board coord]
-  nil)
+  (let [rows (range 9) [_ col] coord]
+     (set (map #(value-at board [% col]) rows))))
+
+  (defn- top-left [coord]
+    (let [[row col] coord
+      map-to-corner (fn [x]
+      (cond
+        (< x 3) 0
+        (< x 6) 3
+        :else 6))]
+    [(map-to-corner row) (map-to-corner col)]))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [a coords b coords] [a b]))
 
 (defn block-values [board coord]
   nil)
