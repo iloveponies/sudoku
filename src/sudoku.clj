@@ -2,21 +2,28 @@
   (:require [clojure.set :as set]))
 
 (def board identity)
+(def all-values #{1 2 3 4 5 6 7 8 9})
 
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (= 0 (value-at board coord) )))
 
 (defn row-values [board coord]
-  nil)
+  (let [[x y] coord]
+    (set (get-in board [x]))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[row col] coord]
+    (loop [result #{}
+          row 0]
+      (if (== 9 row)
+        result
+        (recur (conj result (value-at board [row col])) (inc row))))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords y coords] [x y]))
 
 (defn block-values [board coord]
   nil)
