@@ -60,31 +60,59 @@
   (not board-has-empty-value)))
 
 (defn rows [board]
-  nil)
-
-(defn valid-rows? [board]
-  nil)
+ (mapv set board))
 
 (defn cols [board]
-  nil)
-
-(defn valid-cols? [board]
-  nil)
+ (rows (vec (apply map vector board))))
 
 (defn blocks [board]
-  nil)
+ (let [block-coords (coord-pairs [0 3 6])]
+  (mapv #(block-values board %) block-coords)))
+
+(defn valid-cut [board cut-fn]
+ (let [group (cut-fn board)]
+  (reduce #(and %1 (= %2 all-values))
+          true
+          group)))
+
+(defn valid-rows? [board]
+ (valid-cut board rows))
+
+(defn valid-cols? [board]
+ (valid-cut board cols))
 
 (defn valid-blocks? [board]
-  nil)
+ (valid-cut board blocks))
 
 (defn valid-solution? [board]
-  nil)
+ (and (valid-rows? board)
+      (valid-cols? board)
+      (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+ (assoc-in board coord new-value))
+
+(defn empty-point-finder [board coords]
+ (let [first-coord (first coords)
+       pending-coords (rest coords)]
+  (cond
+   (empty? coords) nil
+   (has-value? board first-coord) (empty-point-finder board pending-coords)
+   (not (has-value? board first-coord)) first-coord)))
 
 (defn find-empty-point [board]
-  nil)
+ (let [all-coords (coord-pairs [0 1 2 3 4 5 6 7 8])]
+  (empty-point-finder board all-coords)))
+
+(defn solve-helper [board solution]
+ (if (filled? solution)
+  (if (valid-solution? solution)
+   [solution]
+   [])
+  (let [empty-point (find-empty-point solution)]
+   (for [valid-value (valid-values-for solution empty-point)
+         patched-solution (solve-helper board (set-value-at solution empty-point valid-value))]
+    patched-solution))))
 
 (defn solve [board]
-  nil)
+ (first (solve-helper board board)))
