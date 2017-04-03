@@ -98,7 +98,7 @@
   (valid-sets (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-cols? board) (valid-rows? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
