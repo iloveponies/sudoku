@@ -21,7 +21,9 @@
   (reduce add-row-value-to-set #{} (range 0 9))))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [x coords
+        y coords]
+    [x y]))
 
 (defn block-values [board coord]
   nil)
