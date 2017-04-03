@@ -104,7 +104,12 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [helper (fn [coord-seq]
+                          (cond
+                            (empty? coord-seq) nil
+                            (not (has-value? board (first coord-seq))) (first coord-seq)
+                            :else (recur (rest coord-seq))))]
+    (helper (all-coords))))
 
 (defn solve [board]
   nil)
