@@ -64,7 +64,6 @@
                             (empty? coord-seq) true
                             (not (has-value? board (first coord-seq))) false
                             :else (recur (rest coord-seq))))]
-
     (check-if-filled (all-coords))))
 
 (defn rows [board]
@@ -83,8 +82,14 @@
 (defn valid-cols? [board]
   nil)
 
+(defn all-block-values-helper [board a-seq row col]
+  (cond
+    (and (>= row 6) (>= col 6)) (conj a-seq (block-values board [row col]))
+    (>= col 6) (all-block-values-helper board (conj a-seq (block-values board [row col])) (+ row 3) 0)
+    :else (all-block-values-helper board (conj a-seq (block-values board [row col])) row (+ col 3))))
+
 (defn blocks [board]
-  nil)
+  (all-block-values-helper board [] 0 0))
 
 (defn valid-blocks? [board]
   nil)
