@@ -51,7 +51,9 @@
     (reduce add-value-to-set #{} (block-coords coord))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference all-values (block-values board coord) (row-values board coord) (col-values board coord))))
 
 (defn filled? [board]
   nil)
