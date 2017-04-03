@@ -18,7 +18,7 @@
   (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  (set (get board (row-coord coord ))))
+  (set (get board (row-coord coord))))
 
 (defn col-values [board coord]
   (let [column (col-coord coord)
@@ -111,5 +111,14 @@
                             :else (recur (rest coord-seq))))]
     (helper (all-coords))))
 
+(defn solve-helper [board]
+  (if
+    (and (filled? board) (valid-solution? board)) [board]
+    (let [empty-point (find-empty-point board)
+          valid-values (valid-values-for board empty-point)]
+      (for [value valid-values
+            solution (solve-helper (set-value-at board empty-point value))]
+        solution))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
