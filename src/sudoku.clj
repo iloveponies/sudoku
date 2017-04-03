@@ -12,10 +12,13 @@
   (not (zero? (value-at board coord))))
 
 (defn row-values [board coord]
-  nil)
+  (set (get board (nth coord 0))))
 
 (defn col-values [board coord]
-  nil)
+  (let [column (nth coord 1)
+        add-row-value-to-set (fn [current-set row]
+                               (conj current-set (value-at board [row column])))]
+  (reduce add-row-value-to-set #{} (range 0 9))))
 
 (defn coord-pairs [coords]
   nil)
