@@ -24,7 +24,7 @@
   (let [column (col-coord coord)
         add-row-value-to-set (fn [current-set row]
                                (conj current-set (value-at board [row column])))]
-  (reduce add-row-value-to-set #{} (range 0 9))))
+    (reduce add-row-value-to-set #{} (range 0 9))))
 
 (defn coord-pairs [coords]
   (for [x coords
@@ -68,13 +68,17 @@
     (check-if-filled (all-coords))))
 
 (defn rows [board]
-  nil)
+  (let [add-row-values-to-seq (fn [a-seq row]
+                               (conj a-seq (row-values board [row 0])))]
+    (reduce add-row-values-to-seq [] (range 0 9))))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (let [add-col-values-to-seq (fn [a-seq col]
+                               (conj a-seq (col-values board [0 col])))]
+    (reduce add-col-values-to-seq [] (range 0 9))))
 
 (defn valid-cols? [board]
   nil)
