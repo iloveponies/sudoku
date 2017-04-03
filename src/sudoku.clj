@@ -55,8 +55,17 @@
     #{}
     (set/difference all-values (block-values board coord) (row-values board coord) (col-values board coord))))
 
+(defn all-coords []
+  (coord-pairs (range 0 9)))
+
 (defn filled? [board]
-  nil)
+  (let [check-if-filled (fn [coord-seq]
+                          (cond
+                            (empty? coord-seq) true
+                            (not (has-value? board (first coord-seq))) false
+                            :else (recur (rest coord-seq))))]
+
+    (check-if-filled (all-coords))))
 
 (defn rows [board]
   nil)
