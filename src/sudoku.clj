@@ -66,13 +66,16 @@
                             :else (recur (rest coord-seq))))]
     (check-if-filled (all-coords))))
 
+(defn valid-sets [set-seq]
+  (= #{all-values} (set set-seq)))
+
 (defn rows [board]
   (let [add-row-values-to-seq (fn [a-seq row]
                                (conj a-seq (row-values board [row 0])))]
     (reduce add-row-values-to-seq [] (range 0 9))))
 
 (defn valid-rows? [board]
-  nil)
+  (valid-sets (rows board)))
 
 (defn cols [board]
   (let [add-col-values-to-seq (fn [a-seq col]
@@ -80,7 +83,7 @@
     (reduce add-col-values-to-seq [] (range 0 9))))
 
 (defn valid-cols? [board]
-  nil)
+  (valid-sets (cols board)))
 
 (defn all-block-values-helper [board a-seq row col]
   (cond
@@ -92,7 +95,7 @@
   (all-block-values-helper board [] 0 0))
 
 (defn valid-blocks? [board]
-  nil)
+  (valid-sets (blocks board)))
 
 (defn valid-solution? [board]
   nil)
