@@ -104,15 +104,15 @@
  (let [all-coords (coord-pairs [0 1 2 3 4 5 6 7 8])]
   (empty-point-finder board all-coords)))
 
-(defn solve-helper [board solution]
+(defn solve-helper [solution]
  (if (filled? solution)
   (if (valid-solution? solution)
    [solution]
    [])
   (let [empty-point (find-empty-point solution)]
    (for [valid-value (valid-values-for solution empty-point)
-         patched-solution (solve-helper board (set-value-at solution empty-point valid-value))]
+         patched-solution (solve-helper (set-value-at solution empty-point valid-value))]
     patched-solution))))
 
 (defn solve [board]
- (first (solve-helper board board)))
+ (first (solve-helper board)))
