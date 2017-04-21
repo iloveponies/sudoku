@@ -44,6 +44,7 @@
     (reduce conj #{}
             (for [xy (for [n (range (get corner 0) (+ (get corner 0) 3))
                            m (range (get corner 1) (+ (get corner 1) 3))]
+                       [n m])]
               (value-at board xy)))))
 
 (defn valid-values-for [board coord]
