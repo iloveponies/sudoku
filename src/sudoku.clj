@@ -135,5 +135,20 @@
           (recur (first loput) (rest loput) nollat)
           eka)))))
 
+(defn solve-h [board]
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      [])
+    (let [first-zero (find-empty-point board)
+          valids (valid-values-for board first-zero)]
+      (flatten (for [v valids]
+                 (solve-h (set-value-at board first-zero v)))))))
+
 (defn solve [board]
-  nil)
+  (loop [board-seq (solve-h board)
+         constr-board []]
+    (if (empty? board-seq)
+      constr-board
+      (recur (drop 9 board-seq)
+             (conj constr-board (take 9 board-seq))))))
