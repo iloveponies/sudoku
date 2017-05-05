@@ -109,4 +109,4 @@
         solution))))
 
 (defn solve [board]
-  (first (solve-helper board)))
+  nil)
