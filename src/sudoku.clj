@@ -129,5 +129,17 @@
 
 ; TODO
 (defn solve [board]
-  nil)
-
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      '()
+    )
+    (let [empty-point (find-empty-point board)]
+      (loop [valid-vals (valid-values-for board empty-point)]
+        (if (empty? valid-vals)
+          '()
+          (let [totry (first valid-vals)
+                soln (solve (set-value-at board empty-point totry))]
+            (if (empty? soln)
+              (recur (rest valid-vals))
+              soln)))))))
