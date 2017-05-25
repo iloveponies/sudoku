@@ -43,9 +43,7 @@
        (value-at board c)))))
 
 (defn filled-values [board coord]
-  (set/union (block-values board coord)
-             (col-values board coord)
-             (row-values board coord)))
+  (reduce set/union ((juxt block-values col-values row-values) board coord)))
 
 (defn valid-values-for [board coord]
   (if (has-value? board coord)
