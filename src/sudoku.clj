@@ -3,6 +3,8 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -17,38 +19,70 @@
    (for [row board]
      (get row col))))
 
+;; TODO: Not sure what to do with this
 (defn coord-pairs [coords]
   (vec
    (for [row coords
          col coords]
      [row col])))
 
+(defn row-col-pairs [rows cols]
+  (for [row rows
+        col cols]
+    [row col]))
+
+(defn get-top-left [[row col]]
+  [(* (quot row 3) 3) (* (quot col 3) 3)])
+
 (defn block-values [board coord]
-  nil)
+  (let [[top-row top-col] (get-top-left coord)
+        coords (row-col-pairs (range top-row (+ top-row 3))
+                              (range top-col (+ top-col 3)))]
+    (set
+     (for [c coords]
+       (value-at board c)))))
+
+(defn filled-values [board coord]
+  (set/union (block-values board coord)
+             (col-values board coord)
+             (row-values board coord)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference all-values (filled-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (every? true?
+          (for [row (range 0 9)
+                col (range 0 9)]
+            (has-value? board [row col]))))
 
 (defn rows [board]
-  nil)
+  (for [row (range 0 9)]
+    (row-values board [row 0])))
+
+(defn is-valid? [board getter]
+  (let [valid-thing? (fn [x] (= all-values x))]
+    (empty? (filter (complement valid-thing?) (getter board)))))
 
 (defn valid-rows? [board]
-  nil)
+  (is-valid? board rows))
 
 (defn cols [board]
-  nil)
+  (for [col (range 0 9)]
+    (col-values board [0 col])))
 
 (defn valid-cols? [board]
-  nil)
+  (is-valid? board cols))
 
 (defn blocks [board]
-  nil)
+  (for [row (range 0 9 3)
+        col (range 0 9 3)]
+    (block-values board [row col])))
 
 (defn valid-blocks? [board]
-  nil)
+  (is-valid? board blocks))
 
 (defn valid-solution? [board]
   nil)
