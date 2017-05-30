@@ -100,12 +100,7 @@
       ()
     )
     (let [epoint (find-empty-point board)]
-      (for [solution (valid-values-for board epoint) rec (solve-helper (set-value-at board epoint solution))]
-          rec
-        )
-      )
-  )
-)
+      (for [solution (valid-values-for board epoint) rec (solve-helper (set-value-at board epoint solution))] rec))))
 
 (defn solve [board]
   (first (solve-helper board)))
