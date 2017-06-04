@@ -100,4 +100,13 @@
   (first (empties board)))
 
 (defn solve [board]
-  nil)
+  (if (filled? board)
+    (if (valid-solution? board)
+      board
+      [])
+    (let [empty-point (find-empty-point board)]
+      (vec
+       (for [value (valid-values-for board empty-point)
+             solution (solve (set-value-at board empty-point value))
+             :when (not (empty? solution))]
+         solution)))))
