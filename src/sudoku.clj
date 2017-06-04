@@ -3,6 +3,8 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -20,35 +22,56 @@
                        (for [i coords]
                          [n i])))))
 
+(defn top-leftmost-coord-of-block [[x y]]
+  [(- x (mod x 3)) (- y (mod y 3))])
+
 (defn block-values [board coord]
-  nil)
+  (let [[x y] (top-leftmost-coord-of-block coord)]
+    (->> board
+         (map (partial drop x))
+         (map (partial take 3))
+         (drop y)
+         (take 3)
+         flatten
+         set)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (clojure.set/difference
+      all-values
+      (block-values board coord)
+      (row-values board coord)
+      (col-values board coord))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (apply concat board)) 0)))
 
 (defn rows [board]
-  nil)
+  (map set board))
 
 (defn valid-rows? [board]
-  nil)
+  (every? empty? (map (partial clojure.set/difference all-values) (rows board))))
 
 (defn cols [board]
-  nil)
+  (for [n (range 0 9)]
+    (col-values board [nil n])))
 
 (defn valid-cols? [board]
-  nil)
+  (every? empty? (map (partial clojure.set/difference all-values) (cols board))))
 
 (defn blocks [board]
-  nil)
+  (mapv (partial block-values board) [[0 0] [3 0] [6 0]
+                                      [0 3] [3 3] [6 3]
+                                      [0 6] [3 6] [6 6]]))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? empty? (map (partial clojure.set/difference all-values) (blocks board))))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
