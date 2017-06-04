@@ -11,8 +11,8 @@
 (defn has-value? [board coord]
   (> (value-at board coord) 0))
 
-(defn row-values [board [x _]]
-  (set (board x)))
+(defn row-values [board [row _]]
+  (set (board row)))
 
 (defn col-values [board [_ y]]
   (set (map #(nth % y) board)))
@@ -22,15 +22,15 @@
                        (for [i coords]
                          [n i])))))
 
-(defn top-leftmost-coord-of-block [[x y]]
-  [(- x (mod x 3)) (- y (mod y 3))])
+(defn top-leftmost-coord-of-block [[row col]]
+  [(- row (mod row 3)) (- col (mod col 3))])
 
 (defn block-values [board coord]
-  (let [[x y] (top-leftmost-coord-of-block coord)]
+  (let [[row col] (top-leftmost-coord-of-block coord)]
     (->> board
-         (map (partial drop x))
+         (map (partial drop row))
          (map (partial take 3))
-         (drop y)
+         (drop col)
          (take 3)
          flatten
          set)))
@@ -74,10 +74,13 @@
        (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (for [coord (coord-pairs (range 0 9))
+               :let [val (value-at board coord)]
+               :when (zero? val)]
+           coord)))
 
 (defn solve [board]
   nil)
