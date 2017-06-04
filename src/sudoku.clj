@@ -50,11 +50,13 @@
     #{}
     (set/difference all-values (filled-values board coord))))
 
+(defn for-all-coords [board func]
+  (for [row (range 0 9)
+        col (range 0 9)]
+    (func board [row col])))
+
 (defn filled? [board]
-  (every? true?
-          (for [row (range 0 9)
-                col (range 0 9)]
-            (has-value? board [row col]))))
+  (every? true? (for-all-coords board has-value?)))
 
 (defn rows [board]
   (for [row (range 0 9)]
@@ -83,13 +85,19 @@
   (is-valid? board blocks))
 
 (defn valid-solution? [board]
-  nil)
+  (every? true? ((juxt valid-rows? valid-blocks? valid-cols?) board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
+
+(defn empties [board]
+  (for [row (range 0 9)
+        col (range 0 9)
+        :when ((complement has-value?) board [row col])]
+    [row col]))
 
 (defn find-empty-point [board]
-  nil)
+  (first (empties board)))
 
 (defn solve [board]
   nil)
