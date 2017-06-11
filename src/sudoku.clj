@@ -124,8 +124,11 @@
       (if (seq vals)
         (let [val (first vals)
               a-solution (solve (set-value-at board empty-point val))]
+          (prn "solution valid?" (valid-solution? a-solution))
           (if (valid-solution? a-solution)
             (do (prn "found something") a-solution)
             (recur (rest vals))))
         (do (prn "vals are empty" nil))))
-    (if (valid-solution? board) (do (prn "valid sudoku" board)) (do (prn "not a valid sudoku" nil)))))
+    (if (valid-solution? board)
+      (do (prn "valid sudoku" board) board)
+      (do (prn "not a valid sudoku" nil)))))
