@@ -61,9 +61,9 @@
   (every? empty? (map (partial clojure.set/difference all-values) (cols board))))
 
 (defn blocks [board]
-  (mapv (partial block-values board) [[0 0] [3 0] [6 0]
-                                      [0 3] [3 3] [6 3]
-                                      [0 6] [3 6] [6 6]]))
+  (mapv (partial block-values board) [[0 0] [0 3] [0 6]
+                                      [3 0] [3 3] [3 6]
+                                      [6 0] [6 3] [6 6]]))
 
 (defn valid-blocks? [board]
   (every? empty? (map (partial clojure.set/difference all-values) (blocks board))))
@@ -114,21 +114,15 @@
     (if (valid-solution? board) board '()))))
 
 (defn solve [board]
-  (prn)
-  (prn "### new solve invocation ###")
   (if-let [empty-point (find-empty-point board)]
     (loop [vals (valid-values-for board empty-point)]
-      (prn "current board" board)
-      (prn "empty point" empty-point)
-      (prn "valid candidates for empty point" vals)
       (if (seq vals)
         (let [val (first vals)
               a-solution (solve (set-value-at board empty-point val))]
-          (prn "solution valid?" (valid-solution? a-solution))
           (if (valid-solution? a-solution)
-            (do (prn "found something") a-solution)
+            a-solution
             (recur (rest vals))))
-        (do (prn "vals are empty" nil))))
+        nil))
     (if (valid-solution? board)
-      (do (prn "valid sudoku" board) board)
-      (do (prn "not a valid sudoku" nil)))))
+      board
+      nil)))
