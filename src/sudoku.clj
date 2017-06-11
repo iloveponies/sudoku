@@ -28,9 +28,9 @@
 (defn block-values [board coord]
   (let [[row col] (top-leftmost-coord-of-block coord)]
     (->> board
-         (map (partial drop row))
+         (map (partial drop col))
          (map (partial take 3))
-         (drop col)
+         (drop row)
          (take 3)
          flatten
          set)))
