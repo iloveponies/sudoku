@@ -82,37 +82,6 @@
                :when (zero? val)]
            coord)))
 
-(comment
-(defn solve [board]
-  (prn board)
-  (let [empty-spot (find-empty-point board)]
-    (if (not empty-spot)
-      (if (valid-solution? board)
-        (do (prn "Hello world 1") board)
-        (do (prn "Hello world 2") '()))
-      (for [candidate (valid-values-for board empty-spot)
-            :let [solution (solve (set-value-at board empty-spot candidate))]
-            :when (valid-solution? solution)]
-        (do (prn "Hello world 3") solution))))))
-
-;; (valid-solution? board)
-;; (find-empty-point board)
-;; (valid-values-for board (find-empty-point board))
-;; (set-value-at board (find-empty-point board) (comment "insert valid value here"))
-(comment
-(defn solve [board]
-  (prn (find-empty-point board))
-  (if-let [empty-point (find-empty-point board)]
-    (loop [valid-values (valid-values-for board empty-point)]
-      (if (seq valid-values)
-        (let [valid-value (first valid-values)
-              a-solution (solve (set-value-at board empty-point valid-value))]
-          (if (valid-solution? a-solution)
-            a-solution
-            (recur (rest valid-values))))
-        '()))
-    (if (valid-solution? board) board '()))))
-
 (defn solve [board]
   (if-let [empty-point (find-empty-point board)]
     (loop [vals (valid-values-for board empty-point)]
