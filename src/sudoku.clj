@@ -116,13 +116,11 @@
 (defn solve [board]
   (if-let [empty-point (find-empty-point board)]
     (loop [vals (valid-values-for board empty-point)]
-      (if (seq vals)
+      (when (seq vals)
         (let [val (first vals)
               a-solution (solve (set-value-at board empty-point val))]
           (if (valid-solution? a-solution)
             a-solution
-            (recur (rest vals))))
-        nil))
-    (if (valid-solution? board)
-      board
-      nil)))
+            (recur (rest vals))))))
+    (when (valid-solution? board)
+      board)))
