@@ -3,6 +3,8 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -52,37 +54,81 @@
     (reduce values #{} block)))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (set/difference
+      all-values
+      (set/union (block-values board coord)
+                 (row-values board coord)
+                 (col-values board coord)))))
 
 (defn filled? [board]
-  nil)
+ (loop [row 0]
+    (cond
+      (= row 9) true
+      (contains? (row-values board [row]) 0) false
+      :else (recur (inc row)))))
 
 (defn rows [board]
-  nil)
+  (loop [row 0
+         rows []]
+    (if (= 9 row)
+      rows
+      (recur (inc row) (conj rows (row-values board [row]))))))
 
 (defn valid-rows? [board]
-  nil)
+  (let [rows (rows board)]
+    (loop [row 0]
+      (cond
+        (= 9 row) true
+        (not (= (get rows row) all-values)) false
+        :else (recur (inc row))))))
 
 (defn cols [board]
-  nil)
+  (loop [col 0
+         cols []]
+    (if (= 9 col)
+      cols
+      (recur (inc col) (conj cols (col-values board [0 col]))))))
 
 (defn valid-cols? [board]
-  nil)
+  (let [cols (cols board)]
+    (loop [col 0]
+      (cond
+        (= 9 col) true
+        (not (= (get cols col) all-values)) false
+        :else (recur (inc col))))))
 
 (defn blocks [board]
-  nil)
+  (let [blocks (coord-pairs [0 3 6])
+        values (fn [res block] (conj res (block-values board block)))]
+    (reduce values [] blocks)))
 
 (defn valid-blocks? [board]
-  nil)
+  (let [blocks (blocks board)]
+    (loop [block 0]
+      (cond
+        (= 9 block) true
+        (not (= (get blocks block) all-values)) false
+        :else (recur (inc block))))))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [row 0
+         col 0]
+    (cond
+      (= 9 row) nil
+      (= 9 col) (recur (inc row) 0)
+      :else (if (has-value? board [row col])
+              (recur row (inc col))
+              [row col]))))
 
 (defn solve [board]
   nil)
