@@ -63,11 +63,11 @@
                  (col-values board coord)))))
 
 (defn filled? [board]
- (loop [row 0]
+ (loop [rows board]
     (cond
-      (= row 9) true
-      (contains? (row-values board [row]) 0) false
-      :else (recur (inc row)))))
+      (empty? rows) true
+      (.contains (first rows) 0) false
+      :else (recur (rest rows)))))
 
 (defn rows [board]
   (loop [row 0
@@ -130,5 +130,16 @@
               (recur row (inc col))
               [row col]))))
 
+(defn solve-helper [board]
+ (if (filled? board)
+    (if (valid-solution? board)
+      [board]
+      '())
+   (let [empty-point  (find-empty-point board)
+         valid-values (valid-values-for board empty-point)]
+     (for [value valid-values
+           solution (solve-helper (set-value-at board empty-point value))]
+       solution))))
+
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
