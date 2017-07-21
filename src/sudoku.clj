@@ -5,8 +5,8 @@
 
 (def all-values #{1, 2, 3, 4, 5, 6, 7, 8, 9})
 
-
-(def sudoku-board
+(comment
+  (def sudoku-board
     (board [[5 3 0 0 7 0 0 0 0]
             [6 0 0 1 9 5 0 0 0]
             [0 9 8 0 0 0 0 6 0]
@@ -17,7 +17,7 @@
             [0 0 0 4 1 9 0 0 5]
             [0 0 0 0 8 0 0 7 9]]))
 
-(def solved-board
+  (def solved-board
     (board [[5 3 4 6 7 8 9 1 2]
             [6 7 2 1 9 5 3 4 8]
             [1 9 8 3 4 2 5 6 7]
@@ -27,7 +27,7 @@
             [9 6 1 5 3 7 2 8 4]
             [2 8 7 4 1 9 6 3 5]
             [3 4 5 2 8 6 1 7 9]]))
- 
+ )
 (defn value-at [board coord]
   (get-in board coord))
 
@@ -35,25 +35,25 @@
   (not (= 0 (value-at board coord))))
 
 (defn row-values [board coord]
-  (let [[row _] coord]
-    (set (get board row))))
+  (let [[row-num _] coord]
+    (set (get board row-num))))
 
 (defn col-values [board coord]
-  (let [[_ column] coord]
-    (set (map #(get % column) board))))
+  (let [[_ col-num] coord]
+    (set (map #(get % col-num) board))))
 
 (defn coord-pairs [coords]
-  (vec (for [x coords
-             y coords]
-    [x y])))
+  (vec (for [a coords
+             b coords]
+    [a b])))
 
 (defn block-values [board coord]
-  (let [[row column] coord
-        m (- row (mod row 3))
-        n (- column (mod column 3))]
-    (set (for [rows [m (+ m 1) (+ m 2)]
-               columns [n (+ n 1) (+ n 2)]]
-           (value-at board [rows columns])))))
+  (let [[row-num col-num] coord
+        r (- row-num (mod row-num 3))
+        c (- col-num (mod col-num 3))]
+    (set (for [rows [r (+ r 1) (+ r 2)]
+               cols [c (+ c 1) (+ c 2)]]
+           (value-at board [rows cols])))))
 
 (defn valid-values-for [board coord]
   (if (has-value? board coord)
