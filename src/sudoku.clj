@@ -5,6 +5,17 @@
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
+(def done-board
+  (board [[5 3 4 6 7 8 9 1 2]
+          [6 7 2 1 9 5 3 4 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 5 9 7 6 1 4 2 3]
+          [4 2 6 8 5 3 7 9 1]
+          [7 1 3 9 2 4 8 5 6]
+          [9 6 1 5 3 7 2 8 4]
+          [2 8 7 4 1 9 6 3 5]
+          [3 4 5 2 8 6 1 7 9]]))
+
 (def sb
   (board [[5 3 0 0 7 0 0 0 0]
           [6 0 0 1 9 5 0 0 0]
@@ -70,30 +81,99 @@
 
 (value-at sb (top-left [8 8]))
 
+(top-left [2 3])
 
 (defn block-values [board coord]
-  nil)
+  (let [x (first (top-left coord))
+        y (last (top-left coord))]
+    (into #{}
+          (concat
+            [(value-at board [x y])]
+            [(value-at board [x (+ 1 y)])]
+            [(value-at board [x (+ 2 y)])]
+            [(value-at board [(+ 1 x) y])]
+            [(value-at board [(+ 1 x) (+ 1 y)])]
+            [(value-at board [(+ 1 x) (+ 2 y)])]
+            [(value-at board [(+ 2 x) y])]
+            [(value-at board [(+ 2 x) (+ 1 y)])]
+            [(value-at board [(+ 2 x) (+ 2 y)])]))))
+
+sb
+
+(block-values sb [0 2])
+
+(set/difference
+  all-values
+    (set/union
+    (row-values sb [0 0])
+    (col-values sb [0 0])
+    (block-values sb [0 0])))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (< 0 (value-at board coord))
+    #{}
+    (set/difference
+      all-values
+      (set/union
+        (row-values sb coord)
+        (col-values sb coord)
+        (block-values sb (top-left coord))))))
+
+(valid-values-for sb [0 0]) ;=> #{}
+(valid-values-for sb [0 2]) ;=> #{1 2 4})
+
+
+(defn board-to-seq [board]
+  (reduce (fn [acc y] (concat acc y)) [] board))
+
 
 (defn filled? [board]
-  nil)
+  (not
+    (contains?
+      (into #{} (board-to-seq board))
+      0)))
+
+(filled? sb)
+
+(def rownums [0 1 2 3 4 5 6 7 8])
 
 (defn rows [board]
-  nil)
+  (reduce (fn [acc row] (conj acc (row-values board [row 0]))) [] rownums))
+
+(rows sb)
+
+(defn valid-row? [row]
+  (empty? (set/difference all-values row)))
+
+(valid-row? #{1 2 3 4 5 6 7 8})
+
+(valid-row? (first (rows sb)))
 
 (defn valid-rows? [board]
-  nil)
+  (let [helper (fn [row i ret]
+                 (if (= i 9)
+                   ret
+                   (recur
+                     (rest row)
+                     (inc i)
+                     (valid-row? (first row)))))]
+    (helper (rows board) 0 false)))
+
+(valid-rows? done-board)
+(valid-rows? sb)
 
 (defn cols [board]
-  nil)
+  (reduce (fn [acc col] (conj acc (col-values board [0 col]))) [] rownums))
+
+(cols sb)
 
 (defn valid-cols? [board]
   nil)
 
 (defn blocks [board]
-  nil)
+  (reduce (fn [acc coord] (conj acc (block-values board coord))) [] (coord-pairs [0 3 6])))
+
+(blocks sb)
 
 (defn valid-blocks? [board]
   nil)
