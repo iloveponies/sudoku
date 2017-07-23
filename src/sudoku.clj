@@ -5,42 +5,14 @@
 
 (def all-values #{1 2 3 4 5 6 7 8 9})
 
-(def done-board
-  (board [[5 3 4 6 7 8 9 1 2]
-          [6 7 2 1 9 5 3 4 8]
-          [1 9 8 3 4 2 5 6 7]
-          [8 5 9 7 6 1 4 2 3]
-          [4 2 6 8 5 3 7 9 1]
-          [7 1 3 9 2 4 8 5 6]
-          [9 6 1 5 3 7 2 8 4]
-          [2 8 7 4 1 9 6 3 5]
-          [3 4 5 2 8 6 1 7 9]]))
-
-(def sb
-  (board [[5 3 0 0 7 0 0 0 0]
-          [6 0 0 1 9 5 0 0 0]
-          [0 9 8 0 0 0 0 6 0]
-          [8 0 0 0 6 0 0 0 3]
-          [4 0 0 8 0 3 0 0 1]
-          [7 0 0 0 2 0 0 0 6]
-          [0 6 0 0 0 0 2 8 0]
-          [0 0 0 4 1 9 0 0 5]
-          [0 0 0 0 8 0 0 7 9]]))
-
 (defn value-at [board coord]
   (get-in board coord))
-
-(value-at sb [0 1])
 
 (defn has-value? [board coord]
   (not (= (value-at board coord) 0)))
 
-(has-value? sb [0 2])
-
 (defn row-values [board coord]
   (into #{} (get board (first coord))))
-
-(row-values sb [0 1])
 
 (defn col-values [board coord]
   (loop [values #{}
@@ -53,14 +25,11 @@
           (value-at board [i (last coord)]))
         (inc i)))))
 
-(col-values sb [4 8])
-
 (defn coord-pairs [coords]
   (for [c1 coords
-      c2 coords]
+        c2 coords]
     [c1 c2]))
 
-(coord-pairs [0 2 2])
 
 (defn top-left [coord]
   (let [r (first coord)
@@ -70,7 +39,7 @@
                 (< c 3) [0 0]
                 (< c 6) [0 3]
                 (< c 9) [0 6])
-      (< r 5) (cond
+      (< r 6) (cond
                 (< c 3) [3 0]
                 (< c 6) [3 3]
                 (< c 9) [3 6])
@@ -79,9 +48,7 @@
                 (< c 6) [6 3]
                 (< c 9) [6 6]))))
 
-(value-at sb (top-left [8 8]))
-
-(top-left [2 3])
+(top-left [8 8])
 
 (defn block-values [board coord]
   (let [x (first (top-left coord))
@@ -98,94 +65,93 @@
             [(value-at board [(+ 2 x) (+ 1 y)])]
             [(value-at board [(+ 2 x) (+ 2 y)])]))))
 
-sb
-
-(block-values sb [0 2])
-
-(set/difference
-  all-values
-    (set/union
-    (row-values sb [0 0])
-    (col-values sb [0 0])
-    (block-values sb [0 0])))
-
 (defn valid-values-for [board coord]
-  (if (< 0 (value-at board coord))
-    #{}
-    (set/difference
-      all-values
-      (set/union
-        (row-values sb coord)
-        (col-values sb coord)
-        (block-values sb (top-left coord))))))
-
-(valid-values-for sb [0 0]) ;=> #{}
-(valid-values-for sb [0 2]) ;=> #{1 2 4})
-
+  (cond
+    (has-value? board coord) #{}
+    :else (let [used (set/union
+                       (block-values board coord)
+                       (row-values board coord)
+                       (col-values board coord))]
+            (set/difference all-values used))))
 
 (defn board-to-seq [board]
   (reduce (fn [acc y] (concat acc y)) [] board))
 
 
 (defn filled? [board]
-  (not
-    (contains?
-      (into #{} (board-to-seq board))
-      0)))
-
-(filled? sb)
+  (every? (fn [x] (has-value? board x)) (coord-pairs (range 9))))
 
 (def rownums [0 1 2 3 4 5 6 7 8])
 
 (defn rows [board]
   (reduce (fn [acc row] (conj acc (row-values board [row 0]))) [] rownums))
 
-(rows sb)
 
-(defn valid-row? [row]
-  (empty? (set/difference all-values row)))
-
-(valid-row? #{1 2 3 4 5 6 7 8})
-
-(valid-row? (first (rows sb)))
+(defn valid-line? [line]
+  (empty? (set/difference all-values line)))
 
 (defn valid-rows? [board]
-  (let [helper (fn [row i ret]
-                 (if (= i 9)
-                   ret
-                   (recur
-                     (rest row)
-                     (inc i)
-                     (valid-row? (first row)))))]
-    (helper (rows board) 0 false)))
-
-(valid-rows? done-board)
-(valid-rows? sb)
+  (every? (fn [line] (valid-line? line)) (rows board)))
 
 (defn cols [board]
   (reduce (fn [acc col] (conj acc (col-values board [0 col]))) [] rownums))
 
-(cols sb)
-
 (defn valid-cols? [board]
-  nil)
+  (every? (fn [col] (valid-line? col)) (cols board)))
 
 (defn blocks [board]
   (reduce (fn [acc coord] (conj acc (block-values board coord))) [] (coord-pairs [0 3 6])))
 
-(blocks sb)
-
 (defn valid-blocks? [board]
-  nil)
+  (every? (fn [block] (valid-line? block)) (blocks board)))
+
+(coord-pairs [0 3 6])
+
 
 (defn valid-solution? [board]
-  nil)
+  (and
+    (valid-rows? board)
+    (valid-cols? board)
+    (valid-blocks? board)))
+
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [coords (coord-pairs (range 9))]
+    (first (filter (fn [x] (not (has-value? board x))) coords))))
+
+
+(defn solve-helper [curr]
+  (if (filled? curr)
+    (if (valid-solution? curr)
+      [curr]
+      [])
+    (let [insert (find-empty-point curr)
+          valid-values (valid-values-for curr insert)]
+      (for [value valid-values
+            solution (solve-helper (set-value-at curr insert value))]
+        solution))))
 
 (defn solve [board]
-  nil)
+  (first (solve-helper board)))
+
+(def tb (board
+         [[5 3 4 6 7 8 9 1 2]
+          [6 7 2 1 9 5 3 4 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 5 9 7 6 1 0 2 3]
+          [4 2 6 8 5 3 7 9 1]
+          [7 1 3 0 2 0 8 5 6]
+          [9 6 1 5 0 7 2 8 4]
+          [2 8 7 4 1 0 0 3 5]
+          [3 4 5 2 8 0 0 7 9]]))
+
+(def tc [5 5])
+(top-left tc)
+(block-values tb (top-left tc))
+(row-values tb tc)
+(col-values tb tc)
+(valid-values-for tb tc)
+(solve tb)
