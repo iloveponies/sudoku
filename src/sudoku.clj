@@ -20,7 +20,9 @@
     (range 9)))
 
 (defn coord-pairs [coords]
-  nil)
+  (for [y coords
+        x coords]
+    [y x]))
 
 (defn block-values [board coord]
   nil)
