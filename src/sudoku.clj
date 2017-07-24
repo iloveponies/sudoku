@@ -10,7 +10,7 @@
   (not (= (get-in board coord) 0)))
 
 (defn row-values [board coord]
-  nil)
+  (set (get board (first coord))))
 
 (defn col-values [board coord]
   nil)
