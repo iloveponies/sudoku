@@ -13,7 +13,11 @@
   (set (get board (first coord))))
 
 (defn col-values [board coord]
-  nil)
+  (reduce
+    (fn [a b]
+      (conj a (value-at board [b (second coord)])))
+    #{}
+    (range 9)))
 
 (defn coord-pairs [coords]
   nil)
