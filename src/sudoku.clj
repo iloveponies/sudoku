@@ -56,7 +56,14 @@
         (col-values board coord)))))
 
 (defn filled? [board]
-  nil)
+  (empty?
+    (set/difference
+      (set
+        (for [y (range 9) x (range 9)]
+        (value-at board [y x])))
+      all-values)))
+
+
 
 (defn rows [board]
   nil)
