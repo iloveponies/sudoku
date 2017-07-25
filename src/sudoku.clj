@@ -24,8 +24,24 @@
         x coords]
     [y x]))
 
+(defn top-left-corner [coord]
+  (vector
+    (* 3 (int (/ (first coord) 3)))
+    (* 3 (int (/ (second coord) 3)))))
+
+(defn coord-pairs-in-block [coord]
+  (map
+    (fn [coord-pair]
+      [(+ (first coord-pair) (first (top-left-corner coord)))
+       (+ (second coord-pair) (second (top-left-corner coord)))])
+    (coord-pairs [0 1 2])))
+
 (defn block-values [board coord]
-  nil)
+  (reduce
+    (fn [result-set coords-vec]
+      (conj result-set (value-at board coords-vec)))
+    #{}
+    (coord-pairs-in-block coord)))
 
 (defn valid-values-for [board coord]
   nil)
