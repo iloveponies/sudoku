@@ -69,7 +69,11 @@
       (set (row-values board [y 0])))))
 
 (defn valid-rows? [board]
-  nil)
+  (every?
+    (fn [row]
+      (empty? (set/difference all-values row)))
+    (rows board)))
+
 
 (defn cols [board]
   (into []
