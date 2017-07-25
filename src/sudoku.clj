@@ -81,7 +81,10 @@
       (set (col-values board [0 x])))))
 
 (defn valid-cols? [board]
-  nil)
+  (every?
+    (fn [col]
+      (empty? (set/difference all-values col)))
+  (cols board)))
 
 (defn blocks [board]
   (into []
@@ -93,7 +96,10 @@
           [(* 3 y) (* 3 x)])))))
 
 (defn valid-blocks? [board]
-  nil)
+  (every?
+    (fn [block]
+      (empty? (set/difference all-values block)))
+  (blocks board)))
 
 (defn valid-solution? [board]
   nil)
