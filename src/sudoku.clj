@@ -80,7 +80,13 @@
   nil)
 
 (defn blocks [board]
-  nil)
+  (into []
+    (for [y (range 3)
+          x (range 3)]
+      (set
+        (block-values
+          board
+          [(* 3 y) (* 3 x)])))))
 
 (defn valid-blocks? [board]
   nil)
