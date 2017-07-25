@@ -64,14 +64,17 @@
       all-values)))
 
 (defn rows [board]
-  (into [] (for [y (range 9)]
-    (set (row-values board [y 0])))))
+  (into []
+    (for [y (range 9)]
+      (set (row-values board [y 0])))))
 
 (defn valid-rows? [board]
   nil)
 
 (defn cols [board]
-  nil)
+  (into []
+    (for [x (range 9)]
+      (set (col-values board [0 x])))))
 
 (defn valid-cols? [board]
   nil)
