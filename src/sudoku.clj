@@ -111,7 +111,11 @@
   (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [all-coords (coord-pairs (range 9))]
+    (when all-coords
+      (if (zero? (value-at board (first all-coords)))
+        (first all-coords)
+        (recur (next all-coords))))))
 
 (defn solve [board]
   nil)
