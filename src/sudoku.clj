@@ -63,10 +63,9 @@
         (value-at board [y x])))
       all-values)))
 
-
-
 (defn rows [board]
-  nil)
+  (into [] (for [y (range 9)]
+    (set (row-values board [y 0])))))
 
 (defn valid-rows? [board]
   nil)
