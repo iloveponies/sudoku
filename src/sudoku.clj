@@ -66,13 +66,29 @@
     (recur (conj result (set (first rows))) (rest rows)))))
 
 (defn valid-rows? [board]
-  nil)
+  (loop [all-rows (rows board)]
+    (cond
+      (empty? all-rows)
+        true
+      (= (first all-rows) all-values)
+        (recur (rest all-rows))
+      :else false)))
 
 (defn cols [board]
-  nil)
+  (loop [result [] acc 0]
+    (cond
+      (== 9 acc)
+        result
+      :else (recur (conj result (col-values board [0 acc])) (inc acc)))))
 
 (defn valid-cols? [board]
-  nil)
+  (loop [all-cols (cols board)]
+    (cond
+      (empty? all-cols)
+        true
+      (= (first all-cols) all-values)
+        (recur (rest all-cols))
+      :else false)))
 
 (defn blocks [board]
   (loop [result [] y 0 x 0]
@@ -84,16 +100,32 @@
       :else (recur (conj result (set (block-values board [x y]))) (+ y 3) x))))
 
 (defn valid-blocks? [board]
-  nil)
+  (loop [all-blocks (blocks board)]
+    (cond
+      (empty? all-blocks)
+        true
+      (= (first all-blocks) all-values)
+        (recur (rest all-blocks))
+      :else false)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board)
+       (valid-cols? board)
+       (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (loop [y 0 x 0]
+    (cond
+      (== 9 y)
+        nil
+      (== 0 (get-in board [y x]))
+        [y x]
+      (== 8 x)
+        (recur (inc y) 0)
+      :else (recur y (inc x)))))
 
 (defn solve [board]
   nil)
