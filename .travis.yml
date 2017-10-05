@@ -1,4 +1,5 @@
 language: clojure
+dist: precise
 lein: lein2
 script: lein2 midje :config .midje-grading-config.clj
 jdk:
