@@ -82,7 +82,12 @@
       (value-at board (vector row col)))))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (let [values-for-row (row-values board coord)
+          values-for-col (col-values board coord)
+          values-for-block (block-values board coord)]
+      (set/difference all-values (set/union values-for-row values-for-col values-for-block)))))
 
 (defn filled? [board]
   nil)
