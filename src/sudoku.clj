@@ -114,10 +114,12 @@
   (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter (fn [coord] (not (has-value? board coord)))
+          (for [x (range 0 9) y (range 0 9)]
+            (vector x y)))))
 
 (defn solve [board]
   nil)
