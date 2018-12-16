@@ -93,25 +93,25 @@
   (not (contains? (set (flatten board)) 0)))
 
 (defn rows [board]
-  nil)
+  (reduce (fn [acc r] (conj acc (row-values board (vector r 0)))) [] (range 0 9)))
 
 (defn valid-rows? [board]
-  nil)
+  (every? (fn [row] (empty? (set/difference all-values row))) (rows board)))
 
 (defn cols [board]
-  nil)
+  (reduce (fn [acc c] (conj acc (col-values board (vector 0 c)))) [] (range 0 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (every? (fn [col] (empty? (set/difference all-values col))) (cols board)))
 
 (defn blocks [board]
-  nil)
+  (reduce (fn [acc coord] (conj acc (block-values board coord))) [] [[0 0] [0 3] [0 6] [3 0] [3 3] [3 6] [6 0] [6 3] [6 6]]))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? (fn [block] (empty? (set/difference all-values block))) (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
   nil)
