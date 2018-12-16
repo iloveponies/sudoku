@@ -90,7 +90,7 @@
       (set/difference all-values (set/union values-for-row values-for-col values-for-block)))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (flatten board)) 0)))
 
 (defn rows [board]
   nil)
