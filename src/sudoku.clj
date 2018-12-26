@@ -57,20 +57,20 @@
       [x
        (cond
         (contains? #{0 1 2} row)
-         0
+        0
         (contains? #{3 4 5} row)
-         3
+        3
         (contains? #{6 7 8} row)
-         6)
-      y
+        6)
+       y
        (cond
         (contains? #{0 1 2} col)
-         0
+        0
         (contains? #{3 4 5} col)
-         3
+        3
         (contains? #{6 7 8} col)
-         6)]
-    (vector x y))))
+        6)]
+     (vector x y))))
 
 
 (defn block-values [board coord]
@@ -79,7 +79,7 @@
    (let [x-coords (range top-left-x (+ top-left-x 3))
          y-coords (range top-left-y (+ top-left-y 3))]
     (set (for [row x-coords col y-coords]
-      (value-at board (vector row col)))))))
+          (value-at board (vector row col)))))))
 
 (defn valid-values-for [board coord]
   (if (has-value? board coord)
@@ -120,6 +120,6 @@
   (first (filter (fn [coord] (not (has-value? board coord)))
           (for [x (range 0 9) y (range 0 9)]
             (vector x y)))))
-
+; test comment
 (defn solve [board]
   nil)
