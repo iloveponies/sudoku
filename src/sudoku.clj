@@ -120,6 +120,21 @@
   (first (filter (fn [coord] (not (has-value? board coord)))
           (for [x (range 0 9) y (range 0 9)]
             (vector x y)))))
-; test comment
+
+(defn solve-helper [current-board]
+  (if (filled? current-board)
+    (if (valid-solution? current-board)
+      current-board
+      []
+      )
+    (let [next-empty-point (find-empty-point current-board)]
+      (let [valid-values (valid-values-for current-board next-empty-point)]
+        (for [value valid-values
+              current-board (solve-helper (set-value-at current-board next-empty-point value))]
+          current-board)))))
+
+
 (defn solve [board]
-  nil)
+  (solve-helper board))
+
+
