@@ -1,58 +1,140 @@
 (ns sudoku
   (:require [clojure.set :as set]))
 
+;(def board2
+;       [[5 3 0 0 7 0 0 0 0]
+;        [6 0 0 1 9 5 0 0 0]
+;        [0 9 8 0 0 0 0 6 0]
+;        [8 0 0 0 6 0 0 0 3]
+;        [4 0 0 8 0 3 0 0 1]
+;        [7 0 0 0 2 0 0 0 6]
+;        [0 6 0 0 0 0 2 8 0]
+;        [0 0 0 4 1 9 0 0 5]
+;        [0 0 0 0 8 0 0 7 9]])
+
+;[[5 3 0 | 0 7 0 | 0 0 0]
+; [6 0 0 | 1 9 5 | 0 0 0]
+; [0 9 8 | 0 0 0 | 0 6 0]
+; -------+-------+-------
+; [8 0 0 | 0 6 0 | 0 0 3]
+; [4 0 0 | 8 0 3 | 0 0 1]
+; [7 0 0 | 0 2 0 | 0 0 6]
+; -------+-------+-------
+; [0 6 0 | 0 0 0 | 2 8 0]
+; [0 0 0 | 4 1 9 | 0 0 5]
+; [0 0 0 | 0 8 0 | 0 7 9]]
+
 (def board identity)
 
+
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (not (= 0 (value-at board coord))))
 
+;returns set i.e. from multiple zeroes only one is included
 (defn row-values [board coord]
-  nil)
+  (let [[row] coord]
+    (set (get board row))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[_ col] coord]
+    (set (map (fn [row] (get-in board [row col])) (range (count board))))))
 
 (defn coord-pairs [coords]
-  nil)
+  (let [pairs []]
+   (for [row coords col coords]
+     (seq (conj pairs row col)))))
+
+;assumes 3x3 board
+;returns [x,y]
+(defn block-top-left [coord]
+  (let [[row _] coord [_ col] coord]
+    (let
+      [x
+       (cond
+        (contains? #{0 1 2} row)
+        0
+        (contains? #{3 4 5} row)
+        3
+        (contains? #{6 7 8} row)
+        6)
+       y
+       (cond
+        (contains? #{0 1 2} col)
+        0
+        (contains? #{3 4 5} col)
+        3
+        (contains? #{6 7 8} col)
+        6)]
+     (vector x y))))
+
 
 (defn block-values [board coord]
-  nil)
+  (let [[top-left-x _] (block-top-left coord)
+        [ _ top-left-y] (block-top-left coord)]
+   (let [x-coords (range top-left-x (+ top-left-x 3))
+         y-coords (range top-left-y (+ top-left-y 3))]
+    (set (for [row x-coords col y-coords]
+          (value-at board (vector row col)))))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (if (has-value? board coord)
+    #{}
+    (let [values-for-row (row-values board coord)
+          values-for-col (col-values board coord)
+          values-for-block (block-values board coord)]
+      (set/difference all-values (set/union values-for-row values-for-col values-for-block)))))
 
 (defn filled? [board]
-  nil)
+  (not (contains? (set (flatten board)) 0)))
 
 (defn rows [board]
-  nil)
+  (reduce (fn [acc r] (conj acc (row-values board (vector r 0)))) [] (range 0 9)))
 
 (defn valid-rows? [board]
-  nil)
+  (every? (fn [row] (empty? (set/difference all-values row))) (rows board)))
 
 (defn cols [board]
-  nil)
+  (reduce (fn [acc c] (conj acc (col-values board (vector 0 c)))) [] (range 0 9)))
 
 (defn valid-cols? [board]
-  nil)
+  (every? (fn [col] (empty? (set/difference all-values col))) (cols board)))
 
 (defn blocks [board]
-  nil)
+  (reduce (fn [acc coord] (conj acc (block-values board coord))) [] [[0 0] [0 3] [0 6] [3 0] [3 3] [3 6] [6 0] [6 3] [6 6]]))
 
 (defn valid-blocks? [board]
-  nil)
+  (every? (fn [block] (empty? (set/difference all-values block))) (blocks board)))
 
 (defn valid-solution? [board]
-  nil)
+  (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (first (filter (fn [coord] (not (has-value? board coord)))
+          (for [x (range 0 9) y (range 0 9)]
+            (vector x y)))))
+
+(defn solve-helper [current-board]
+  (if (filled? current-board)
+    (if (valid-solution? current-board)
+      current-board
+      []
+      )
+    (let [next-empty-point (find-empty-point current-board)]
+      (let [valid-values (valid-values-for current-board next-empty-point)]
+        (for [value valid-values
+              current-board (solve-helper (set-value-at current-board next-empty-point value))]
+          current-board)))))
+
 
 (defn solve [board]
-  nil)
+  (solve-helper board))
+
+
