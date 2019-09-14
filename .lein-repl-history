@@ -1,0 +1,142 @@
+(use 'sudoku)
+(value-at sudoku-board [0 1]) ;=> 3
+(value-at sudoku-board [0 0]) ;=> 5
+(has-value? sudoku-board [0 0]) ;=> true
+(has-value? sudoku-board [0 2]) ;=> false
+(use 'sudoku :reload)
+(row-values sudoku-board [0 2]) ;=> #{0 5 3 7}
+(row-values sudoku-board [3 2]) ;=> #{0 8 6 3}
+(value-at sudoku-board [10 19])
+(conj #{} 5)
+(use 'sudoku :reload)
+(col-values sudoku-board [0 2]) ;=> #{0 8}
+(col-values sudoku-board [4 8]) ;=> #{3 1 6 0 5 9}
+(use 'sudoku :reload)
+(coord-pairs [0 1])   ;=> [[0 0] [0 1]
+                      ;    [1 0] [1 1]]
+(coord-pairs [0 1 2]) ;=> [[0 0] [0 1] [0 2]
+                      ;    [1 0] [1 1] [1 2]
+                      ;    [2 0] [2 1] [2 2]]
+(coord-pairs [0 1])
+(coord-pairs [0 1 2])
+(int 1/3)
+(map #(* 3 (int (/ % 3))) [5 5])
+(coord-pairs [6 7 8 0 1 2])
+(count (coord-pairs [6 7 8 0 1 2]))
+(range 0 2)
+(range 0 3)
+(use 'sudoku :reload)
+(block-values [5 5])
+(block-values sudoku-board [5 5])
+(map #(range (first %) (+ 3(first %))) [0 0])
+(use 'sudoku :reload)
+(block-values sudoku-board [5 5])
+(use 'sudoku :reload)
+(block-values sudoku-board [5 5])
+(use 'sudoku :reload)
+(block-values sudoku-board [5 5])
+(use 'sudoku :reload)
+(block-values sudoku-board [5 5])
+(use 'sudoku :reload)
+(block-values sudoku-board [5 5])
+(block-values sudoku-board [0 2])
+(use 'sudoku :reload)
+(valid-values-for sudoku-board [0 0])
+(use 'sudoku :reload)
+(valid-values-for sudoku-board [0 0])
+(valid-values-for sudoku-board [0 2])
+(coord-pairs (range 0 10))
+(count (coord-pairs (range 0 10)))
+(use 'sudoku :reload)
+(filled? sudoku-board) ;=> false
+(filled? solved-board) ;=> true
+(use 'sudoku :reload)
+(rows sudoku-board)
+(rows solved-board)
+(use 'sudoku :reload)
+(blocks sudoku-board)
+(use 'sudoku :reload)
+(blocks sudoku-board)
+(use 'sudoku :reload)
+(valid-rows? solved-board)  ;=> truthy
+(valid-rows? invalid-board) ;=> falsey
+(set [#{} #{1}])
+(use 'sudoku :reload)
+(valid-rows? solved-board)  ;=> truthy
+(set #{1})
+(use 'sudoku :reload)
+(valid-rows? solved-board)  ;=> truthy
+(valid-cols? solved-board)  ;=> truthy
+(valid-rows? sudoku-board) ;=> falsey
+(use 'sudoku :reload)
+(valid-solution? solved-board)  ;=> truthy
+(use 'sudoku)
+(set-value-at before-change [2 1] 4)
+(coord-pairs (range 0 9))
+(count (coord-pairs (range 0 9)))
+(use 'sudoku :reload)
+(find-empty-point sudoku-board)
+(find-empty-point solved-board)
+(get [1 2 3] nil)
+(use 'sudoku)
+(find-empty-point solved-board)
+(use 'sudoku)
+(find-empty-point solved-board)
+(use 'sudoku)
+(has-value? solved-board nil)
+(not 0)
+(not 1)
+(value-at solved-board nil)
+(use 'sudoku)
+(value-at solved-board nil)
+(has-value? solved-board nil)
+(use 'sudoku :reload)
+(find-empty-point solved-board)
+(for [n []] n)
+(for [n 1] n)
+(for [n [1]] n)
+(for [n [1 2]] n)
+(use 'sudoku :reload)
+(solve sudoku-board)
+(= solved-board (solve sudoku-board))
+(= solved-board (first (solve sudoku-board)))
+(use 'sudoku)
+(use 'sudoku :reload)
+(def sudoku-board
+  (board [[5 3 0 0 7 0 0 0 0]
+          [6 0 0 1 9 5 0 0 0]
+          [0 9 8 0 0 0 0 6 0]
+          [8 0 0 0 6 0 0 0 3]
+          [4 0 0 8 0 3 0 0 1]
+          [7 0 0 0 2 0 0 0 6]
+          [0 6 0 0 0 0 2 8 0]
+          [0 0 0 4 1 9 0 0 5]
+          [0 0 0 0 8 0 0 7 9]]))
+(def solved-board
+  (board [[5 3 4 6 7 8 9 1 2]
+          [6 7 2 1 9 5 3 4 8]
+          [1 9 8 3 4 2 5 6 7]
+          [8 5 9 7 6 1 4 2 3]
+          [4 2 6 8 5 3 7 9 1]
+          [7 1 3 9 2 4 8 5 6]
+          [9 6 1 5 3 7 2 8 4]
+          [2 8 7 4 1 9 6 3 5]
+          [3 4 5 2 8 6 1 7 9]]))
+(solve sudoku-board)
+(use 'sudoku :reload)
+(solve sudoku-board)
+(use 'sudoku :reload)
+(solve sudoku-board)
+(use 'sudoku :reload)
+(solve sudoku-board)
+(use 'sudoku :reload)
+(solve sudoku-board)
+(solve-helper sudoku-board)
+(use 'sudoku :reload)
+(solve sudoku-board)
+(use 'sudoku :reload)
+(solve sudoku-board)
+(solve-helper sudoku-board)
+(use 'sudoku :reload)
+(solve-helper sudoku-board)
+(solve sudoku-board)
