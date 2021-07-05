@@ -3,56 +3,128 @@
 
 (def board identity)
 
+(def all-values #{1 2 3 4 5 6 7 8 9})
+
 (defn value-at [board coord]
-  nil)
+  (get-in board coord))
 
 (defn has-value? [board coord]
-  nil)
+  (if (= (value-at board coord) 0)
+    false
+    true))
 
 (defn row-values [board coord]
-  nil)
+  (let [[x y] coord]
+    (set (get board x))))
 
 (defn col-values [board coord]
-  nil)
+  (let [[k i] coord]
+        (set (map (fn [x] (get x i)) board))))
 
 (defn coord-pairs [coords]
-  nil)
+  (into [] (for [row coords
+        col coords]
+        [row col])))
 
 (defn block-values [board coord]
-  nil)
+  (let [top-left-coord
+          (fn [coord]
+            (let [[row col] coord]
+              [(- row (mod row 3)) (- col (mod col 3))]))
+        [top-left-x top-left-y] (top-left-coord coord)]
+    (set (for [x (range 3) y (range 3)]
+           (value-at board [(+ top-left-x x) (+ top-left-y y)])))))
 
 (defn valid-values-for [board coord]
-  nil)
+  (let [block-vals (block-values board coord)
+        row-vals (row-values board coord)
+        col-vals (col-values board coord)
+        combined-vals (set/union block-vals row-vals col-vals)]
+      (if (has-value? board coord)
+        #{}
+        (set/difference all-values combined-vals))))
 
 (defn filled? [board]
-  nil)
+  (let [board-values
+          (fn [board]
+            (set (for [x (range 9) y (range 9)]
+              (value-at board [x y]))))]
+    (not (contains? (board-values board) 0))))
 
 (defn rows [board]
-  nil)
+  (into [] (for [x (range 9)]
+          (row-values board [x 0]))))
+
 
 (defn valid-rows? [board]
-  nil)
+  (let [all-rows (rows board)]
+    (loop [each-row all-rows]
+            (cond
+              (empty? each-row) true
+              (not (= (first each-row) all-values)) false
+              :else (recur (rest each-row))))))
 
 (defn cols [board]
-  nil)
+  (into [] (for [y (range 9)]
+        (col-values board [0 y]))))
 
 (defn valid-cols? [board]
-  nil)
+    (let [all-cols (cols board)]
+      (loop [each-col all-cols]
+            (cond
+              (empty? each-col) true
+              (not (= (first each-col) all-values)) false
+              :else (recur (rest each-col))))))
 
 (defn blocks [board]
-  nil)
+  (let [blocks-of-three (reduce (fn [res x] (concat res (partition 3 x))) [] board)
+        blocks-of-nine-of-three (partition 9 blocks-of-three)
+        block-sets (map (fn [x]
+              (for [row-num (range 3)]
+                (set
+                  (concat
+                    (nth x row-num)
+                    (nth x (+ 3 row-num))
+                    (nth x (+ 6 row-num)))))) blocks-of-nine-of-three)]
+      (into [] (reduce
+        (fn [res x]
+          (concat res x)) [] block-sets))))
 
 (defn valid-blocks? [board]
-  nil)
+  (let [all-blocks (blocks board)]
+    (loop [each-block all-blocks]
+          (cond
+            (empty? each-block) true
+            (not (= (first each-block) all-values)) false
+            :else (recur (rest each-block))))))
 
 (defn valid-solution? [board]
-  nil)
+  (if (and (valid-rows? board) (valid-cols? board) (valid-blocks? board)) true false))
 
 (defn set-value-at [board coord new-value]
-  nil)
+  (assoc-in board coord new-value))
 
 (defn find-empty-point [board]
-  nil)
+  (let [nulls-of-this-row (fn [i row]
+      (for [x (range 9)
+            :let [row-val (nth row x)]
+            :when (= 0 row-val)]
+        [i x]))
+    get-nulls (fn [index current-board null-coords]
+                (if (empty? current-board)
+                  null-coords
+                  (recur (inc index)
+                          (rest current-board)
+                          (concat null-coords (nulls-of-this-row index (first current-board))))))]
+    ; Initially returned every empty point,
+    ;   fix it by returning first of them.
+    (first (get-nulls 0 board []))))
 
 (defn solve [board]
-  nil)
+  (if (valid-solution? board)
+    board
+    (let [this-empty-point (find-empty-point board)
+          valid-nums (valid-values-for board this-empty-point)]
+      (for [n valid-nums
+          solution (solve (set-value-at board this-empty-point n))]
+        solution))))
